@@ -116,8 +116,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-$x-space: 15%;
-
 .carousel {
   position: relative;
   margin: 10px 0;
