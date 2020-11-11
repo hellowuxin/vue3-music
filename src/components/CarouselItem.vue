@@ -12,14 +12,14 @@ export default defineComponent({
   props: {
     width: {
       type: Number,
-      default: 642
+      required: true
     }
   },
   setup (props) {
     const item: Ref<Element | null> = ref(null)
     const imgWidth = props.width + 'px'
     const itemStyle = ref({
-      width: imgWidth,
+      width: `min(100%, ${imgWidth})`,
       margin: `0 max(0px, calc(100% - ${imgWidth}) / 2)`
     })
     const changeStyle = (mutationsList: MutationRecord[]) => {
