@@ -183,6 +183,7 @@ export default defineComponent({
   list-style: none;
   justify-content: center;
   padding-inline-start: 0;
+  margin: 10px 0;
 
   li {
     margin: 0 .3rem;
