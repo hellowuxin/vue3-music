@@ -1,22 +1,22 @@
 <template>
-  <div class="carousel" :style="{ height: `${imgHeight}px` }">
-    <div class="carousel-inner" ref="carouselInner">
-      <carousel-item
-        v-for="item in [1,2,3,4]"
-        :key="item"
-        :width="imgWidth"
-      />
+  <div class="carousel">
+    <div class="carousel-container">
+      <div class="carousel-content" ref="carouselContent" :style="{ height: `${imgHeight}px` }">
+        <carousel-item
+          v-for="item in [1,2,3,4]"
+          :key="item"
+          :width="imgWidth"
+        />
+      </div>
+      <a class="carousel-control-prev" @click="controlClick(false)">
+        <icon class="carousel-control-prev-icon" iconId="iconleft"/>
+      </a>
+      <a class="carousel-control-next" @click="controlClick(true)">
+        <icon class="carousel-control-next-icon" iconId="iconright"/>
+      </a>
     </div>
-    <a class="carousel-control-prev" @click="controlClick(false)">
-      <icon class="carousel-control-prev-icon" iconId="iconleft"/>
-    </a>
-    <a class="carousel-control-next" @click="controlClick(true)">
-      <icon class="carousel-control-next-icon" iconId="iconright"/>
-    </a>
-    <ol class="carousel-indicators">
-      <li class="active"></li>
-      <li></li>
-      <li></li>
+    <ol class="carousel-indicators" ref="carouselIndicators">
+      <li v-for="indic in indicators" :key="indic"></li>
     </ol>
   </div>
 </template>
@@ -52,21 +52,24 @@ export default defineComponent({
   },
   setup (props) {
     let activeIndex = 0
+    const indicators = [...new Array(props.value.length).keys()]
     const circleIndex = (step: number) => {
       const index = (activeIndex + step) % props.value.length
       return index > -1 ? index : index + props.value.length
     }
-    const circleElement = (ele: Element, next: boolean) => {
+    const circleElement = (ele: Element, next = true) => {
       return next
         ? (ele.nextElementSibling || ele.parentElement?.firstElementChild || ele)
         : (ele.previousElementSibling || ele.parentElement?.lastElementChild || ele)
     }
     const controlClick = (next: boolean) => {
       const activeItem = document.querySelector('.carousel-item.active')
-      if (activeItem) {
+      const activeIndicator = document.querySelector('.carousel-indicators li.active')
+
+      if (activeItem && activeIndicator) {
         const prevItem = circleElement(activeItem, false) as Element
-        const nextItem = circleElement(activeItem, true) as Element
-        const deactiveItem = circleElement(nextItem, true) as Element
+        const nextItem = circleElement(activeItem) as Element
+        const deactiveItem = circleElement(nextItem) as Element
 
         if (next) {
           activeIndex = circleIndex(1)
@@ -75,6 +78,9 @@ export default defineComponent({
           nextItem.classList.replace('carousel-item-next', 'active')
           deactiveItem.classList.add('carousel-item-next')
           deactiveItem.children[0].setAttribute('src', props.value[circleIndex(1)].imgSrc)
+
+          activeIndicator.classList.remove('active')
+          circleElement(activeIndicator).classList.add('active')
         } else {
           activeIndex = circleIndex(-1)
           prevItem.classList.replace('carousel-item-prev', 'active')
@@ -82,14 +88,18 @@ export default defineComponent({
           nextItem.classList.remove('carousel-item-next')
           deactiveItem.classList.add('carousel-item-prev')
           deactiveItem.children[0].setAttribute('src', props.value[circleIndex(-1)].imgSrc)
+
+          activeIndicator.classList.remove('active')
+          circleElement(activeIndicator, false).classList.add('active')
         }
       }
     }
-    const carouselInner: Ref<Element | null> = ref(null)
+    const carouselContent: Ref<Element | null> = ref(null)
+    const carouselIndicators: Ref<Element | null> = ref(null)
 
     onMounted(() => {
-      if (carouselInner.value) {
-        const { children } = carouselInner.value
+      if (carouselContent.value) {
+        const { children } = carouselContent.value
         const { value } = props
         const prev = children[children.length - 1]
         prev.classList.add('carousel-item-prev')
@@ -101,6 +111,9 @@ export default defineComponent({
         next.classList.add('carousel-item-next')
         next.children[0].setAttribute('src', value[circleIndex(1)].imgSrc)
       }
+      if (carouselIndicators.value) {
+        carouselIndicators.value.children[0].classList.add('active')
+      }
 
       // setInterval(() => {
       //   controlClick(true)
@@ -109,7 +122,9 @@ export default defineComponent({
 
     return {
       controlClick,
-      carouselInner
+      carouselContent,
+      indicators,
+      carouselIndicators
     }
   }
 })
@@ -118,11 +133,15 @@ export default defineComponent({
 <style lang="scss">
 .carousel {
   position: relative;
-  margin: 10px 0;
+  margin: 20px 0;
 
-  .carousel-inner {
-    height: inherit;
+  .carousel-container {
     position: relative;
+
+    .carousel-content {
+      height: inherit;
+      position: relative;
+    }
   }
 }
 
@@ -157,5 +176,24 @@ export default defineComponent({
 
 .carousel-control-next {
   right: 0
+}
+
+.carousel-indicators {
+  display: flex;
+  list-style: none;
+  justify-content: center;
+  padding-inline-start: 0;
+
+  li {
+    margin: 0 .3rem;
+    width: 0.4rem;
+    height: 0.4rem;
+    background-color: #E5E5E5;
+    border-radius: 50%;
+
+    &.active {
+      background-color: #D33A31;
+    }
+  }
 }
 </style>
