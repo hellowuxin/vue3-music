@@ -1,6 +1,6 @@
 <template>
   <div class="carousel-item" :style="itemStyle" ref="item">
-    <img>
+    <img v-bind="$attrs">
   </div>
 </template>
 
@@ -9,10 +9,11 @@ import { defineComponent, onMounted, Ref, ref } from 'vue'
 
 export default defineComponent({
   name: 'CarouselItem',
+  inheritAttrs: false,
   props: {
     width: {
       type: Number,
-      required: true
+      default: 642
     }
   },
   setup (props) {
@@ -47,19 +48,30 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@keyframes active-to-deactive {
+  from { z-index: 1; }
+  to { z-index: 0; }
+}
+
 .carousel-item {
   z-index: -2;
   position: absolute;
   border-radius: 10px;
   height: inherit;
+  transform: scale(.9);
   transition: all .5s ease-out;
 
   &.active {
-    z-index: 0;
+    z-index: 1;
+    transform: scale(1);
 
     &::after {
       opacity: 0;
     }
+  }
+
+  &.deactive {
+    animation-name: active-to-deactive;
   }
 
   &::after {
