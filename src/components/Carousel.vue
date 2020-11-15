@@ -4,7 +4,7 @@
       <div
         class="carousel-content"
         ref="carouselContent"
-        :style="{ height: `${height}px` }"
+        :style="{ height: `${height || imgHeight}px` }"
         @transitionend="onTransitionend"
       >
         <slot/>
@@ -16,7 +16,7 @@
         <icon class="carousel-control-next-icon" iconId="iconright"/>
       </a>
     </div>
-    <ol class="carousel-indicators" ref="carouselIndicators">
+    <ol class="carousel-indicators" ref="carouselIndicators" v-if="indicators">
       <li
         v-for="indic in indicators"
         :key="indic"
@@ -38,16 +38,14 @@ export default defineComponent({
     Icon
   },
   props: {
-    height: {
-      type: Number,
-      default: 250
-    }
+    height: Number
   },
   setup () {
     const activeIndex = ref(0)
-    const carouselContent: Ref<Element | null> = ref(null)
-    const carouselIndicators: Ref<Element | null> = ref(null)
-    const indicators: Ref<number[] | null> = ref(null)
+    const carouselContent: Ref<Element | undefined> = ref()
+    const carouselIndicators: Ref<Element | undefined> = ref()
+    const indicators: Ref<number[] | undefined> = ref()
+    const imgHeight: Ref<number | undefined> = ref()
 
     const circleIndex = (step: number) => {
       const { length } = indicators.value as number[]
@@ -115,10 +113,14 @@ export default defineComponent({
     onMounted(() => {
       if (carouselContent.value) {
         const { children } = carouselContent.value
-        indicators.value = [...new Array(children.length).keys()]
-        children[children.length - 1].classList.add('carousel-item-prev')
-        children[0].classList.add('active')
-        children[1].classList.add('carousel-item-next')
+        if (children.length > 3) {
+          indicators.value = [...new Array(children.length).keys()]
+          children[children.length - 1].classList.add('carousel-item-prev')
+          children[0].classList.add('active')
+          children[1].classList.add('carousel-item-next')
+
+          imgHeight.value = (children[0] as HTMLElement).offsetHeight
+        }
       }
       // setInterval(() => {
       //   controlClick(true)
@@ -132,7 +134,8 @@ export default defineComponent({
       indicators,
       carouselIndicators,
       makeActive,
-      onTransitionend
+      onTransitionend,
+      imgHeight
     }
   }
 })
@@ -140,14 +143,12 @@ export default defineComponent({
 
 <style lang="scss">
 .carousel {
-  position: relative;
   margin: 20px 0;
 
   .carousel-container {
     position: relative;
 
     .carousel-content {
-      height: inherit;
       position: relative;
     }
   }

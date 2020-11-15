@@ -17,7 +17,7 @@ export default defineComponent({
     }
   },
   setup (props) {
-    const item: Ref<Element | null> = ref(null)
+    const item: Ref<Element | undefined> = ref()
     const imgWidth = props.width + 'px'
     const itemStyle = ref({
       width: `min(100%, ${imgWidth})`,
