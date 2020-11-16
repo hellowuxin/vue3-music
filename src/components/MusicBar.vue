@@ -48,6 +48,7 @@ export default defineComponent({
   border-width: 3px 0 0 0;
   border-color: #D33A31;
   border-style: solid;
+  color: #4C4C4C;
 
   .bar-start {
     display: flex;
@@ -69,7 +70,19 @@ export default defineComponent({
     font-size: 22px;
 
     .icon {
-      padding: 0 10px;
+      margin: 0 10px;
+    }
+
+    .iconplay {
+      padding: 10px;
+      border-radius: 50%;
+      color: white;
+      background-color:  #D33A31;
+    }
+
+    .iconxiayishou,
+    .iconshangyishou {
+      color: #D33A31;
     }
   }
 }

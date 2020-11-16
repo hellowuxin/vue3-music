@@ -1,11 +1,11 @@
 <template>
   <div class="card">
     <div class="card-content">
-      <span class="play-count">
+      <span class="play-count" v-if="playCount">
         <icon iconId="iconplay1"/>
-        <span>{{ Math.floor(playCount/10000) }}万</span>
+        <span>{{ Math.floor(playCount / 10000) }}万</span>
       </span>
-      <icon class="play-circle" iconId="iconplay"/>
+      <icon iconId="iconplay"/>
       <img :src="imgSrc"/>
     </div>
     <span class="card-title">{{ title }}</span>
@@ -44,7 +44,7 @@ export default defineComponent({
       font-size: smaller;
     }
 
-    .play-circle {
+    .iconplay {
       opacity: 0;
       position: absolute;
       right: 0;
@@ -65,7 +65,7 @@ export default defineComponent({
     }
 
     &:hover {
-      .play-circle {
+      .iconplay {
         opacity: 1;
       }
     }

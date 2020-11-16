@@ -4,7 +4,7 @@
       <div
         class="carousel-content"
         ref="carouselContent"
-        :style="{ height: `${height || imgHeight}px` }"
+        :style="{ height: `${height}px` }"
         @transitionend="onTransitionend"
       >
         <slot/>
@@ -38,14 +38,16 @@ export default defineComponent({
     Icon
   },
   props: {
-    height: Number
+    height: {
+      type: Number,
+      default: 238
+    }
   },
   setup () {
     const activeIndex = ref(0)
     const carouselContent: Ref<Element | undefined> = ref()
     const carouselIndicators: Ref<Element | undefined> = ref()
     const indicators: Ref<number[] | undefined> = ref()
-    const imgHeight: Ref<number | undefined> = ref()
 
     const circleIndex = (step: number) => {
       const { length } = indicators.value as number[]
@@ -118,13 +120,11 @@ export default defineComponent({
           children[children.length - 1].classList.add('carousel-item-prev')
           children[0].classList.add('active')
           children[1].classList.add('carousel-item-next')
-
-          imgHeight.value = (children[0] as HTMLElement).offsetHeight
         }
       }
       // setInterval(() => {
       //   controlClick(true)
-      // }, 2000)
+      // }, 3000)
     })
 
     return {
@@ -134,8 +134,7 @@ export default defineComponent({
       indicators,
       carouselIndicators,
       makeActive,
-      onTransitionend,
-      imgHeight
+      onTransitionend
     }
   }
 })
