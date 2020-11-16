@@ -24,4 +24,9 @@ export default defineComponent({
   fill: currentColor;
   overflow: hidden;
 }
+
+a {
+  text-decoration: none;
+  color: black;
+}
 </style>

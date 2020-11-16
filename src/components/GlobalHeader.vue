@@ -1,5 +1,5 @@
 <template>
-  <nav>
+  <nav class="global-header">
     <div class="container">
       <ul class="nav-ul">
         <li class="nav-li"><a class="active" href="#">个性推荐</a></li>
@@ -30,7 +30,6 @@ nav {
 
 .container {
   display: flex;
-  padding: 0 calc(1.5rem / 2);
 }
 
 .nav-ul {
@@ -44,7 +43,6 @@ nav {
 .nav-li {
   a {
     color: rgba($black, .55);
-    text-decoration: none;
 
     &.active {
       color: $black;
