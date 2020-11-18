@@ -1,34 +1,33 @@
 <template>
-  <div class="carousel">
-    <div class="carousel-container">
+  <div :class="style['container']">
+    <div :class="style['content']">
       <div
-        class="carousel-content"
-        ref="carouselContent"
+        ref="contentRef"
         :style="{ height: `${height}px` }"
         @transitionend="onTransitionend"
       >
         <slot/>
       </div>
-      <a class="carousel-control-prev" @click="controlClick(false)">
-        <icon class="carousel-control-prev-icon" iconId="iconleft"/>
+      <a :class="style['control-prev']" @click="controlClick(false)">
+        <icon iconId="iconleft"/>
       </a>
-      <a class="carousel-control-next" @click="controlClick()">
-        <icon class="carousel-control-next-icon" iconId="iconright"/>
+      <a :class="style['control-next']" @click="controlClick()">
+        <icon iconId="iconright"/>
       </a>
     </div>
-    <ol class="carousel-indicators" ref="carouselIndicators" v-if="indicators">
+    <ol :class="style['indicators']" ref="indicatorsRef" v-if="indicators">
       <li
         v-for="indic in indicators"
         :key="indic"
         @mouseenter="makeActive(indic)"
-        :class="{active: indic === activeIndex}"
+        :class="{[style['active']]: indic === activeIndex}"
       ></li>
     </ol>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, Ref } from 'vue'
+import { defineComponent, onMounted, ref, Ref, useCssModule } from 'vue'
 import Icon from './Icon.vue'
 import debounce from '../tools/debounce'
 
@@ -45,9 +44,10 @@ export default defineComponent({
   },
   setup () {
     const activeIndex = ref(0)
-    const carouselContent: Ref<Element | undefined> = ref()
-    const carouselIndicators: Ref<Element | undefined> = ref()
+    const contentRef: Ref<Element | undefined> = ref()
+    const indicatorsRef: Ref<Element | undefined> = ref()
     const indicators: Ref<number[] | undefined> = ref()
+    const style = useCssModule()
 
     const circleIndex = (step: number) => {
       const { length } = indicators.value as number[]
@@ -86,10 +86,10 @@ export default defineComponent({
         controlClick()
       } else if (index === circleIndex(-1)) {
         controlClick(false)
-      } else if (index !== activeIndex.value && carouselContent.value) {
+      } else if (index !== activeIndex.value && contentRef.value) {
         activeIndex.value = index
         const activeItem = document.querySelector('.carousel-item.active')
-        const newActiveItem = carouselContent.value.children[index]
+        const newActiveItem = contentRef.value.children[index]
 
         if (activeItem) {
           const prevItem = circleElement(activeItem, false)
@@ -104,8 +104,8 @@ export default defineComponent({
       }
     }
     const onTransitionend = debounce(() => {
-      if (carouselContent.value) {
-        const deactive = carouselContent.value.querySelector('.deactive')
+      if (contentRef.value) {
+        const deactive = contentRef.value.querySelector('.deactive')
         if (deactive) {
           deactive.classList.remove('deactive')
         }
@@ -113,8 +113,8 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      if (carouselContent.value) {
-        const { children } = carouselContent.value
+      if (contentRef.value) {
+        const { children } = contentRef.value
         if (children.length > 3) {
           indicators.value = [...new Array(children.length).keys()]
           children[children.length - 1].classList.add('carousel-item-prev')
@@ -128,11 +128,12 @@ export default defineComponent({
     })
 
     return {
+      style,
       activeIndex,
       controlClick,
-      carouselContent,
+      contentRef,
       indicators,
-      carouselIndicators,
+      indicatorsRef,
       makeActive,
       onTransitionend
     }
@@ -140,21 +141,17 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-.carousel {
+<style lang="scss" module>
+.container {
   margin: 20px 0;
-
-  .carousel-container {
-    position: relative;
-
-    .carousel-content {
-      position: relative;
-    }
-  }
 }
 
-.carousel-control-prev,
-.carousel-control-next {
+.content {
+  position: relative;
+}
+
+.control-prev,
+.control-next {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -171,22 +168,21 @@ export default defineComponent({
     opacity: 1;
   }
 
-  .carousel-control-prev-icon,
-  .carousel-control-next-icon {
+  :global(.icon) {
     width: 2rem;
     height: 2rem;
   }
 }
 
-.carousel-control-prev {
+.control-prev {
   left: 0;
 }
 
-.carousel-control-next {
+.control-next {
   right: 0
 }
 
-.carousel-indicators {
+.indicators {
   display: flex;
   list-style: none;
   justify-content: center;
