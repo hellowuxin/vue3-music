@@ -1,11 +1,14 @@
-export default function debounce<T> (fn: Function, delay = 0) {
+type Func = <T>(args?: T) => void
+
+export default function debounce (fn: Func, delay = 0): Func {
   let timer: null | number = null
-  return <U>(...args: U[]) => {
+
+  return <T>(...args: T[]) => {
     if (timer) {
       clearTimeout(timer)
     }
     timer = setTimeout(() => {
-      fn(args)
+      fn(...args)
       timer = null
     }, delay)
   }
