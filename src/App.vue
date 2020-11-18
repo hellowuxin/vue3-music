@@ -21,6 +21,10 @@ export default defineComponent({
 </script>
 
 <style type="text/css">
+body {
+  margin: 0;
+}
+
 .icon {
   width: 1em; height: 1em;
   vertical-align: -0.15em;
@@ -34,7 +38,6 @@ a {
 }
 
 .global-container {
-  margin-top: 54px;
-  margin-bottom: 73px;
+  margin: 54px 20px 73px 20px;
 }
 </style>

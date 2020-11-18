@@ -1,28 +1,35 @@
 <template>
-  <nav class="global-header">
-    <ul class="nav-ul">
-      <li class="nav-li"><a class="active" href="#">个性推荐</a></li>
-      <li class="nav-li"><a href="#">歌单</a></li>
-      <li class="nav-li"><a href="#">主播电台</a></li>
-      <li class="nav-li"><a href="#">排行榜</a></li>
-      <li class="nav-li"><a href="#">歌手</a></li>
-      <li class="nav-li"><a href="#">最新音乐</a></li>
+  <nav :class="style['container']">
+    <ul :class="style['nav']">
+      <router-link :class="[style['nav-item'], style['active']]" to="/">个性推荐</router-link>
+      <router-link :class="style['nav-item']" to="/">歌单</router-link>
+      <router-link :class="style['nav-item']" to="/">主播电台</router-link>
+      <router-link :class="style['nav-item']" to="/">排行榜</router-link>
+      <router-link :class="style['nav-item']" to="/">歌手</router-link>
+      <router-link :class="style['nav-item']" to="/">最新音乐</router-link>
     </ul>
   </nav>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, useCssModule } from 'vue'
 
 export default defineComponent({
-  name: 'GlobalHeader'
+  name: 'GlobalHeader',
+  setup () {
+    const style = useCssModule()
+
+    return {
+      style
+    }
+  }
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" module>
 $black: #000;
 
-.global-header {
+.container {
   z-index: 5;
   background-color: rgba(#F6F6F6, .9);
   backdrop-filter: blur(10px);
@@ -30,26 +37,24 @@ $black: #000;
   top: 0;
   left: 0;
   right: 0;
+}
 
-  .nav-ul {
-    display: flex;
-    justify-content: space-between;
-    list-style: none;
-    padding: 0;
+.nav {
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  padding: 0;
+}
 
-    .nav-li {
-      a {
-        color: rgba($black, .55);
+.nav-item {
+  color: rgba($black, .55);
 
-        &.active {
-          color: $black;
-        }
+  &.active {
+    color: $black;
+  }
 
-        &:hover {
-          color: $black;
-        }
-      }
-    }
+  &:hover {
+    color: $black;
   }
 }
 </style>
