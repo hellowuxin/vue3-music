@@ -1,5 +1,5 @@
 <template>
-  <div class="home-view">
+  <div :class="style['container']">
     <carousel v-if="carouselValue && carouselValue.length > 3">
       <carousel-item
         v-for="(item, index) in carouselValue"
@@ -7,12 +7,12 @@
         :src="item.imageUrl"
       ></carousel-item>
     </carousel>
-    <div class="recommended-playlists">
-      <a class="title" href="#">
+    <div :class="style['recommended-playlists']">
+      <a :class="style['title']" href="#">
         <span>推荐歌单</span>
         <icon iconId="iconright"/>
       </a>
-      <div class="recommended-playlists-content" v-if="recommendedPlaylists">
+      <div :class="style['content']" v-if="recommendedPlaylists">
         <card
           v-for="play in recommendedPlaylists"
           :key="play.id"
@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import axios from 'axios'
-import { defineComponent, ref, Ref } from 'vue'
+import { defineComponent, ref, Ref, useCssModule } from 'vue'
 import Carousel from '../components/Carousel.vue'
 import CarouselItem from '../components/CarouselItem.vue'
 import Card from '../components/Card.vue'
@@ -57,6 +57,7 @@ export default defineComponent({
     const carouselValue: Ref<Banner[] | undefined> = ref()
     const recommendedPlaylists: Ref<Play[] | undefined> = ref()
     const router = useRouter()
+    const style = useCssModule()
 
     axios.get('/banner').then(({ data }) => {
       carouselValue.value = data.banners
@@ -70,6 +71,7 @@ export default defineComponent({
     }
 
     return {
+      style,
       carouselValue,
       recommendedPlaylists,
       clickCard
@@ -78,24 +80,27 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-.home-view {
+<style lang="scss" module>
+.container {
   display: flow-root;
 }
 
-.title {
-  display: block;
-  margin: 10px 0;
-  font-size: larger;
+.recommended-playlists {
 
-  .icon {
-    padding-left: 5px;
+  .title {
+    display: block;
+    margin: 10px 0;
+    font-size: larger;
+
+    :global(.icon) {
+      padding-left: 5px;
+    }
   }
-}
 
-.recommended-playlists-content {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 30px 20px;
+  .content {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 30px 20px;
+  }
 }
 </style>

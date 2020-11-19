@@ -1,20 +1,20 @@
 <template>
-  <div class="music-bar">
-    <div class="bar-start">
+  <div :class="style['container']">
+    <div :class="style['left']">
       <img src="http://p1.music.126.net/BPaZelNOF3p2Ov2zkSlq0A==/2528876745087477.jpg?param=177y177" alt="">
-      <div class="bar-start-content">
+      <div :class="style['left-content']">
         <div>As The Deer</div>
         <div>00:33 / 05:01</div>
       </div>
     </div>
-    <div class="bar-center">
+    <div :class="style['center']">
       <icon iconId="iconaixin"/>
-      <icon iconId="iconshangyishou"/>
-      <icon iconId="iconplay"/>
-      <icon iconId="iconxiayishou"/>
+      <icon iconId="iconshangyishou" :class="style['iconshangyishou']"/>
+      <icon iconId="iconplay" :class="style['iconplay']"/>
+      <icon iconId="iconxiayishou" :class="style['iconxiayishou']"/>
       <icon iconId="iconfenxiang"/>
     </div>
-    <div class="bar-end">
+    <div :class="style['right']">
       <icon iconId="iconxunhuan"/>
       <icon iconId="iconbofangliebiao"/>
       <icon iconId="iconyinliang"/>
@@ -23,19 +23,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, useCssModule } from 'vue'
 import Icon from './Icon.vue'
 
 export default defineComponent({
   name: 'MusicBar',
   components: {
     Icon
+  },
+  setup () {
+    const style = useCssModule()
+
+    return {
+      style
+    }
   }
 })
 </script>
 
-<style lang="scss">
-.music-bar {
+<style lang="scss" module>
+.container {
   position: fixed;
   bottom: 0;
   left: 0;
@@ -49,41 +56,42 @@ export default defineComponent({
   border-color: #D33A31;
   border-style: solid;
   color: #4C4C4C;
+}
 
-  .bar-start {
-    display: flex;
+.left {
+  display: flex;
+  height: inherit;
+
+  img {
     height: inherit;
-
-    img {
-      height: inherit;
-      border-radius: 4px;
-    }
-
-    .bar-start-content {
-      padding: 0 10px;
-    }
+    border-radius: 4px;
   }
+}
 
-  .bar-center, .bar-end {
-    display: flex;
-    align-items: center;
-    font-size: 22px;
+.left-content {
+  padding: 0 10px;
+}
 
-    .icon {
-      margin: 0 10px;
-    }
+.center,
+.right {
+  display: flex;
+  align-items: center;
+  font-size: 22px;
 
-    .iconplay {
-      padding: 10px;
-      border-radius: 50%;
-      color: white;
-      background-color:  #D33A31;
-    }
-
-    .iconxiayishou,
-    .iconshangyishou {
-      color: #D33A31;
-    }
+  :global(.icon) {
+    margin: 0 10px;
   }
+}
+
+.iconplay {
+  padding: 10px;
+  border-radius: 50%;
+  color: white;
+  background-color:  #D33A31;
+}
+
+.iconxiayishou,
+.iconshangyishou {
+  color: #D33A31;
 }
 </style>
