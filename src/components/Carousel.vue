@@ -2,7 +2,7 @@
   <div :class="style['container']">
     <div :class="style['content']">
       <div
-        ref="contentRef"
+        ref="contentEle"
         :style="{ height: `${height}px` }"
         @transitionend="onTransitionend"
       >
@@ -15,7 +15,7 @@
         <icon iconId="iconright"/>
       </a>
     </div>
-    <ol :class="style['indicators']" ref="indicatorsRef" v-if="indicators">
+    <ol :class="style['indicators']" ref="indicatorsEle" v-if="indicators">
       <li
         v-for="indic in indicators"
         :key="indic"
@@ -30,6 +30,7 @@
 import { defineComponent, onMounted, ref, Ref, useCssModule } from 'vue'
 import Icon from './Icon.vue'
 import debounce from '../tools/debounce'
+import itemStyle from '../css/CarouselItem.module.scss'
 
 export default defineComponent({
   name: 'Carousel',
@@ -44,10 +45,17 @@ export default defineComponent({
   },
   setup () {
     const activeIndex = ref(0)
-    const contentRef: Ref<Element | undefined> = ref()
-    const indicatorsRef: Ref<Element | undefined> = ref()
+    const contentEle: Ref<Element | undefined> = ref()
+    const indicatorsEle: Ref<Element | undefined> = ref()
     const indicators: Ref<number[] | undefined> = ref()
     const style = useCssModule()
+    const {
+      prev: itemPrev,
+      active: itemActive,
+      deactive: itemDeactive,
+      next: itemNext,
+      container: itemContainer
+    } = itemStyle
 
     const circleIndex = (step: number) => {
       const { length } = indicators.value as number[]
@@ -60,7 +68,7 @@ export default defineComponent({
         : (ele.previousElementSibling || ele.parentElement?.lastElementChild || ele)
     }
     const controlClick = (next = true) => {
-      const activeItem = document.querySelector('.carousel-item.active')
+      const activeItem = document.querySelector(`.${itemContainer}.${itemActive}`)
 
       if (activeItem) {
         const prevItem = circleElement(activeItem, false)
@@ -68,16 +76,16 @@ export default defineComponent({
 
         if (next) {
           activeIndex.value = circleIndex(1)
-          prevItem.classList.remove('carousel-item-prev')
-          activeItem.classList.replace('active', 'carousel-item-prev')
-          nextItem.classList.replace('carousel-item-next', 'active')
-          circleElement(nextItem).classList.add('carousel-item-next')
+          prevItem.classList.remove(itemPrev)
+          activeItem.classList.replace(itemActive, itemPrev)
+          nextItem.classList.replace(itemNext, itemActive)
+          circleElement(nextItem).classList.add(itemNext)
         } else {
           activeIndex.value = circleIndex(-1)
-          prevItem.classList.replace('carousel-item-prev', 'active')
-          activeItem.classList.replace('active', 'carousel-item-next')
-          nextItem.classList.remove('carousel-item-next')
-          circleElement(prevItem, false).classList.add('carousel-item-prev')
+          prevItem.classList.replace(itemPrev, itemActive)
+          activeItem.classList.replace(itemActive, itemNext)
+          nextItem.classList.remove(itemNext)
+          circleElement(prevItem, false).classList.add(itemPrev)
         }
       }
     }
@@ -86,40 +94,40 @@ export default defineComponent({
         controlClick()
       } else if (index === circleIndex(-1)) {
         controlClick(false)
-      } else if (index !== activeIndex.value && contentRef.value) {
+      } else if (index !== activeIndex.value && contentEle.value) {
         activeIndex.value = index
-        const activeItem = document.querySelector('.carousel-item.active')
-        const newActiveItem = contentRef.value.children[index]
+        const activeItem = document.querySelector(`.${itemContainer}.${itemActive}`)
+        const newActiveItem = contentEle.value.children[index]
 
         if (activeItem) {
           const prevItem = circleElement(activeItem, false)
           const nextItem = circleElement(activeItem)
-          activeItem.classList.replace('active', 'deactive')
-          prevItem.classList.remove('carousel-item-prev')
-          nextItem.classList.remove('carousel-item-next')
+          activeItem.classList.replace(itemActive, itemDeactive)
+          prevItem.classList.remove(itemPrev)
+          nextItem.classList.remove(itemNext)
         }
-        newActiveItem.classList.add('active')
-        circleElement(newActiveItem, false).classList.add('carousel-item-prev')
-        circleElement(newActiveItem).classList.add('carousel-item-next')
+        newActiveItem.classList.add(itemActive)
+        circleElement(newActiveItem, false).classList.add(itemPrev)
+        circleElement(newActiveItem).classList.add(itemNext)
       }
     }
     const onTransitionend = debounce(() => {
-      if (contentRef.value) {
-        const deactive = contentRef.value.querySelector('.deactive')
+      if (contentEle.value) {
+        const deactive = contentEle.value.querySelector(itemDeactive)
         if (deactive) {
-          deactive.classList.remove('deactive')
+          deactive.classList.remove(itemDeactive)
         }
       }
     })
 
     onMounted(() => {
-      if (contentRef.value) {
-        const { children } = contentRef.value
+      if (contentEle.value) {
+        const { children } = contentEle.value
         if (children.length > 3) {
           indicators.value = [...new Array(children.length).keys()]
-          children[children.length - 1].classList.add('carousel-item-prev')
-          children[0].classList.add('active')
-          children[1].classList.add('carousel-item-next')
+          children[children.length - 1].classList.add(itemPrev)
+          children[0].classList.add(itemActive)
+          children[1].classList.add(itemNext)
         }
       }
       // setInterval(() => {
@@ -129,11 +137,12 @@ export default defineComponent({
 
     return {
       style,
+      itemStyle,
       activeIndex,
       controlClick,
-      contentRef,
+      contentEle,
       indicators,
-      indicatorsRef,
+      indicatorsEle,
       makeActive,
       onTransitionend
     }
