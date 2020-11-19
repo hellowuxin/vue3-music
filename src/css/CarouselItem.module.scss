@@ -1,0 +1,60 @@
+@keyframes active-to-deactive {
+  from { z-index: 1; }
+  to { z-index: 0; }
+}
+
+.container {
+  z-index: -2;
+  position: absolute;
+  border-radius: 10px;
+  height: inherit;
+  transform: scale(.9);
+  transition: all .5s ease-out;
+
+  &::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    content: "";
+    background-color: black;
+    opacity: 0.5;
+    border-radius: inherit;
+  }
+
+  img {
+    display: block;
+    height: inherit;
+    width: inherit;
+    border-radius: inherit;
+    object-fit: cover;
+  }
+}
+
+.active {
+  z-index: 1;
+  transform: scale(1);
+}
+
+.active::after {
+  opacity: 0;
+}
+
+.deactive {
+  animation-name: active-to-deactive;
+}
+
+.next,
+.prev {
+  z-index: -1;
+  transform: scale(.8);
+}
+
+.prev {
+  transform-origin: left;
+}
+
+.next {
+  transform-origin: right;
+}

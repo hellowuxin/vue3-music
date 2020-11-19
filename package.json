@@ -7,6 +7,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "start:server": "cd NeteaseCloudMusicApi && node app.js",
+    "tsm": "tsm src/css",
     "start": "concurrently \"npm run start:server\" \"npm run serve\""
   },
   "dependencies": {
