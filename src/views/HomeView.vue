@@ -1,6 +1,6 @@
 <template>
   <div :class="style['container']">
-    <carousel v-if="carouselValue && carouselValue.length > 3">
+    <carousel v-if="carouselValue">
       <carousel-item
         v-for="(item, index) in carouselValue"
         :key="index"

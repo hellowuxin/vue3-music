@@ -152,7 +152,7 @@ export default defineComponent({
 
 <style lang="scss" module>
 .container {
-  margin: 20px 0;
+  margin: 10px 0;
 }
 
 .content {

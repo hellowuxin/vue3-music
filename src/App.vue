@@ -20,7 +20,7 @@ export default defineComponent({
 })
 </script>
 
-<style type="text/css">
+<style>
 body {
   margin: 0;
 }
@@ -39,5 +39,14 @@ a {
 
 .global-container {
   margin: 54px 20px 73px 20px;
+  padding: 10px 0;
+}
+
+.grey {
+  color: #797979
+}
+
+.small-font {
+  font-size: small;
 }
 </style>

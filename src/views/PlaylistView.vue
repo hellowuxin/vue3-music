@@ -7,7 +7,8 @@
           <span :class="style['tag']">歌单</span>
           <h2>{{ playlist.name }}</h2>
         </div>
-        <p>
+        <p :class="style['creator']" class="grey small-font">
+          <img :src="playlist.creator.avatarUrl" alt="">
           <span>{{ playlist.creator.nickname }}</span>
           <span>{{ new Date(playlist.createTime).toLocaleDateString('en-CA') }}创建</span>
         </p>
@@ -37,17 +38,18 @@ import { useRoute } from 'vue-router'
 import axios from 'axios'
 
 interface Creator {
-  nickname: string;
+  nickname: string
+  avatarUrl: string
 }
 interface Playlist {
-  name: string;
-  coverImgUrl: string;
-  creator: Creator;
-  createTime: number;
-  tags: string[];
-  trackCount: number;
-  playCount: number;
-  description: string;
+  name: string
+  coverImgUrl: string
+  creator: Creator
+  createTime: number
+  tags: string[]
+  trackCount: number
+  playCount: number
+  description: string
 }
 
 export default defineComponent({
@@ -76,7 +78,7 @@ export default defineComponent({
 
 .header {
   display: flex;
-  margin: 20px 0;
+  align-items: flex-start;
 
   img {
     width: 300px;
@@ -89,19 +91,33 @@ export default defineComponent({
 
   .title {
     display: flex;
-    align-items: center;
 
     .tag {
+      font-size: smaller;
       color: red;
       border: 1px solid;
       border-radius: 4px;
-      padding: 0 3px;
-      font-size: smaller;
+      padding: 0 5px;
+      margin: 6px 0;
+      height: min-content;
+      flex-shrink: 0;
     }
 
     h2 {
-      margin: 0;
+      margin: 0 0 0 10px;
+      font-weight: normal;
     }
+  }
+}
+
+.creator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  img {
+    width: 30px;
+    border-radius: 50%;
   }
 }
 </style>
