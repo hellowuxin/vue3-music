@@ -21,6 +21,11 @@ export default defineComponent({
 </script>
 
 <style>
+:root {
+  --main-color: #D33A31;
+  --grey: #797979;
+}
+
 body {
   margin: 0;
 }
@@ -42,11 +47,7 @@ a {
   padding: 10px 0;
 }
 
-.grey {
-  color: #797979
-}
-
-.small-font {
-  font-size: small;
+button {
+  outline: none;
 }
 </style>

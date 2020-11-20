@@ -71,7 +71,7 @@ export default defineComponent({
   border-radius: 50%;
   padding: 8px;
   margin: 10px;
-  color: #D33A31;
+  color: var(--main-color);
   background-color: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(5px);
   transition: opacity .3s ease;

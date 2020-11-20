@@ -42,8 +42,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" module>
-$red: #D33A31;
-
 .container {
   position: fixed;
   bottom: 0;
@@ -55,7 +53,7 @@ $red: #D33A31;
   height: 50px;
   padding: 10px;
   border-width: 3px 0 0 0;
-  border-color: $red;
+  border-color: var(--main-color);
   border-style: solid;
   color: #4C4C4C;
 }
@@ -87,11 +85,11 @@ $red: #D33A31;
 
 .iconplay {
   font-size: 40px;
-  color: $red;
+  color: var(--main-color);
 }
 
 .iconxiayishou,
 .iconshangyishou {
-  color: $red;
+  color: var(--main-color);
 }
 </style>

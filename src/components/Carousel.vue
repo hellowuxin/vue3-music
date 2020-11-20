@@ -202,7 +202,7 @@ export default defineComponent({
     padding: .4rem;
 
     &.active::after {
-      background-color: #D33A31;
+      background-color: var(--main-color);
     }
 
     &::after {
