@@ -10,7 +10,7 @@
     <div :class="style['center']">
       <icon iconId="iconaixin"/>
       <icon iconId="iconshangyishou" :class="style['iconshangyishou']"/>
-      <icon iconId="iconplay" :class="style['iconplay']"/>
+      <icon iconId="iconplay2" :class="style['iconplay']"/>
       <icon iconId="iconxiayishou" :class="style['iconxiayishou']"/>
       <icon iconId="iconfenxiang"/>
     </div>
@@ -42,6 +42,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" module>
+$red: #D33A31;
+
 .container {
   position: fixed;
   bottom: 0;
@@ -53,7 +55,7 @@ export default defineComponent({
   height: 50px;
   padding: 10px;
   border-width: 3px 0 0 0;
-  border-color: #D33A31;
+  border-color: $red;
   border-style: solid;
   color: #4C4C4C;
 }
@@ -84,14 +86,12 @@ export default defineComponent({
 }
 
 .iconplay {
-  padding: 10px;
-  border-radius: 50%;
-  color: white;
-  background-color:  #D33A31;
+  font-size: 40px;
+  color: $red;
 }
 
 .iconxiayishou,
 .iconshangyishou {
-  color: #D33A31;
+  color: $red;
 }
 </style>
