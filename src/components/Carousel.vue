@@ -194,7 +194,6 @@ export default defineComponent({
 .indicators {
   display: flex;
   justify-content: center;
-  padding-inline-start: 0;
   margin: 5px 0;
 
   li {

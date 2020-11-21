@@ -51,7 +51,8 @@ button {
 }
 
 ol,
-li {
+ul {
   list-style: none;
+  padding: 0;
 }
 </style>
