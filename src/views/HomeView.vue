@@ -91,6 +91,7 @@ export default defineComponent({
     display: block;
     margin: 10px 0;
     font-size: larger;
+    color: black;
 
     :global(.icon) {
       padding-left: 5px;

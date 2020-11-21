@@ -39,7 +39,6 @@ body {
 
 a {
   text-decoration: none;
-  color: black;
 }
 
 .global-container {
@@ -49,5 +48,10 @@ a {
 
 button {
   outline: none;
+}
+
+ol,
+li {
+  list-style: none;
 }
 </style>
