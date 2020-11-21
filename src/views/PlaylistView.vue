@@ -2,14 +2,14 @@
   <div :class="style['container']" v-if="playlist">
     <div :class="style['header']">
       <img :src="playlist.coverImgUrl" alt="">
-      <div :class="style['content']">
+      <div :class="style['header-content']">
         <div :class="style['title']">
           <span>歌单</span>
           <h2>{{ playlist.name }}</h2>
         </div>
         <p :class="style['creator']">
           <img :src="playlist.creator.avatarUrl" alt="">
-          <span>{{ playlist.creator.nickname }}</span>
+          <router-link to="#">{{ playlist.creator.nickname }}</router-link>
           <span>{{ new Date(playlist.createTime).toLocaleDateString('en-CA') }}创建</span>
         </p>
         <div :class="style['actions']">
@@ -36,22 +36,40 @@
             <span>下载全部</span>
           </button>
         </div>
-        <p>
-          <span>标 签：</span>
-          <span v-for="(tag, index) in playlist.tags" :key="index">{{tag}}</span>
+        <p :class="style['tags']">
+          <span>标&emsp;签：</span>
+          <ul :class="style['breadcrumb']">
+            <li v-for="(tag, index) in playlist.tags" :key="index">
+              <router-link to="#">{{tag}}</router-link>
+            </li>
+          </ul>
         </p>
-        <p>
-          <span>歌曲数：{{ playlist.trackCount }}</span>
-          <span>播放数：{{ playlist.playCount }}</span>
+        <p :class="style['count']">
+          <span>
+            <span>歌曲数：</span>
+            <span :class="style['grey']">{{ playlist.trackCount }}</span>
+          </span>
+          <span>
+            <span>播放数：</span>
+            <span :class="style['grey']">{{ playlist.playCount }}</span>
+          </span>
         </p>
-        <p v-html="`简介：${ playlist.description.replaceAll('\n', '<br>') }`"></p>
+        <p :class="style['introduction']" ref="introEle">
+          <span>简&emsp;介：</span>
+          <span
+            v-html="playlist.description.replaceAll('\n', '<br>')"
+            :class="style['description']"
+            ref="descEle"
+          ></span>
+          <span v-show="isVisible" :class="style['dropdown']" @click="dropdown"></span>
+        </p>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, ref, useCssModule } from 'vue'
+import { defineComponent, onUpdated, Ref, ref, useCssModule } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 import Icon from '../components/Icon.vue'
@@ -82,37 +100,97 @@ export default defineComponent({
     const style = useCssModule()
     const route = useRoute()
     const playlist: Ref<Playlist | undefined> = ref()
+    const introEle: Ref<HTMLParagraphElement | undefined> = ref()
+    const descEle: Ref<HTMLSpanElement | undefined> = ref()
+    const isVisible = ref(true)
+
     axios.get(`/playlist/detail?id=${route.query.id}`).then(({ data }) => {
       console.log(data.playlist)
       playlist.value = data.playlist
     })
 
+    const dropdown = () => {
+      if (introEle.value) {
+        if (introEle.value.classList.contains(style.unfold)) {
+          introEle.value.classList.remove(style.unfold)
+        } else {
+          introEle.value.classList.add(style.unfold)
+        }
+      }
+    }
+
+    onUpdated(() => {
+      if (descEle.value) {
+        isVisible.value = descEle.value.scrollHeight > 90
+      }
+    })
+
     return {
       style,
-      playlist
+      playlist,
+      dropdown,
+      introEle,
+      isVisible,
+      descEle
     }
   }
 })
 </script>
 
 <style lang="scss" module>
+@keyframes close {
+  from {
+    -webkit-line-clamp: initial;
+  }
+
+  to {
+    -webkit-line-clamp: 3;
+  }
+}
+
+@keyframes open {
+  from {
+    -webkit-line-clamp: 3;
+  }
+
+  to {
+    -webkit-line-clamp: initial;
+  }
+}
+
+a {
+  color: #668DB9;
+}
+
+p {
+  margin: 0;
+}
+
+.grey {
+  color: var(--grey);
+}
+
 .container {
   display: flow-root;
 }
 
 .header {
   display: flex;
-  align-items: flex-start;
+  align-items: start;
   font-size: small;
 
   img {
-    width: 300px;
+    flex-shrink: 0;
+    width: 250px;
     border-radius: 10px;
   }
+}
 
-  .content {
-    margin-left: 20px;
-  }
+.header-content {
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
 }
 
 .title {
@@ -149,6 +227,7 @@ export default defineComponent({
 
 .actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 
   :global(.icon) {
@@ -194,6 +273,65 @@ export default defineComponent({
 
     &:hover {
       cursor: pointer;
+    }
+  }
+}
+
+.tags {
+  display: flex;
+
+  .breadcrumb {
+    display: flex;
+    margin: 0;
+    padding: 0;
+
+    li:not(:first-child):before {
+      content: '/';
+      padding: 0 3px;
+    }
+  }
+}
+
+.count {
+  display: flex;
+  gap: 20px;
+}
+
+.introduction {
+  position: relative;
+  overflow: hidden;
+  max-height: 54px;
+  transition: max-height 0.3s linear;
+
+  .description {
+    color: var(--grey);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-indent: 4em;
+    margin-top: -18px;
+    animation: close 0s linear 0.3s forwards;
+  }
+
+  .dropdown {
+    position: absolute;
+    top: calc(18px * 2.5);
+    right: 0;
+    border: 6px solid transparent;
+    border-top-color: var(--grey);
+    cursor: pointer;
+    transform-origin: 50% 25%;
+  }
+
+  &.unfold {
+    max-height: 100rem;
+
+    .description {
+      animation: open 0s linear forwards;
+    }
+
+    .dropdown {
+      transform: rotate(180deg);
     }
   }
 }
