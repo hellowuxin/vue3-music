@@ -66,16 +66,14 @@
       </div>
     </div>
     <div :class="style['content']">
-      <nav>
-        <ul>
-          <li :class="style['active']">歌曲列表</li>
-          <li>
-            <span>评论</span>
-            <span :class="style['commentcount']">({{ playlist.commentCount }})</span>
-          </li>
-          <li>收藏者</li>
-        </ul>
-      </nav>
+      <tabs>
+        <li>歌曲列表</li>
+        <li>
+          <span>评论</span>
+          <span :class="style['commentcount']">({{ playlist.commentCount }})</span>
+        </li>
+        <li>收藏者</li>
+      </tabs>
       <table :class="style['songlist']">
         <colgroup>
           <col>
@@ -121,10 +119,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onUpdated, Ref, ref, useCssModule } from 'vue'
+import { defineComponent, nextTick, Ref, ref, useCssModule } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 import Icon from '../components/Icon.vue'
+import Tabs from '../components/Tabs.vue'
 
 interface Creator {
   nickname: string
@@ -163,7 +162,8 @@ interface Playlist {
 export default defineComponent({
   name: 'PlaylistView',
   components: {
-    Icon
+    Icon,
+    Tabs
   },
   setup () {
     const style = useCssModule()
@@ -172,11 +172,6 @@ export default defineComponent({
     const introEle: Ref<HTMLParagraphElement | undefined> = ref()
     const descEle: Ref<HTMLSpanElement | undefined> = ref()
     const isVisible = ref(true)
-
-    axios.get(`/playlist/detail?id=${route.query.id}`).then(({ data }) => {
-      console.log(data.playlist)
-      playlist.value = data.playlist
-    })
 
     const dropdown = () => {
       if (introEle.value) {
@@ -188,7 +183,11 @@ export default defineComponent({
       }
     }
 
-    onUpdated(() => {
+    axios.get(`/playlist/detail?id=${route.query.id}`).then(async ({ data }) => {
+      console.log(data.playlist)
+      playlist.value = data.playlist
+
+      await nextTick()
       if (descEle.value) {
         isVisible.value = descEle.value.scrollHeight > 90
       }
@@ -409,20 +408,6 @@ p {
   display: flow-root;
   color: var(--grey);
   margin-top: 20px;
-
-  nav {
-    display: flow-root;
-  }
-
-  nav ul {
-    display: flex;
-    gap: 30px;
-    margin: 0;
-  }
-
-  nav li {
-    padding: 5px 0;
-  }
 }
 
 .commentcount {
