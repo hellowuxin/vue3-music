@@ -38,7 +38,7 @@
         </div>
         <p :class="style['tags']">
           <span>标&emsp;签：</span>
-          <ul :class="style['breadcrumb']">
+          <ul class="breadcrumb">
             <li v-for="(tag, index) in playlist.tags" :key="index">
               <router-link to="#">{{ tag }}</router-link>
             </li>
@@ -74,46 +74,9 @@
         </li>
         <li>收藏者</li>
       </tabs>
-      <table :class="style['songlist']">
-        <colgroup>
-          <col>
-          <col>
-          <col>
-          <col>
-          <col>
-        </colgroup>
-        <thead>
-          <tr>
-            <th></th>
-            <th>音乐标题</th>
-            <th>歌手</th>
-            <th>专辑</th>
-            <th>时长</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(track, index) in playlist.tracks" :key="track.id">
-            <td :class="style['serial']">
-              <span>{{ `${Math.floor((index+1)/10)}${((index+1)%10)}` }}</span>
-              <icon iconId="iconaixin"></icon>
-              <icon iconId="icondownload"></icon>
-            </td>
-            <td :class="style['songtitle']">
-              <span>{{ track.name }}</span>
-              <icon v-if="track.mv" iconId="iconvideo"></icon>
-            </td>
-            <td>
-              <ul :class="style['breadcrumb']">
-                <li v-for="ar in track.ar" :key="ar.id">
-                  <router-link to="#">{{ ar.name }}</router-link>
-                </li>
-              </ul>
-            </td>
-            <td>{{ track.al.name }}</td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
+      <tabs-items>
+        <songlist :tracks="playlist.tracks"></songlist>
+      </tabs-items>
     </div>
   </div>
 </template>
@@ -122,48 +85,19 @@
 import { defineComponent, nextTick, Ref, ref, useCssModule } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
+import { Playlist } from '../interface'
 import Icon from '../components/Icon.vue'
 import Tabs from '../components/Tabs.vue'
-
-interface Creator {
-  nickname: string
-  avatarUrl: string
-}
-interface Artist {
-  id: number
-  name: string
-}
-interface Album {
-  id: number
-  name: string
-}
-interface Track {
-  name: string
-  id: number
-  ar: Artist[]
-  al: Album
-  mv: number
-}
-interface Playlist {
-  name: string
-  coverImgUrl: string
-  creator: Creator
-  createTime: number
-  tags: string[]
-  trackCount: number
-  playCount: number
-  description: string
-  shareCount: number
-  subscribedCount: number
-  tracks: Track[]
-  commentCount: number
-}
+import TabsItems from '../components/TabsItems.vue'
+import Songlist from '../components/Songlist.vue'
 
 export default defineComponent({
   name: 'PlaylistView',
   components: {
     Icon,
-    Tabs
+    Tabs,
+    TabsItems,
+    Songlist
   },
   setup () {
     const style = useCssModule()
@@ -191,6 +125,9 @@ export default defineComponent({
       if (descEle.value) {
         isVisible.value = descEle.value.scrollHeight > 90
       }
+    })
+    axios.get(`/comment/playlist?id=${route.query.id}`).then(({ data }) => {
+      console.log(data)
     })
 
     return {
@@ -350,16 +287,6 @@ p {
   display: flex;
 }
 
-.breadcrumb {
-  display: flex;
-  margin: 0;
-
-  li:not(:first-child):before {
-    content: '/';
-    padding: 0 3px;
-  }
-}
-
 .count {
   display: flex;
   gap: 20px;
@@ -412,58 +339,5 @@ p {
 
 .commentcount {
   font-size: small;
-}
-
-.songlist {
-  width: 100%;
-
-  :global(.icon) {
-    font-size: x-large;
-  }
-
-  colgroup col:first-child,
-  colgroup col:last-child {
-    width: min-content;
-  }
-
-  th {
-    text-align: start;
-    font-weight: normal;
-    white-space: nowrap;
-  }
-
-  tbody tr:nth-child(odd) {
-    background-color: #FAFAFA;
-  }
-
-  td,
-  th {
-    border-collapse: collapse;
-    border: 5px solid transparent;
-  }
-}
-
-.serial {
-  display: flex;
-  gap: 5px;
-  align-items: center;
-  font-family: Courier, monospace, 'Courier New';
-
-  span {
-    margin-right: 10px;
-  }
-}
-
-.songtitle {
-  color: black;
-
-  span {
-    margin-right: 5px;
-  }
-
-  :global(.icon) {
-    font-size: large;
-    color: var(--main-color);
-  }
 }
 </style>

@@ -20,7 +20,7 @@ export default defineComponent({
 })
 </script>
 
-<style>
+<style lang="scss">
 :root {
   --main-color: #D33A31;
   --grey: #797979;
@@ -54,5 +54,15 @@ ol,
 ul {
   list-style: none;
   padding: 0;
+}
+
+.breadcrumb {
+  display: flex;
+  margin: 0;
+
+  li:not(:first-child):before {
+    content: '/';
+    padding: 0 3px;
+  }
 }
 </style>
