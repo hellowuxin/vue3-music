@@ -20,6 +20,7 @@ export interface Track {
   al: Album
   mv: number
   alia: string[]
+  dt: number
 }
 
 export interface Playlist {

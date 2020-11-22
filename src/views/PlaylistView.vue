@@ -165,14 +165,6 @@ export default defineComponent({
   }
 }
 
-a {
-  color: #668DB9;
-}
-
-p {
-  margin: 0;
-}
-
 .grey {
   color: var(--grey);
 }
@@ -190,6 +182,14 @@ p {
     flex-shrink: 0;
     width: 250px;
     border-radius: 10px;
+  }
+
+  a {
+    color: #668DB9;
+  }
+
+  p {
+    margin: 0;
   }
 }
 

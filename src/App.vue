@@ -24,6 +24,7 @@ export default defineComponent({
 :root {
   --main-color: #D33A31;
   --grey: #797979;
+  --monospaced: Courier, monospace, 'Courier New';
 }
 
 body {

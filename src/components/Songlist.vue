@@ -19,7 +19,7 @@
     <tbody>
       <tr v-for="(track, index) in tracks" :key="track.id">
         <td :class="style['serial']">
-          <span>{{ `${Math.floor((index+1)/10)}${((index+1)%10)}` }}</span>
+          <span>{{ ((index + 1) % 10).toString().padStart(2, '0') }}</span>
           <icon iconId="iconaixin"></icon>
           <icon iconId="icondownload"></icon>
         </td>
@@ -36,7 +36,7 @@
           </ul>
         </td>
         <td>{{ track.al.name }}</td>
-        <td></td>
+        <td>{{ Math.floor(track.dt / 60000).toString().padStart(2, '0') }}:{{ Math.floor(track.dt / 1000 % 60).toString().padStart(2, '0') }}</td>
       </tr>
     </tbody>
   </table>
@@ -77,9 +77,12 @@ export default defineComponent({
     font-size: x-large;
   }
 
-  colgroup col:first-child,
-  colgroup col:last-child {
+  colgroup col:first-child {
     width: 100px;
+  }
+
+  colgroup col:last-child {
+    width: 61px;
   }
 
   th {
@@ -98,13 +101,21 @@ export default defineComponent({
   tbody tr:nth-child(odd) {
     background-color: #FAFAFA;
   }
+
+  tbody td:last-child {
+    font-family: var(--monospaced);
+  }
+
+  a {
+    color: var(--grey)
+  }
 }
 
 .serial {
   display: flex;
   gap: 5px;
   align-items: center;
-  font-family: Courier, monospace, 'Courier New';
+  font-family: var(--monospaced);
 
   span {
     margin-right: 10px;
