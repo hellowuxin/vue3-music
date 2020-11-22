@@ -24,9 +24,13 @@
           <icon iconId="icondownload"></icon>
         </td>
         <td :class="style['songtitle']">
-          <span>{{ track.name }}</span>
-          <span v-if="track.alia.length > 0">({{ track.alia[0] }})</span>
-          <icon v-if="track.mv" iconId="iconvideo"></icon>
+          <div>
+            <div>
+              <span>{{ track.name }}</span>
+              <span v-if="track.alia.length > 0">({{ track.alia[0] }})</span>
+            </div>
+            <icon v-if="track.mv" iconId="iconvideo"></icon>
+          </div>
         </td>
         <td>
           <ul class="breadcrumb">
@@ -124,17 +128,25 @@ export default defineComponent({
 
 .songtitle {
 
-  span:first-child {
-    color: black;
+  > div {
+    display: flex;
+    align-items: center;
+
+    > div {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-right: 5px;
+    }
   }
 
-  span {
-    margin-right: 5px;
+  span:first-child {
+    color: black;
   }
 
   :global(.icon) {
     font-size: large;
     color: var(--main-color);
+    flex-shrink: 0;
   }
 }
 </style>
