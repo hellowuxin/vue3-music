@@ -57,8 +57,13 @@ ul {
 }
 
 .breadcrumb {
-  display: flex;
   margin: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+  li {
+    display: inline;
+  }
 
   li:not(:first-child):before {
     content: '/';
