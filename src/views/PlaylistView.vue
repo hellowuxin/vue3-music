@@ -111,8 +111,10 @@ export default defineComponent({
       if (introEle.value) {
         if (introEle.value.classList.contains(style.unfold)) {
           introEle.value.classList.remove(style.unfold)
+          introEle.value.style.maxHeight = ''
         } else {
           introEle.value.classList.add(style.unfold)
+          introEle.value.style.maxHeight = `${descEle.value?.offsetHeight}px`
         }
       }
     }
@@ -296,7 +298,7 @@ p {
   position: relative;
   overflow: hidden;
   max-height: 54px;
-  transition: max-height 0.3s linear;
+  transition: max-height 0.3s ease;
 
   .description {
     color: var(--grey);
@@ -305,7 +307,7 @@ p {
     overflow: hidden;
     text-indent: 4em;
     margin-top: -18px;
-    animation: close 0s linear 0.3s forwards;
+    animation: close 0s 0.3s forwards;
   }
 
   .dropdown {
@@ -319,10 +321,9 @@ p {
   }
 
   &.unfold {
-    max-height: 100rem;
 
     .description {
-      animation: open 0s linear forwards;
+      animation: open 0s forwards;
     }
 
     .dropdown {
