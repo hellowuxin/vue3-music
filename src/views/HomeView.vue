@@ -29,8 +29,7 @@
 <script lang="ts">
 import axios from 'axios'
 import { defineComponent, ref, Ref, useCssModule } from 'vue'
-import Carousel from '../components/Carousel.vue'
-import CarouselItem from '../components/CarouselItem.vue'
+import { Carousel, CarouselItem } from '@/components/Carousel'
 import Card from '../components/Card.vue'
 import Icon from '../components/Icon.vue'
 import { useRouter } from 'vue-router'

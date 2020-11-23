@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, Ref, ref } from 'vue'
-import style from '../css/CarouselItem.module.scss'
+import style from '@/css/CarouselItem.module.scss'
 
 export default defineComponent({
   name: 'CarouselItem',
@@ -51,5 +51,5 @@ export default defineComponent({
 </script>
 
 <style>
-@import "../css/CarouselItem.module.scss"
+@import '~@/css/CarouselItem.module.scss'
 </style>

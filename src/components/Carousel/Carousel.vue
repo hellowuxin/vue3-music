@@ -28,9 +28,9 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref, Ref, useCssModule } from 'vue'
-import Icon from './Icon.vue'
-import debounce from '../tools/debounce'
-import itemStyle from '../css/CarouselItem.module.scss'
+import Icon from '@/components/Icon.vue'
+import debounce from '@/tools/debounce'
+import itemStyle from '@/css/CarouselItem.module.scss'
 
 export default defineComponent({
   name: 'Carousel',

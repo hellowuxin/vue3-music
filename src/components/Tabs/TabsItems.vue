@@ -6,8 +6,8 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, Ref, ref, useCssModule, watch } from 'vue'
-import reflow from '../tools/reflow'
-import debounce from '../tools/debounce'
+import reflow from '@/tools/reflow'
+import debounce from '@/tools/debounce'
 
 export default defineComponent({
   name: 'TabsItems',
