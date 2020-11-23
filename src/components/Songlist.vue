@@ -19,7 +19,7 @@
     <tbody>
       <tr v-for="(track, index) in tracks" :key="track.id">
         <td :class="style['serial']">
-          <span>{{ ((index + 1) % 10).toString().padStart(2, '0') }}</span>
+          <span>{{ (index + 1).toString().padStart(2, '0') }}</span>
           <icon iconId="iconaixin"></icon>
           <icon iconId="icondownload"></icon>
         </td>

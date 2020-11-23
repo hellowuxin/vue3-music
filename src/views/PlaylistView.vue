@@ -66,7 +66,7 @@
       </div>
     </div>
     <div :class="style['content']">
-      <tabs>
+      <tabs v-model="activeTab">
         <li>歌曲列表</li>
         <li>
           <span>评论</span>
@@ -74,8 +74,16 @@
         </li>
         <li>收藏者</li>
       </tabs>
-      <tabs-items>
-        <songlist :tracks="playlist.tracks"></songlist>
+      <tabs-items v-model="activeTab">
+        <tab-item>
+          <songlist :tracks="playlist.tracks"></songlist>
+        </tab-item>
+        <tab-item>
+          第二页
+        </tab-item>
+        <tab-item>
+          第三页
+        </tab-item>
       </tabs-items>
     </div>
   </div>
@@ -90,6 +98,7 @@ import Icon from '../components/Icon.vue'
 import Tabs from '../components/Tabs.vue'
 import TabsItems from '../components/TabsItems.vue'
 import Songlist from '../components/Songlist.vue'
+import TabItem from '../components/TabItem.vue'
 
 export default defineComponent({
   name: 'PlaylistView',
@@ -97,7 +106,8 @@ export default defineComponent({
     Icon,
     Tabs,
     TabsItems,
-    Songlist
+    Songlist,
+    TabItem
   },
   setup () {
     const style = useCssModule()
@@ -106,6 +116,7 @@ export default defineComponent({
     const introEle: Ref<HTMLParagraphElement | undefined> = ref()
     const descEle: Ref<HTMLSpanElement | undefined> = ref()
     const isVisible = ref(true)
+    const activeTab = ref(0)
 
     const dropdown = () => {
       if (introEle.value) {
@@ -138,7 +149,8 @@ export default defineComponent({
       dropdown,
       introEle,
       isVisible,
-      descEle
+      descEle,
+      activeTab
     }
   }
 })

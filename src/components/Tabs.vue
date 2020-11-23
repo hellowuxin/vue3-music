@@ -13,8 +13,14 @@ import { defineComponent, onMounted, Ref, ref, useCssModule } from 'vue'
 
 export default defineComponent({
   name: 'Tabs',
-  setup () {
-    let activeTab = 0
+  props: {
+    modelValue: {
+      type: Number,
+      default: 0
+    }
+  },
+  emits: ['update:modelValue'],
+  setup (props, context) {
     const tabsEle: Ref<HTMLUListElement | undefined> = ref()
     const sliderStyle = ref({ width: '', left: '0px' })
     const style = useCssModule()
@@ -28,7 +34,7 @@ export default defineComponent({
         const oldActiveli = currentTarget.querySelector(`.${style.active}`)
 
         if (li !== oldActiveli) {
-          activeTab = [...currentTarget.children].indexOf(li)
+          context.emit('update:modelValue', [...currentTarget.children].indexOf(li))
           li.classList.add(style.active)
           oldActiveli?.classList.remove(style.active)
           sliderStyle.value.width = `${li.offsetWidth}px`
@@ -56,7 +62,7 @@ export default defineComponent({
     onMounted(() => {
       if (tabsEle.value) {
         const { children } = tabsEle.value
-        const activeLi = children[activeTab] as HTMLLIElement
+        const activeLi = children[props.modelValue] as HTMLLIElement
         sliderStyle.value.width = `${activeLi.offsetWidth}px`
         activeLi.classList.add(style.active)
       }

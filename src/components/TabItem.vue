@@ -1,22 +1,16 @@
 <template>
-  <div></div>
+  <div class="TabsItem">
+    <slot></slot>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, useCssModule } from 'vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'TabsItems',
-  setup () {
-    const style = useCssModule()
-
-    return {
-      style
-    }
-  }
+  name: 'TabsItem'
 })
 </script>
 
 <style lang="scss" module>
-
 </style>
