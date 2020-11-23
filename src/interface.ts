@@ -1,4 +1,5 @@
-export interface Creator {
+export interface User {
+  userId: number
   nickname: string
   avatarUrl: string
 }
@@ -26,7 +27,7 @@ export interface Track {
 export interface Playlist {
   name: string
   coverImgUrl: string
-  creator: Creator
+  creator: User
   createTime: number
   tags: string[]
   trackCount: number
@@ -36,4 +37,18 @@ export interface Playlist {
   subscribedCount: number
   tracks: Track[]
   commentCount: number
+}
+
+export interface Comment {
+  user: User
+  content: string
+  commentId: number
+  liked: boolean
+  likedCount: number
+  time: number
+}
+
+export interface CommentResp {
+  comments: Comment[]
+  total: number
 }

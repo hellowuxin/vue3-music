@@ -75,15 +75,9 @@
         <li>收藏者</li>
       </tabs>
       <tabs-items v-model="activeTab">
-        <tab-item>
-          <songlist :tracks="playlist.tracks"></songlist>
-        </tab-item>
-        <tab-item>
-          第二页
-        </tab-item>
-        <tab-item>
-          第三页
-        </tab-item>
+        <tab-item><songlist :tracks="playlist.tracks"></songlist></tab-item>
+        <tab-item><commentlist v-if="commentResp" :commentResp="commentResp"></commentlist></tab-item>
+        <tab-item>第三页</tab-item>
       </tabs-items>
     </div>
   </div>
@@ -93,12 +87,13 @@
 import { defineComponent, nextTick, Ref, ref, useCssModule } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
-import { Playlist } from '../interface'
+import { Playlist, CommentResp } from '../interface'
 import Icon from '../components/Icon.vue'
 import Tabs from '../components/Tabs.vue'
 import TabsItems from '../components/TabsItems.vue'
 import Songlist from '../components/Songlist.vue'
 import TabItem from '../components/TabItem.vue'
+import Commentlist from '../components/Commentlist.vue'
 
 export default defineComponent({
   name: 'PlaylistView',
@@ -107,12 +102,14 @@ export default defineComponent({
     Tabs,
     TabsItems,
     Songlist,
-    TabItem
+    TabItem,
+    Commentlist
   },
   setup () {
     const style = useCssModule()
     const route = useRoute()
     const playlist: Ref<Playlist | undefined> = ref()
+    const commentResp: Ref<CommentResp | undefined> = ref()
     const introEle: Ref<HTMLParagraphElement | undefined> = ref()
     const descEle: Ref<HTMLSpanElement | undefined> = ref()
     const isVisible = ref(true)
@@ -131,7 +128,7 @@ export default defineComponent({
     }
 
     axios.get(`/playlist/detail?id=${route.query.id}`).then(async ({ data }) => {
-      console.log(data.playlist)
+      console.log('playlist', data)
       playlist.value = data.playlist
 
       await nextTick()
@@ -140,7 +137,8 @@ export default defineComponent({
       }
     })
     axios.get(`/comment/playlist?id=${route.query.id}`).then(({ data }) => {
-      console.log(data)
+      console.log('comment', data)
+      commentResp.value = data
     })
 
     return {
@@ -150,7 +148,8 @@ export default defineComponent({
       introEle,
       isVisible,
       descEle,
-      activeTab
+      activeTab,
+      commentResp
     }
   }
 })
