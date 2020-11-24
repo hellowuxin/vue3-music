@@ -13,27 +13,27 @@
       </p>
       <div :class="style['actions']">
         <div :class="style['compose']">
-          <button :class="style['play']">
+          <btn :class="style['play']">
             <icon iconId="iconplay3"></icon>
             <span>播放全部</span>
-          </button>
+          </btn>
           <div :class="style['gap']"></div>
-          <button :class="style['add-play']">
+          <btn :class="style['add-play']">
             <icon iconId="iconicon-test"></icon>
-          </button>
+          </btn>
         </div>
-        <button>
+        <btn>
           <icon iconId="iconAddadocument"></icon>
           <span>收藏({{ playlist.subscribedCount }})</span>
-        </button>
-        <button>
+        </btn>
+        <btn>
           <icon iconId="iconfenxiang"></icon>
           <span>分享({{ playlist.shareCount }})</span>
-        </button>
-        <button>
+        </btn>
+        <btn>
           <icon iconId="icondownload"></icon>
           <span>下载全部</span>
-        </button>
+        </btn>
       </div>
       <p :class="style['tags']">
         <span>标&emsp;签：</span>
@@ -70,11 +70,13 @@
 import { defineComponent, useCssModule, Ref, ref, PropType, onMounted } from 'vue'
 import { Playlist } from '../interface'
 import Icon from './Icon.vue'
+import Btn from './Btn.vue'
 
 export default defineComponent({
   name: 'PlaylistHeader',
   components: {
-    Icon
+    Icon,
+    Btn
   },
   props: {
     playlist: {
@@ -210,22 +212,6 @@ export default defineComponent({
     .add-play {
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
-    }
-  }
-
-  button {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    border-radius: 28px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #D9D9D9;
-    padding: 3px 10px;
-    background-color: white;
-
-    &:hover {
-      cursor: pointer;
     }
   }
 }

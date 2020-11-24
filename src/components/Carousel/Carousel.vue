@@ -29,7 +29,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, Ref, useCssModule } from 'vue'
 import Icon from '@/components/Icon.vue'
-import debounce from '@/tools/debounce'
+import { debounce } from '@/tools'
 import itemStyle from './CarouselItem.module.scss'
 
 export default defineComponent({
