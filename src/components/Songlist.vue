@@ -32,14 +32,14 @@
             <icon v-if="track.mv" iconId="iconvideo"></icon>
           </div>
         </td>
-        <td>
+        <td :class="style['singer']">
           <ul class="breadcrumb">
             <li v-for="ar in track.ar" :key="ar.id">
               <router-link to="#">{{ ar.name }}</router-link>
             </li>
           </ul>
         </td>
-        <td>{{ track.al.name }}</td>
+        <td :class="style['album']">{{ track.al.name }}</td>
         <td>{{ Math.floor(track.dt / 60000).toString().padStart(2, '0') }}:{{ Math.floor(track.dt / 1000 % 60).toString().padStart(2, '0') }}</td>
       </tr>
     </tbody>
@@ -92,6 +92,7 @@ export default defineComponent({
   th {
     text-align: start;
     font-weight: normal;
+    color: var(--grey)
   }
 
   td,
@@ -108,14 +109,12 @@ export default defineComponent({
 
   tbody td:last-child {
     font-family: var(--monospaced);
-  }
-
-  a {
-    color: var(--grey)
+    color: var(--lightgrey);
   }
 }
 
 .serial {
+  color: var(--lightgrey);
   display: flex;
   gap: 5px;
   align-items: center;
@@ -139,8 +138,8 @@ export default defineComponent({
     }
   }
 
-  span:first-child {
-    color: black;
+  span:not(:first-child) {
+    color: var(--lightgrey);
   }
 
   :global(.icon) {
@@ -148,5 +147,10 @@ export default defineComponent({
     color: var(--main-color);
     flex-shrink: 0;
   }
+}
+
+.singer,
+.album {
+  color: var(--grey);
 }
 </style>

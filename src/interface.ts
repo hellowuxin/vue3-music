@@ -51,4 +51,6 @@ export interface Comment {
 export interface CommentResp {
   comments: Comment[]
   total: number
+  hotComments: Comment[]
+  topComments: Comment[]
 }

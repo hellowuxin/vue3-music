@@ -101,6 +101,7 @@ export default defineComponent({
 .container {
   display: flow-root;
   position: relative;
+  color: var(--grey);
 
   ul {
     display: flex;
@@ -113,7 +114,8 @@ export default defineComponent({
     position: relative;
     overflow: hidden;
 
-    &.active {
+    &.active,
+    &:hover {
       color: var(--main-color)
     }
   }

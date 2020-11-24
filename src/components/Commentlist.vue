@@ -1,7 +1,7 @@
 <template>
   <div :class="style['container']">
-    <span>最新评论</span>
-    <div v-for="comment in commentResp.comments" :key="comment.commentId">
+    <span>精彩评论</span>
+    <div v-for="comment in commentResp.hotComments" :key="comment.commentId">
       <img src="" alt="">
       <span>{{ comment.user.nickname }}</span>
       <span>{{ comment.content }}</span>
@@ -21,9 +21,9 @@ export default defineComponent({
       required: true
     }
   },
-  setup () {
+  setup (props) {
     const style = useCssModule()
-
+    console.log(props.commentResp)
     return {
       style
     }

@@ -23,8 +23,17 @@ export default defineComponent({
 <style lang="scss">
 :root {
   --main-color: #D33A31;
-  --grey: #797979;
+  --lightgrey: #797979;
+  --grey: #646464;
   --monospaced: Courier, monospace, 'Courier New';
+}
+
+.grey {
+  color: var(--grey)
+}
+
+.lightgray {
+  color: var(--lightgrey)
 }
 
 body {
@@ -40,6 +49,7 @@ body {
 
 a {
   text-decoration: none;
+  color: inherit;
 }
 
 .global-container {

@@ -47,11 +47,9 @@ export default defineComponent({
     const activeTab = ref(0)
 
     axios.get(`/playlist/detail?id=${route.query.id}`).then(async ({ data }) => {
-      console.log('playlist', data)
       playlist.value = data.playlist
     })
     axios.get(`/comment/playlist?id=${route.query.id}`).then(({ data }) => {
-      console.log('comment', data)
       commentResp.value = data
     })
 
@@ -86,17 +84,12 @@ export default defineComponent({
   }
 }
 
-.grey {
-  color: var(--grey);
-}
-
 .container {
   display: flow-root;
 }
 
 .content {
   display: flow-root;
-  color: var(--grey);
   margin-top: 20px;
 }
 

@@ -46,11 +46,11 @@
       <p :class="style['count']">
         <span>
           <span>歌曲数：</span>
-          <span :class="style['grey']">{{ playlist.trackCount }}</span>
+          <span class="grey">{{ playlist.trackCount }}</span>
         </span>
         <span>
           <span>播放数：</span>
-          <span :class="style['grey']">{{ playlist.playCount }}</span>
+          <span class="grey">{{ playlist.playCount }}</span>
         </span>
       </p>
       <p :class="style['introduction']" ref="introEle">
