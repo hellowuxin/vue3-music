@@ -130,7 +130,7 @@ export default defineComponent({
   }
 
   a {
-    color: #668DB9;
+    color: var(--blue);
   }
 
   p {

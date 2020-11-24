@@ -25,6 +25,7 @@ export default defineComponent({
   --main-color: #D33A31;
   --lightgrey: #797979;
   --grey: #646464;
+  --blue: #668DB9;
   --monospaced: Courier, monospace, 'Courier New';
 }
 
@@ -32,7 +33,7 @@ export default defineComponent({
   color: var(--grey)
 }
 
-.lightgray {
+.lightgrey {
   color: var(--lightgrey)
 }
 
