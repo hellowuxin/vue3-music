@@ -44,6 +44,7 @@ export interface beReplied {
   beRepliedCommentId: number
   content: string
   user: User
+  status: number
 }
 
 export interface Comment {
