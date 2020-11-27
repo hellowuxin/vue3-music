@@ -39,6 +39,12 @@ export interface Playlist {
   commentCount: number
 }
 
+export interface beReplied {
+  beRepliedCommentId: number
+  content: string
+  user: User
+}
+
 export interface Comment {
   user: User
   content: string
@@ -46,6 +52,7 @@ export interface Comment {
   liked: boolean
   likedCount: number
   time: number
+  beReplied: beReplied[]
 }
 
 export interface CommentResp {

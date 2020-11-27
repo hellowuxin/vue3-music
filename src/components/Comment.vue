@@ -6,6 +6,10 @@
         <router-link to="#">{{ comment.user.nickname }}：</router-link>
         <span>{{ comment.content }}</span>
       </div>
+      <div v-if="comment.beReplied.length > 0" :class="style['beReplied']">
+        <router-link to="#">@{{ comment.beReplied[0].user.nickname }}：</router-link>
+        <span>{{ comment.beReplied[0].content }}</span>
+      </div>
       <div>
         <span :class="style['time']">{{ getChinaDate(new Date(comment.time)) }}</span>
         <div :class="style['action']">
@@ -91,5 +95,12 @@ export default defineComponent({
     font-size: small;
     margin-left: 5px;
   }
+}
+
+.beReplied {
+  background-color: #F2F2F2;
+  padding: 10px;
+  color: var(--grey);
+  border-radius: 4px;
 }
 </style>

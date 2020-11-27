@@ -13,7 +13,12 @@
       </btn>
     </div>
     <div v-if="commentResp.comments.length > 0">
-
+      <span :class="style['title']">最新评论</span>
+      <comment
+        v-for="comment in commentResp.comments"
+        :key="comment.commentId"
+        :comment="comment"
+      ></comment>
     </div>
   </div>
 </template>
@@ -54,6 +59,10 @@ export default defineComponent({
 .container {
   display: flow-root;
   margin-top: 20px;
+
+  > div {
+    margin-bottom: 20px;
+  }
 }
 
 .title {
