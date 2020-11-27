@@ -13,7 +13,7 @@
       <tabs-items v-model="activeTab">
         <tab-item><songlist :tracks="playlist.tracks"></songlist></tab-item>
         <tab-item><commentlist v-if="commentResp" :commentResp="commentResp"></commentlist></tab-item>
-        <tab-item>第三页</tab-item>
+        <tab-item><subscriberlist :subscribers="playlist.subscribers"></subscriberlist></tab-item>
       </tabs-items>
     </div>
   </div>
@@ -28,6 +28,7 @@ import { Tabs, TabsItems, TabItem } from '@/components/Tabs'
 import Songlist from '../components/Songlist.vue'
 import Commentlist from '../components/Commentlist.vue'
 import PlaylistHeader from '../components/PlaylistHeader.vue'
+import Subscriberlist from '@/components/Subscriberlist.vue'
 
 export default defineComponent({
   name: 'PlaylistView',
@@ -37,7 +38,8 @@ export default defineComponent({
     Songlist,
     TabItem,
     Commentlist,
-    PlaylistHeader
+    PlaylistHeader,
+    Subscriberlist
   },
   setup () {
     const style = useCssModule()
@@ -48,6 +50,7 @@ export default defineComponent({
 
     axios.get(`/playlist/detail?id=${route.query.id}`).then(async ({ data }) => {
       playlist.value = data.playlist
+      console.log(data.playlist)
     })
     axios.get(`/comment/playlist?id=${route.query.id}`).then(({ data }) => {
       commentResp.value = data

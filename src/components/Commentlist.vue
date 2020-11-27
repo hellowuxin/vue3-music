@@ -46,7 +46,7 @@ export default defineComponent({
   setup (props) {
     const style = useCssModule()
 
-    console.log(props.commentResp)
+    // console.log(props.commentResp)
 
     return {
       style

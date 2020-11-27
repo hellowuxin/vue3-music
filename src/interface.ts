@@ -35,6 +35,7 @@ export interface Playlist {
   description: string
   shareCount: number
   subscribedCount: number
+  subscribers: User[]
   tracks: Track[]
   commentCount: number
 }
