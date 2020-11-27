@@ -10,7 +10,10 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'Icon',
   props: {
-    iconId: String
+    iconId: {
+      type: String,
+      required: true
+    }
   }
 })
 </script>

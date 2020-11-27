@@ -33,7 +33,10 @@ export default defineComponent({
     Icon
   },
   props: {
-    comment: Object as PropType<Comment>
+    comment: {
+      type: Object as PropType<Comment>,
+      required: true
+    }
   },
   setup () {
     const style = useCssModule()
