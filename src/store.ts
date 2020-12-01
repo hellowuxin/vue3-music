@@ -1,5 +1,12 @@
 import { createStore } from 'vuex'
+import { Track } from './interface'
 
-export default createStore({
-  state: {}
+interface StoreData {
+  track: Track | ''
+}
+
+export default createStore<StoreData>({
+  state: {
+    track: ''
+  }
 })

@@ -25,11 +25,15 @@
         </td>
         <td :class="style['songtitle']">
           <div>
-            <div>
+            <div :class="style['songtitle-name']">
               <span>{{ track.name }}</span>
               <span v-if="track.alia.length > 0">({{ track.alia[0] }})</span>
             </div>
-            <icon v-if="track.mv" iconId="iconvideo"></icon>
+            <icon v-if="track.mv" iconId="iconvideo" :class="style['iconvideo']"></icon>
+            <div :class="style['songtitle-action']">
+              <icon iconId="iconplay1"></icon>
+              <icon iconId="iconxiazai1"></icon>
+            </div>
           </div>
         </td>
         <td :class="style['singer']">
@@ -74,6 +78,7 @@ export default defineComponent({
 
 <style lang="scss" module>
 .container {
+  border-spacing: 0;
   width: 100%;
   table-layout: fixed;
 
@@ -107,6 +112,11 @@ export default defineComponent({
     background-color: #FAFAFA;
   }
 
+  thead th:hover,
+  tbody tr:hover {
+    background-color: #F2F2F3;
+  }
+
   tbody td:last-child {
     font-family: var(--monospaced);
     color: var(--lightgrey);
@@ -130,12 +140,12 @@ export default defineComponent({
   > div {
     display: flex;
     align-items: center;
+  }
 
-    > div {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-right: 5px;
-    }
+  &-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 5px;
   }
 
   span:not(:first-child) {
@@ -144,9 +154,27 @@ export default defineComponent({
 
   :global(.icon) {
     font-size: large;
-    color: var(--main-color);
     flex-shrink: 0;
   }
+
+  .iconvideo {
+    color: var(--main-color);
+  }
+
+  &-action {
+    display: none;
+    gap: 5px;
+    margin-left: auto;
+    color: var(--lightgrey);
+
+    :global(.icon) {
+      cursor: pointer;
+    }
+  }
+}
+
+.songtitle:hover .songtitle-action {
+  display: flex;
 }
 
 .singer,
