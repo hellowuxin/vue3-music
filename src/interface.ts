@@ -12,6 +12,7 @@ export interface Artist {
 export interface Album {
   id: number
   name: string
+  picUrl: string
 }
 
 export interface Track {

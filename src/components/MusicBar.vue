@@ -1,10 +1,18 @@
 <template>
-  <div :class="style['container']">
+  <div :class="style['container']" v-if="track">
     <div :class="style['left']">
-      <img src="http://p1.music.126.net/BPaZelNOF3p2Ov2zkSlq0A==/2528876745087477.jpg?param=177y177" alt="">
-      <div :class="style['left-content']">
-        <div>As The Deer</div>
-        <div>00:33 / 05:01</div>
+      <img :src="`${track.al.picUrl}?param=60y60`" alt="">
+      <div>
+        <div :class="style['track-title']">
+          <span>{{ track.name }}</span>
+          <span>&nbsp;-&nbsp;</span>
+          <ul class="breadcrumb">
+            <li v-for="ar in track.ar" :key="ar.id">
+              <router-link to="#">{{ ar.name }}</router-link>
+            </li>
+          </ul>
+        </div>
+        <div>00:00 / {{ getTrackTime(track.dt) }}</div>
       </div>
     </div>
     <div :class="style['center']">
@@ -23,8 +31,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, useCssModule } from 'vue'
+import { computed, defineComponent, useCssModule } from 'vue'
+import { useStore } from 'vuex'
+import { StoreData } from '@/store'
 import Icon from './Icon.vue'
+import { getTrackTime } from '@/tools'
 
 export default defineComponent({
   name: 'MusicBar',
@@ -33,9 +44,16 @@ export default defineComponent({
   },
   setup () {
     const style = useCssModule()
+    const store = useStore<StoreData>()
+    const track = computed(() => {
+      console.log(store.state.track)
+      return store.state.track
+    })
 
     return {
-      style
+      style,
+      track,
+      getTrackTime
     }
   }
 })
@@ -49,7 +67,6 @@ export default defineComponent({
   right: 0;
   background-color: white;
   display: flex;
-  justify-content: space-between;
   height: 50px;
   padding: 10px;
   border-width: 3px 0 0 0;
@@ -58,9 +75,21 @@ export default defineComponent({
   color: #4C4C4C;
 }
 
-.left {
+.left,
+.center,
+.right {
   display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.left {
   height: inherit;
+  gap: 10px;
+
+  > div {
+    width: calc(100% - 50px - 10px);
+  }
 
   img {
     height: inherit;
@@ -68,13 +97,27 @@ export default defineComponent({
   }
 }
 
-.left-content {
-  padding: 0 10px;
+.track-title {
+  white-space: nowrap;
+
+  > * {
+    display: inline-block;
+    max-width: calc((100% - 20px) / 2);
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
+
+.center {
+  justify-content: center;
+}
+
+.right {
+  justify-content: flex-end;
 }
 
 .center,
 .right {
-  display: flex;
   align-items: center;
   font-size: 22px;
 

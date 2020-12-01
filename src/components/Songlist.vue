@@ -31,7 +31,7 @@
             </div>
             <icon v-if="track.mv" iconId="iconvideo" :class="style['iconvideo']"></icon>
             <div :class="style['songtitle-action']">
-              <icon iconId="iconplay1"></icon>
+              <icon iconId="iconplay1" @click="playSong(track)"></icon>
               <icon iconId="iconxiazai1"></icon>
             </div>
           </div>
@@ -44,7 +44,7 @@
           </ul>
         </td>
         <td :class="style['album']">{{ track.al.name }}</td>
-        <td>{{ Math.floor(track.dt / 60000).toString().padStart(2, '0') }}:{{ Math.floor(track.dt / 1000 % 60).toString().padStart(2, '0') }}</td>
+        <td>{{ getTrackTime(track.dt) }}</td>
       </tr>
     </tbody>
   </table>
@@ -52,8 +52,11 @@
 
 <script lang="ts">
 import { defineComponent, PropType, useCssModule } from 'vue'
+import { useStore } from 'vuex'
+import { StoreData } from '@/store'
 import { Track } from '../interface'
 import Icon from './Icon.vue'
+import { getTrackTime } from '@/tools'
 
 export default defineComponent({
   name: 'TabsItems',
@@ -68,9 +71,16 @@ export default defineComponent({
   },
   setup () {
     const style = useCssModule()
+    const store = useStore<StoreData>()
+
+    const playSong = (track: Track) => {
+      store.commit('playSong', track)
+    }
 
     return {
-      style
+      style,
+      playSong,
+      getTrackTime
     }
   }
 })

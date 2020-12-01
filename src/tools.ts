@@ -24,3 +24,8 @@ export function reflow (element: HTMLElement): number {
 export const getChinaDate = (date: Date): string => {
   return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 ${date.getHours()}:${date.getMinutes()}`
 }
+
+// 歌曲时间
+export const getTrackTime = (time: number): string => {
+  return `${Math.floor(time / 60000).toString().padStart(2, '0')}:${Math.floor(time / 1000 % 60).toString().padStart(2, '0')}`
+}
