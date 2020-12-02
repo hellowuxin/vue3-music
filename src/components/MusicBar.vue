@@ -1,33 +1,35 @@
 <template>
-  <div :class="style['container']" v-if="track">
-    <div :class="style['left']">
-      <img :src="`${track.al.picUrl}?param=60y60`" alt="">
-      <div>
-        <div :class="style['track-title']">
-          <span>{{ track.name }}</span>
-          <span>&nbsp;-&nbsp;</span>
-          <ul class="breadcrumb">
-            <li v-for="ar in track.ar" :key="ar.id">
-              <router-link to="#">{{ ar.name }}</router-link>
-            </li>
-          </ul>
+  <transition :enter-active-class="style['enter-active']" :enter-from-class="style['enter-from']">
+    <div :class="style['container']" v-if="track">
+      <div :class="style['left']">
+        <img :src="`${track.al.picUrl}?param=60y60`" alt="">
+        <div>
+          <div :class="style['track-title']">
+            <span>{{ track.name }}</span>
+            <span>&nbsp;-&nbsp;</span>
+            <ul class="breadcrumb">
+              <li v-for="ar in track.ar" :key="ar.id">
+                <router-link to="#">{{ ar.name }}</router-link>
+              </li>
+            </ul>
+          </div>
+          <div>00:00 / {{ getTrackTime(track.dt) }}</div>
         </div>
-        <div>00:00 / {{ getTrackTime(track.dt) }}</div>
+      </div>
+      <div :class="style['center']">
+        <icon iconId="iconaixin"/>
+        <icon iconId="iconshangyishou" :class="style['iconshangyishou']"/>
+        <icon iconId="iconplay2" :class="style['iconplay']"/>
+        <icon iconId="iconxiayishou" :class="style['iconxiayishou']"/>
+        <icon iconId="iconfenxiang"/>
+      </div>
+      <div :class="style['right']">
+        <icon iconId="iconxunhuan"/>
+        <icon iconId="iconbofangliebiao"/>
+        <icon iconId="iconyinliang"/>
       </div>
     </div>
-    <div :class="style['center']">
-      <icon iconId="iconaixin"/>
-      <icon iconId="iconshangyishou" :class="style['iconshangyishou']"/>
-      <icon iconId="iconplay2" :class="style['iconplay']"/>
-      <icon iconId="iconxiayishou" :class="style['iconxiayishou']"/>
-      <icon iconId="iconfenxiang"/>
-    </div>
-    <div :class="style['right']">
-      <icon iconId="iconxunhuan"/>
-      <icon iconId="iconbofangliebiao"/>
-      <icon iconId="iconyinliang"/>
-    </div>
-  </div>
+  </transition>
 </template>
 
 <script lang="ts">
@@ -46,7 +48,6 @@ export default defineComponent({
     const style = useCssModule()
     const store = useStore<StoreData>()
     const track = computed(() => {
-      console.log(store.state.track)
       return store.state.track
     })
 
@@ -60,6 +61,14 @@ export default defineComponent({
 </script>
 
 <style lang="scss" module>
+.enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.enter-from {
+  transform: translateY(73px);
+}
+
 .container {
   position: fixed;
   bottom: 0;
