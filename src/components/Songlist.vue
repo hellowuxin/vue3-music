@@ -17,7 +17,11 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(track, index) in tracks" :key="track.id">
+      <tr
+        v-for="(track, index) in tracks"
+        :key="track.id"
+        :class="globalTrack && globalTrack.id === track.id ? style['playing'] : ''"
+      >
         <td :class="style['serial']">
           <span>{{ (index + 1).toString().padStart(2, '0') }}</span>
           <icon iconId="iconaixin"></icon>
@@ -27,23 +31,30 @@
           <div>
             <div :class="style['songtitle-name']">
               <span>{{ track.name }}</span>
-              <span v-if="track.alia.length > 0">({{ track.alia[0] }})</span>
+              <span v-if="track.alia.length > 0">&nbsp;({{ track.alia[0] }})</span>
             </div>
             <icon v-if="track.mv" iconId="iconvideo" :class="style['iconvideo']"></icon>
             <div :class="style['songtitle-action']">
-              <icon iconId="iconplay1" @click="playSong(track)"></icon>
+              <icon
+                :iconId="
+                  (globalTrack &&
+                  globalTrack.id === track.id &&
+                  globalPlaying) ? 'iconpause' : 'iconplay1'
+                "
+                @click="playSong(track)"
+              ></icon>
               <icon iconId="iconxiazai1"></icon>
             </div>
           </div>
         </td>
-        <td :class="style['singer']">
+        <td>
           <ul class="breadcrumb">
             <li v-for="ar in track.ar" :key="ar.id">
               <router-link to="#">{{ ar.name }}</router-link>
             </li>
           </ul>
         </td>
-        <td :class="style['album']">{{ track.al.name }}</td>
+        <td>{{ track.al.name }}</td>
         <td>{{ getTrackTime(track.dt) }}</td>
       </tr>
     </tbody>
@@ -51,7 +62,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, useCssModule } from 'vue'
+import { computed, defineComponent, PropType, useCssModule } from 'vue'
 import { useStore } from 'vuex'
 import { StoreData } from '@/store'
 import { Track } from '../interface'
@@ -72,15 +83,27 @@ export default defineComponent({
   setup () {
     const style = useCssModule()
     const store = useStore<StoreData>()
+    const globalTrack = computed(() => {
+      return store.state.track
+    })
+    const globalPlaying = computed(() => {
+      return store.state.playing
+    })
 
     const playSong = (track: Track) => {
-      store.commit('playSong', track)
+      if (globalTrack.value && globalTrack.value.id === track.id) {
+        store.commit('play')
+      } else {
+        store.commit('playSong', track)
+      }
     }
 
     return {
       style,
       playSong,
-      getTrackTime
+      getTrackTime,
+      globalTrack,
+      globalPlaying
     }
   }
 })
@@ -88,6 +111,7 @@ export default defineComponent({
 
 <style lang="scss" module>
 .container {
+  color: var(--grey);
   border-spacing: 0;
   width: 100%;
   table-layout: fixed;
@@ -96,18 +120,20 @@ export default defineComponent({
     font-size: x-large;
   }
 
-  colgroup col:first-child {
-    width: 100px;
-  }
+  colgroup col {
 
-  colgroup col:last-child {
-    width: 61px;
+    &:first-child {
+      width: 100px;
+    }
+
+    &:last-child {
+      width: 61px;
+    }
   }
 
   th {
     text-align: start;
     font-weight: normal;
-    color: var(--grey)
   }
 
   td,
@@ -118,27 +144,43 @@ export default defineComponent({
     text-overflow: ellipsis;
   }
 
-  tbody tr:nth-child(odd) {
-    background-color: #FAFAFA;
-  }
-
   thead th:hover,
   tbody tr:hover {
     background-color: #F2F2F3;
   }
 
+  thead tr,
+  tbody td:first-child span,
+  tbody td:last-child {
+    color: var(--lightgrey);
+  }
+
+  tbody td:first-child,
   tbody td:last-child {
     font-family: var(--monospaced);
-    color: var(--lightgrey);
+  }
+
+  tbody tr {
+
+    &.playing {
+      color: var(--main-color);
+      background-color: #F2F2F3;
+    }
+
+    &:hover .songtitle-action {
+      display: flex;
+    }
+
+    &:nth-child(odd) {
+      background-color: #FAFAFA;
+    }
   }
 }
 
 .serial {
-  color: var(--lightgrey);
   display: flex;
   gap: 5px;
   align-items: center;
-  font-family: var(--monospaced);
 
   span {
     margin-right: 10px;
@@ -165,6 +207,7 @@ export default defineComponent({
   :global(.icon) {
     font-size: large;
     flex-shrink: 0;
+    cursor: pointer;
   }
 
   .iconvideo {
@@ -175,20 +218,6 @@ export default defineComponent({
     display: none;
     gap: 5px;
     margin-left: auto;
-    color: var(--lightgrey);
-
-    :global(.icon) {
-      cursor: pointer;
-    }
   }
-}
-
-.songtitle:hover .songtitle-action {
-  display: flex;
-}
-
-.singer,
-.album {
-  color: var(--grey);
 }
 </style>

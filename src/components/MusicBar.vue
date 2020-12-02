@@ -19,7 +19,7 @@
       <div :class="style['center']">
         <icon iconId="iconaixin"/>
         <icon iconId="iconshangyishou" :class="style['iconshangyishou']"/>
-        <icon iconId="iconplay2" :class="style['iconplay']"/>
+        <icon :iconId="playing ? 'iconplay_pause' : 'iconplay_go'" :class="style['iconplay']" @click="play"/>
         <icon iconId="iconxiayishou" :class="style['iconxiayishou']"/>
         <icon iconId="iconfenxiang"/>
       </div>
@@ -50,11 +50,19 @@ export default defineComponent({
     const track = computed(() => {
       return store.state.track
     })
+    const playing = computed(() => {
+      return store.state.playing
+    })
+    const play = () => {
+      store.commit('play')
+    }
 
     return {
       style,
       track,
-      getTrackTime
+      getTrackTime,
+      playing,
+      play
     }
   }
 })
@@ -128,15 +136,16 @@ export default defineComponent({
 .center,
 .right {
   align-items: center;
-  font-size: 22px;
+  font-size: 25px;
 
   :global(.icon) {
+    cursor: pointer;
     margin: 0 10px;
   }
 }
 
 .iconplay {
-  font-size: 40px;
+  font-size: 50px;
   color: var(--main-color);
 }
 

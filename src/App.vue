@@ -23,7 +23,7 @@ export default defineComponent({
 <style lang="scss">
 :root {
   --main-color: #D33A31;
-  --lightgrey: #797979;
+  --lightgrey: #A6A6A7;
   --grey: #646464;
   --blue: #668DB9;
   --monospaced: Courier, monospace, 'Courier New';
