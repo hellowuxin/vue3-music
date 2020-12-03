@@ -1,23 +1,48 @@
 import { createStore } from 'vuex'
 import { Track } from './interface'
+import axios from 'axios'
 
-export interface StoreData {
+export interface GlobalStore {
   track: Track | ''
-  playing: boolean
+  paused: boolean
+  songUrl: string
 }
 
-export default createStore<StoreData>({
+export default createStore<GlobalStore>({
   state: {
     track: '',
-    playing: false
+    paused: true,
+    songUrl: ''
   },
   mutations: {
-    playSong (state, track: Track) {
-      state.track = track
-      state.playing = true
+    changeSong (state, payload: { track: Track, songUrl: string }) {
+      state.track = payload.track
+      state.songUrl = payload.songUrl
     },
     play (state) {
-      state.playing = !state.playing
+      state.paused = false
+    },
+    pause (state) {
+      state.paused = true
+    },
+    changePaused (state) {
+      state.paused = !state.paused
+    }
+  },
+  actions: {
+    async playSong ({ commit, state }, track: Track) {
+      if (!state.track || track.id !== state.track.id) {
+        const { data } = await axios.get(`/song/url?id=${track.id}`)
+        commit('pause')
+        commit({
+          type: 'changeSong',
+          track,
+          songUrl: data.data[0].url
+        })
+        commit('play')
+      } else {
+        commit('changePaused')
+      }
     }
   }
 })

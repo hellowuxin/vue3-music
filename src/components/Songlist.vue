@@ -39,7 +39,7 @@
                 :iconId="
                   (globalTrack &&
                   globalTrack.id === track.id &&
-                  globalPlaying) ? 'iconpause' : 'iconplay1'
+                  !globalPaused) ? 'iconpause' : 'iconplay1'
                 "
                 @click="playSong(track)"
               ></icon>
@@ -64,7 +64,7 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, useCssModule } from 'vue'
 import { useStore } from 'vuex'
-import { StoreData } from '@/store'
+import { GlobalStore } from '@/store'
 import { Track } from '../interface'
 import Icon from './Icon.vue'
 import { getTrackTime } from '@/tools'
@@ -82,20 +82,16 @@ export default defineComponent({
   },
   setup () {
     const style = useCssModule()
-    const store = useStore<StoreData>()
+    const store = useStore<GlobalStore>()
     const globalTrack = computed(() => {
       return store.state.track
     })
-    const globalPlaying = computed(() => {
-      return store.state.playing
+    const globalPaused = computed(() => {
+      return store.state.paused
     })
 
     const playSong = (track: Track) => {
-      if (globalTrack.value && globalTrack.value.id === track.id) {
-        store.commit('play')
-      } else {
-        store.commit('playSong', track)
-      }
+      store.dispatch('playSong', track)
     }
 
     return {
@@ -103,7 +99,7 @@ export default defineComponent({
       playSong,
       getTrackTime,
       globalTrack,
-      globalPlaying
+      globalPaused
     }
   }
 })

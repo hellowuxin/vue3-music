@@ -19,7 +19,7 @@
       <div :class="style['center']">
         <icon iconId="iconaixin"/>
         <icon iconId="iconshangyishou" :class="style['iconshangyishou']"/>
-        <icon :iconId="playing ? 'iconplay_pause' : 'iconplay_go'" :class="style['iconplay']" @click="play"/>
+        <icon :iconId="globalPaused ? 'iconplay_go' : 'iconplay_pause'" :class="style['iconplay']" @click="play"/>
         <icon iconId="iconxiayishou" :class="style['iconxiayishou']"/>
         <icon iconId="iconfenxiang"/>
       </div>
@@ -35,7 +35,7 @@
 <script lang="ts">
 import { computed, defineComponent, useCssModule } from 'vue'
 import { useStore } from 'vuex'
-import { StoreData } from '@/store'
+import { GlobalStore } from '@/store'
 import Icon from './Icon.vue'
 import { getTrackTime } from '@/tools'
 
@@ -46,22 +46,22 @@ export default defineComponent({
   },
   setup () {
     const style = useCssModule()
-    const store = useStore<StoreData>()
+    const store = useStore<GlobalStore>()
     const track = computed(() => {
       return store.state.track
     })
-    const playing = computed(() => {
-      return store.state.playing
+    const globalPaused = computed(() => {
+      return store.state.paused
     })
     const play = () => {
-      store.commit('play')
+      store.commit(globalPaused.value ? 'play' : 'pause')
     }
 
     return {
       style,
       track,
       getTrackTime,
-      playing,
+      globalPaused,
       play
     }
   }

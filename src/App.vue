@@ -4,18 +4,68 @@
     <router-view></router-view>
   </div>
   <music-bar></music-bar>
+  <audio ref="audioEle"></audio>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, Ref, watch, ref } from 'vue'
+import { useStore } from 'vuex'
 import GlobalHeader from './components/GlobalHeader.vue'
 import MusicBar from './components/MusicBar.vue'
+import { GlobalStore } from './store'
 
 export default defineComponent({
   name: 'App',
   components: {
     GlobalHeader,
     MusicBar
+  },
+  setup () {
+    const audioEle: Ref<HTMLAudioElement | undefined> = ref()
+    const store = useStore<GlobalStore>()
+    watch(() => store.state.songUrl, (newVal) => {
+      if (audioEle.value) {
+        audioEle.value.src = newVal
+        if (!store.state.paused) {
+          audioEle.value.play()
+        }
+      }
+    })
+    watch(() => store.state.paused, (newVal) => {
+      if (audioEle.value) {
+        if (!newVal) {
+          audioEle.value.play()
+        } else {
+          audioEle.value.pause()
+        }
+      }
+    })
+    // onMounted(() => {
+    //   if (audioEle.value) {
+    //     audioEle.value.addEventListener('loadstart', () => {
+    //       console.log('audio loadstart')
+    //     })
+    //     audioEle.value.addEventListener('loadedmetadata', () => {
+    //       console.log('audio loadedmetadata')
+    //     })
+    //     audioEle.value.addEventListener('loadeddata', () => {
+    //       console.log('audio loadeddata')
+    //     })
+    //     audioEle.value.addEventListener('progress', () => {
+    //       console.log('audio progress')
+    //     })
+    //     audioEle.value.addEventListener('canplay', () => {
+    //       console.log('audio canplay')
+    //     })
+    //     audioEle.value.addEventListener('error', () => {
+    //       console.log('audio error', audioEle.value?.error)
+    //     })
+    //   }
+    // })
+
+    return {
+      audioEle
+    }
   }
 })
 </script>
