@@ -1,7 +1,7 @@
 // 事件发布订阅模式
 export type Handler<T = any> = (event?: T) => void;
 export interface Emitter {
-  all: Map<string, Handler<any>[]>;
+  all: Map<string, Handler[]>;
   on(type: string, handler: Handler): void;
   off(type: string, handler: Handler): void;
   emit<T>(type: string, evt: T): void;

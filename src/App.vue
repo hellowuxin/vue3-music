@@ -4,68 +4,21 @@
     <router-view></router-view>
   </div>
   <music-bar></music-bar>
-  <audio ref="audioEle"></audio>
+  <music-audio></music-audio>
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, watch, ref } from 'vue'
-import { useStore } from 'vuex'
+import { defineComponent } from 'vue'
 import GlobalHeader from './components/GlobalHeader.vue'
 import MusicBar from './components/MusicBar.vue'
-import { GlobalStore } from './store'
+import MusicAudio from './components/MusicAudio.vue'
 
 export default defineComponent({
   name: 'App',
   components: {
     GlobalHeader,
-    MusicBar
-  },
-  setup () {
-    const audioEle: Ref<HTMLAudioElement | undefined> = ref()
-    const store = useStore<GlobalStore>()
-    watch(() => store.state.songUrl, (newVal) => {
-      if (audioEle.value) {
-        audioEle.value.src = newVal
-        if (!store.state.paused) {
-          audioEle.value.play()
-        }
-      }
-    })
-    watch(() => store.state.paused, (newVal) => {
-      if (audioEle.value) {
-        if (!newVal) {
-          audioEle.value.play()
-        } else {
-          audioEle.value.pause()
-        }
-      }
-    })
-    // onMounted(() => {
-    //   if (audioEle.value) {
-    //     audioEle.value.addEventListener('loadstart', () => {
-    //       console.log('audio loadstart')
-    //     })
-    //     audioEle.value.addEventListener('loadedmetadata', () => {
-    //       console.log('audio loadedmetadata')
-    //     })
-    //     audioEle.value.addEventListener('loadeddata', () => {
-    //       console.log('audio loadeddata')
-    //     })
-    //     audioEle.value.addEventListener('progress', () => {
-    //       console.log('audio progress')
-    //     })
-    //     audioEle.value.addEventListener('canplay', () => {
-    //       console.log('audio canplay')
-    //     })
-    //     audioEle.value.addEventListener('error', () => {
-    //       console.log('audio error', audioEle.value?.error)
-    //     })
-    //   }
-    // })
-
-    return {
-      audioEle
-    }
+    MusicBar,
+    MusicAudio
   }
 })
 </script>
@@ -77,6 +30,8 @@ export default defineComponent({
   --grey: #646464;
   --blue: #668DB9;
   --monospaced: Courier, monospace, 'Courier New';
+  --topspace: 54px;
+  --bottomspace: 73px
 }
 
 .grey {
@@ -104,7 +59,7 @@ a {
 }
 
 .global-container {
-  margin: 54px 20px 73px 20px;
+  margin: var(--topspace) 20px var(--bottomspace) 20px;
   padding: 10px 0;
 }
 
