@@ -7,6 +7,8 @@ export interface GlobalStore {
   paused: boolean
   songUrl: string
   currentTime: number
+  volume: number
+  muted: boolean
 }
 
 export default createStore<GlobalStore>({
@@ -14,7 +16,9 @@ export default createStore<GlobalStore>({
     track: '',
     paused: true,
     songUrl: '',
-    currentTime: 0
+    currentTime: 0,
+    volume: 1,
+    muted: false
   },
   mutations: {
     changeSong (state, payload: { track: Track, songUrl: string }) {
@@ -32,6 +36,18 @@ export default createStore<GlobalStore>({
     },
     timeUpdate (state, current: number) {
       state.currentTime = current
+    },
+    changeVolume (state, volume: number) {
+      state.volume = volume
+    },
+    mute (state) {
+      state.muted = true
+    },
+    unmute (state) {
+      state.muted = false
+    },
+    changeMuted (state) {
+      state.muted = !state.muted
     }
   },
   actions: {

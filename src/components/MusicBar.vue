@@ -29,10 +29,10 @@
           <icon iconId="iconxunhuan"/>
           <icon iconId="iconbofangliebiao"/>
           <div :class="style['dropdown']">
-            <icon iconId="iconyinliang"/>
+            <icon :iconId="muted ? 'iconjingyin1' : 'iconyinliang'" @click="changeMuted"/>
             <div :class="style['dropdown-menu']">
-              <span :class="style['volume-number']">{{ Math.floor(volume) }}</span>
-              <progress-linear :vertical="true" :value="volume" height="60px" @progress-click="onVolumeClick"></progress-linear>
+              <span :class="style['volume-number']">{{ muted ? 0 : Math.floor(volume * 100) }}</span>
+              <progress-linear :vertical="true" :value="muted ? 0 : volume" :max="1" height="60px" @progress-click="onVolumeClick"></progress-linear>
             </div>
           </div>
         </div>
@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, useCssModule, ref } from 'vue'
+import { computed, defineComponent, useCssModule } from 'vue'
 import { useStore } from 'vuex'
 import { GlobalStore } from '@/store'
 import Icon from './Icon.vue'
@@ -59,8 +59,12 @@ export default defineComponent({
   setup () {
     const style = useCssModule()
     const store = useStore<GlobalStore>()
-    const volume = ref(100)
-
+    const volume = computed(() => {
+      return store.state.volume
+    })
+    const muted = computed(() => {
+      return store.state.muted
+    })
     const track = computed(() => {
       return store.state.track
     })
@@ -74,12 +78,14 @@ export default defineComponent({
     const play = () => {
       store.commit(globalPaused.value ? 'play' : 'pause')
     }
-
+    const changeMuted = () => {
+      store.commit('changeMuted')
+    }
     const onProgressClick = (percent: number) => {
       emitter.emit('changeCurrentTime', percent)
     }
     const onVolumeClick = (percent: number) => {
-      volume.value = 100 * percent
+      store.commit('changeVolume', percent)
     }
 
     return {
@@ -91,7 +97,9 @@ export default defineComponent({
       globalCurrent,
       onProgressClick,
       onVolumeClick,
-      volume
+      volume,
+      muted,
+      changeMuted
     }
   }
 })

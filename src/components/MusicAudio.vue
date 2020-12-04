@@ -34,6 +34,16 @@ export default defineComponent({
         }
       }
     })
+    watch(() => store.state.volume, (volume) => {
+      if (audioEle.value) {
+        audioEle.value.volume = volume
+      }
+    })
+    watch(() => store.state.muted, (muted) => {
+      if (audioEle.value) {
+        audioEle.value.muted = muted
+      }
+    })
     emitter.on('changeCurrentTime', (percent: number) => {
       if (audioEle.value && store.state.track) {
         audioEle.value.currentTime = store.state.track.dt * percent / 1000
