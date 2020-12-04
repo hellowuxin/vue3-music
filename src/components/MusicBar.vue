@@ -1,10 +1,7 @@
 <template>
   <transition :enter-active-class="style['enter-active']" :enter-from-class="style['enter-from']">
     <div :class="style['container']" v-if="track">
-      <div :class="style['progress']" @click="onProgressClick" ref="progressEle">
-        <div :class="style['bar']" :style="{ transform: `scaleX(${globalCurrent / track.dt})` }" ref="barEle"></div>
-        <div :class="style['thumb']" :style="{ transform: `translateX(${thumbEleX}px)` }"></div>
-      </div>
+      <progress-linear :value="globalCurrent" :max="track.dt" @progress-click="onProgressClick"></progress-linear>
       <div :class="style['content']">
         <div :class="style['left']">
           <img :src="`${track.al.picUrl}?param=60y60`" alt="">
@@ -31,7 +28,13 @@
         <div :class="style['right']">
           <icon iconId="iconxunhuan"/>
           <icon iconId="iconbofangliebiao"/>
-          <icon iconId="iconyinliang"/>
+          <div :class="style['dropdown']">
+            <icon iconId="iconyinliang"/>
+            <div :class="style['dropdown-menu']">
+              <span :class="style['volume-number']">{{ Math.floor(volume) }}</span>
+              <progress-linear :vertical="true" :value="volume" height="60px" @progress-click="onVolumeClick"></progress-linear>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -39,24 +42,24 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, useCssModule, Ref, ref, watch } from 'vue'
+import { computed, defineComponent, useCssModule, ref } from 'vue'
 import { useStore } from 'vuex'
 import { GlobalStore } from '@/store'
 import Icon from './Icon.vue'
 import { getTrackTime } from '@/tools'
 import { emitter } from '@/components/MusicAudio.vue'
+import ProgressLinear from '@/components/ProgressLinear.vue'
 
 export default defineComponent({
   name: 'MusicBar',
   components: {
-    Icon
+    Icon,
+    ProgressLinear
   },
   setup () {
-    const progressEle: Ref<HTMLDivElement | undefined> = ref()
-    const barEle: Ref<HTMLDivElement | undefined> = ref()
     const style = useCssModule()
     const store = useStore<GlobalStore>()
-    const thumbEleX = ref(0)
+    const volume = ref(100)
 
     const track = computed(() => {
       return store.state.track
@@ -71,26 +74,13 @@ export default defineComponent({
     const play = () => {
       store.commit(globalPaused.value ? 'play' : 'pause')
     }
-    const onBarChange = () => {
-      if (barEle.value) {
-        thumbEleX.value = barEle.value.getBoundingClientRect().width - 5
-      }
-    }
-    const onProgressClick = (event: MouseEvent) => {
-      if (progressEle.value) {
-        const offset = progressEle.value.getBoundingClientRect()
-        const left = event.clientX - offset.left
 
-        emitter.emit('changeCurrentTime', left / progressEle.value.clientWidth)
-      }
+    const onProgressClick = (percent: number) => {
+      emitter.emit('changeCurrentTime', percent)
     }
-
-    const ob = new MutationObserver(onBarChange)
-    watch(barEle, (val) => {
-      if (val) {
-        ob.observe(val, { attributeFilter: ['style'] })
-      }
-    })
+    const onVolumeClick = (percent: number) => {
+      volume.value = 100 * percent
+    }
 
     return {
       style,
@@ -99,10 +89,9 @@ export default defineComponent({
       globalPaused,
       play,
       globalCurrent,
-      barEle,
-      thumbEleX,
       onProgressClick,
-      progressEle
+      onVolumeClick,
+      volume
     }
   }
 })
@@ -124,38 +113,6 @@ export default defineComponent({
   right: 0;
 }
 
-.progress {
-  position: relative;
-  height: 3px;
-  background-color: #F4F4F4;
-  display: flex;
-  align-items: center;
-  padding: 5px 0;
-  cursor: pointer;
-  background-clip: content-box;
-
-  .bar {
-    width: 100%;
-    position: absolute;
-    transform-origin: left;
-    transform: scaleX(0);
-    height: inherit;
-    background-color: var(--main-color);
-  }
-
-  .thumb {
-    display: none;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: var(--main-color);
-  }
-
-  &:hover .thumb {
-    display: block;
-  }
-}
-
 .content {
   background-color: white;
   display: flex;
@@ -169,12 +126,12 @@ export default defineComponent({
 .right {
   display: flex;
   flex: 1;
-  overflow: hidden;
 }
 
 .left {
   height: inherit;
   gap: 10px;
+  overflow: hidden;
 
   > div {
     width: calc(100% - 50px - 10px);
@@ -199,6 +156,11 @@ export default defineComponent({
 
 .center {
   justify-content: center;
+
+  .iconplay:global(.icon) {
+    font-size: 50px;
+    color: var(--main-color);
+  }
 }
 
 .right {
@@ -208,17 +170,12 @@ export default defineComponent({
 .center,
 .right {
   align-items: center;
-  font-size: 25px;
 
   :global(.icon) {
+    font-size: 25px;
     cursor: pointer;
-    margin: 0 10px;
+    margin: 10px;
   }
-}
-
-.iconplay {
-  font-size: 50px;
-  color: var(--main-color);
 }
 
 .iconxiayishou,
@@ -228,5 +185,37 @@ export default defineComponent({
 
 .time {
   font-family: var(--monospaced);
+}
+
+.dropdown {
+  position: relative;
+
+  &:hover &-menu,
+  &-menu:hover {
+    display: flex;
+  }
+}
+
+.dropdown-menu {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px;
+  background-color: white;
+  border-radius: 4px;
+  display: none;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 5px 5px -3px rgba(0,0,0,.2),
+    0 8px 10px 1px rgba(0,0,0,.14),
+    0 3px 14px 2px rgba(0,0,0,.12);
+}
+
+.volume-number {
+  text-align: center;
+  font-size: 12px;
+  width: 20px;
 }
 </style>
