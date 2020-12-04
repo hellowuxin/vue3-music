@@ -26,15 +26,17 @@
           <icon iconId="iconfenxiang"/>
         </div>
         <div :class="style['right']">
-          <icon iconId="iconxunhuan"/>
-          <icon iconId="iconbofangliebiao"/>
-          <div :class="style['dropdown']">
-            <icon :iconId="muted ? 'iconjingyin1' : 'iconyinliang'" @click="changeMuted"/>
-            <div :class="style['dropdown-menu']">
-              <span :class="style['volume-number']">{{ muted ? 0 : Math.floor(volume * 100) }}</span>
-              <progress-linear :vertical="true" :value="muted ? 0 : volume" :max="1" height="60px" @progress-click="onVolumeClick"></progress-linear>
-            </div>
-          </div>
+          <btn :icon="true"><icon iconId="iconxunhuan"/></btn>
+          <btn :icon="true"><icon iconId="iconbofangliebiao"/></btn>
+          <dropdown>
+            <template #activator="{ on }">
+              <btn :icon="true" v-on="on">
+                <icon :iconId="muted ? 'iconjingyin1' : 'iconyinliang'" @click="changeMuted"/>
+              </btn>
+            </template>
+            <span :class="style['volume-number']">{{ muted ? 0 : Math.floor(volume * 100) }}</span>
+            <progress-linear :vertical="true" :value="muted ? 0 : volume" :max="1" height="60px" @progress-click="onVolumeClick"></progress-linear>
+          </dropdown>
         </div>
       </div>
     </div>
@@ -49,12 +51,16 @@ import Icon from './Icon.vue'
 import { getTrackTime } from '@/tools'
 import { emitter } from '@/components/MusicAudio.vue'
 import ProgressLinear from '@/components/ProgressLinear.vue'
+import Btn from '@/components/Btn.vue'
+import Dropdown from '@/components/Dropdown.vue'
 
 export default defineComponent({
   name: 'MusicBar',
   components: {
     Icon,
-    ProgressLinear
+    ProgressLinear,
+    Btn,
+    Dropdown
   },
   setup () {
     const style = useCssModule()
@@ -178,11 +184,11 @@ export default defineComponent({
 .center,
 .right {
   align-items: center;
+  gap: 20px;
 
   :global(.icon) {
     font-size: 25px;
     cursor: pointer;
-    margin: 10px;
   }
 }
 
@@ -193,32 +199,6 @@ export default defineComponent({
 
 .time {
   font-family: var(--monospaced);
-}
-
-.dropdown {
-  position: relative;
-
-  &:hover &-menu,
-  &-menu:hover {
-    display: flex;
-  }
-}
-
-.dropdown-menu {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 10px;
-  background-color: white;
-  border-radius: 4px;
-  display: none;
-  align-items: center;
-  flex-direction: column;
-  gap: 10px;
-  box-shadow: 0 5px 5px -3px rgba(0,0,0,.2),
-    0 8px 10px 1px rgba(0,0,0,.14),
-    0 3px 14px 2px rgba(0,0,0,.12);
 }
 
 .volume-number {
