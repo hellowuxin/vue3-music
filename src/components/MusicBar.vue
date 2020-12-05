@@ -30,12 +30,18 @@
           <btn :icon="true"><icon iconId="iconbofangliebiao"/></btn>
           <dropdown>
             <template #activator="{ on }">
-              <btn :icon="true" v-on="on">
-                <icon :iconId="muted ? 'iconjingyin1' : 'iconyinliang'" @click="changeMuted"/>
+              <btn :icon="true" v-on="on" @click="changeMuted">
+                <icon :iconId="muted ? 'iconjingyin1' : 'iconyinliang'"/>
               </btn>
             </template>
             <span :class="style['volume-number']">{{ muted ? 0 : Math.floor(volume * 100) }}</span>
-            <progress-linear :vertical="true" :value="muted ? 0 : volume" :max="1" height="60px" @progress-click="onVolumeClick"></progress-linear>
+            <progress-linear
+              :vertical="true"
+              :value="muted ? 0 : volume"
+              :max="1"
+              height="60px"
+              @progress-click="onVolumeClick"
+            ></progress-linear>
           </dropdown>
         </div>
       </div>
