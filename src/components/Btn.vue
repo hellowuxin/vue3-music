@@ -1,12 +1,12 @@
 <template>
-  <button :class="icon ? style['container-icon'] : style['container']" @click="click" ref="btnEle">
+  <button :class="icon ? style['container-icon'] : style['container']" @click="createRipple" ref="btnEle">
     <slot></slot>
   </button>
 </template>
 
 <script lang="ts">
 import { createRipple } from '@/tools'
-import { defineComponent, ref, Ref, useCssModule } from 'vue'
+import { defineComponent, useCssModule } from 'vue'
 
 export default defineComponent({
   name: 'Btn',
@@ -17,17 +17,11 @@ export default defineComponent({
     }
   },
   setup () {
-    const btnEle: Ref<HTMLButtonElement | undefined> = ref()
     const style = useCssModule()
-
-    const click = (e: MouseEvent) => {
-      createRipple(e, btnEle.value)
-    }
 
     return {
       style,
-      click,
-      btnEle
+      createRipple
     }
   }
 })

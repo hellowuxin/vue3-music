@@ -26,7 +26,7 @@
           <icon iconId="iconfenxiang"/>
         </div>
         <div :class="style['right']">
-          <btn :icon="true"><icon iconId="iconxunhuan"/></btn>
+          <btn :icon="true"><icon iconId="iconliebiaoshunxu"/></btn>
           <btn :icon="true"><icon iconId="iconbofangliebiao"/></btn>
           <dropdown>
             <template #activator="{ on }">
@@ -172,6 +172,10 @@ export default defineComponent({
     text-overflow: ellipsis;
     overflow: hidden;
   }
+
+  :global(.breadcrumb) {
+    color: var(--grey);
+  }
 }
 
 .center {
@@ -205,6 +209,7 @@ export default defineComponent({
 
 .time {
   font-family: var(--monospaced);
+  color: var(--lightgrey);
 }
 
 .volume-number {

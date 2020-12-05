@@ -33,7 +33,7 @@ export const getTrackTime = (time: number): string => {
 // 波纹
 export const createRipple = (event: MouseEvent, button?: HTMLElement): void => {
   if (!button) {
-    button = event.target as HTMLElement
+    button = event.currentTarget as HTMLElement
   }
   const circle = document.createElement('span')
   const diameter = Math.max(button.clientWidth, button.clientHeight)
