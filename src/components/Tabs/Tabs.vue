@@ -10,6 +10,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, Ref, ref, useCssModule } from 'vue'
+import { createRipple } from '@/tools'
 
 export default defineComponent({
   name: 'Tabs',
@@ -42,22 +43,6 @@ export default defineComponent({
         }
       }
     }
-    const createRipple = (event: MouseEvent, button: HTMLElement) => {
-      const circle = document.createElement('span')
-      const diameter = Math.max(button.clientWidth, button.clientHeight)
-      const radius = diameter / 2
-      const offset = button.getBoundingClientRect()
-
-      circle.style.width = circle.style.height = `${diameter}px`
-      circle.style.left = `${event.clientX - (offset.left + radius)}px`
-      circle.style.top = `${event.clientY - (offset.top + radius)}px`
-      circle.classList.add(style.ripple)
-      button.appendChild(circle)
-
-      setTimeout(() => {
-        circle.remove()
-      }, 600)
-    }
 
     onMounted(() => {
       if (tabsEle.value) {
@@ -79,25 +64,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" module>
-@keyframes rippleA {
-  from {
-    transform: scale(0.5);
-    opacity: 0.5;
-  }
-
-  to {
-    transform: scale(4);
-    opacity: 0;
-  }
-}
-
-.ripple {
-  position: absolute;
-  border-radius: 50%;
-  animation: rippleA 0.6s linear forwards;
-  background-color: var(--main-color);
-}
-
 .container {
   display: flow-root;
   position: relative;

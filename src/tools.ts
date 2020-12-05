@@ -29,3 +29,24 @@ export const getChinaDate = (date: Date): string => {
 export const getTrackTime = (time: number): string => {
   return `${Math.floor(time / 60000).toString().padStart(2, '0')}:${Math.floor(time / 1000 % 60).toString().padStart(2, '0')}`
 }
+
+// 波纹
+export const createRipple = (event: MouseEvent, button?: HTMLElement): void => {
+  if (!button) {
+    button = event.target as HTMLElement
+  }
+  const circle = document.createElement('span')
+  const diameter = Math.max(button.clientWidth, button.clientHeight)
+  const radius = diameter / 2
+  const offset = button.getBoundingClientRect()
+
+  circle.style.width = circle.style.height = `${diameter}px`
+  circle.style.left = `${event.clientX - (offset.left + radius)}px`
+  circle.style.top = `${event.clientY - (offset.top + radius)}px`
+  circle.classList.add('ripple')
+  button.appendChild(circle)
+
+  setTimeout(() => {
+    circle.remove()
+  }, 600)
+}

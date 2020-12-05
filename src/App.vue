@@ -90,4 +90,23 @@ ul {
     padding: 0 3px;
   }
 }
+
+@keyframes rippleA {
+  from {
+    transform: scale(0.5);
+    opacity: 0.5;
+  }
+
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  animation: rippleA 0.6s linear forwards;
+  background-color: currentColor;
+}
 </style>
