@@ -1,11 +1,3 @@
 # vue3-music
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run start
-```
+在线演示：<https://music.5xin.xyz/>
