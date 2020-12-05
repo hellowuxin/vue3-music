@@ -56,32 +56,8 @@ export default defineComponent({
       }
     }
     const onEnded = () => {
-      if (audioEle.value) {
-        store.commit('pause')
-      }
+      store.dispatch('end')
     }
-    // onMounted(() => {
-    //   if (audioEle.value) {
-    //     audioEle.value.addEventListener('loadstart', () => {
-    //       console.log('audio loadstart')
-    //     })
-    //     audioEle.value.addEventListener('loadedmetadata', () => {
-    //       console.log('audio loadedmetadata')
-    //     })
-    //     audioEle.value.addEventListener('loadeddata', () => {
-    //       console.log('audio loadeddata')
-    //     })
-    //     audioEle.value.addEventListener('progress', () => {
-    //       console.log('audio progress')
-    //     })
-    //     audioEle.value.addEventListener('canplay', () => {
-    //       console.log('audio canplay')
-    //     })
-    //     audioEle.value.addEventListener('error', () => {
-    //       console.log('audio error', audioEle.value?.error)
-    //     })
-    //   }
-    // })
 
     return {
       audioEle,

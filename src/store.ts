@@ -3,27 +3,34 @@ import { Track } from './interface'
 import axios from 'axios'
 
 export interface GlobalStore {
-  track: Track | ''
+  track: Track | undefined
   paused: boolean
   songUrl: string
   currentTime: number
   volume: number
   muted: boolean
+  playMode: 'order' | 'loop' | 'order-loop'
+  tracklist: Track[]
 }
 
 export default createStore<GlobalStore>({
   state: {
-    track: '',
+    track: undefined,
     paused: true,
     songUrl: '',
     currentTime: 0,
     volume: 1,
-    muted: false
+    muted: false,
+    playMode: 'order',
+    tracklist: []
   },
   mutations: {
-    changeSong (state, payload: { track: Track, songUrl: string }) {
+    changeTrack (state, payload: { track: Track, songUrl: string }) {
       state.track = payload.track
       state.songUrl = payload.songUrl
+    },
+    changeTrackList (state, tracklist: Track[]) {
+      state.tracklist = tracklist
     },
     play (state) {
       state.paused = false
@@ -51,18 +58,34 @@ export default createStore<GlobalStore>({
     }
   },
   actions: {
-    async playSong ({ commit, state }, track: Track) {
-      if (!state.track || track.id !== state.track.id) {
-        const { data } = await axios.get(`/song/url?id=${track.id}`)
+    async playSong ({ commit, state }, payload: { track: Track, tracklist?: Track[] }) {
+      if (!state.track || payload.track.id !== state.track.id) {
+        const { data } = await axios.get(`/song/url?id=${payload.track.id}`)
         commit('pause')
         commit({
-          type: 'changeSong',
-          track,
+          type: 'changeTrack',
+          track: payload.track,
           songUrl: data.data[0].url
         })
         commit('play')
       } else {
         commit('changePaused')
+      }
+      if (payload.tracklist && state.tracklist !== payload.tracklist) {
+        console.log(1)
+        commit('changeTrackList', payload.tracklist)
+      }
+    },
+    end ({ commit, state, dispatch }) {
+      commit('pause')
+      if (state.track && state.playMode === 'order') {
+        const nextIndex = state.tracklist.indexOf(state.track) + 1
+        if (nextIndex < state.tracklist.length) {
+          dispatch({
+            type: 'playSong',
+            track: state.tracklist[nextIndex]
+          })
+        }
       }
     }
   }

@@ -80,7 +80,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup () {
+  setup (props) {
     const style = useCssModule()
     const store = useStore<GlobalStore>()
     const globalTrack = computed(() => {
@@ -91,7 +91,11 @@ export default defineComponent({
     })
 
     const playSong = (track: Track) => {
-      store.dispatch('playSong', track)
+      store.dispatch({
+        type: 'playSong',
+        tracklist: props.tracks,
+        track
+      })
     }
 
     return {
