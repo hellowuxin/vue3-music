@@ -16,7 +16,7 @@
         <card
           v-for="play in recommendedPlaylists"
           :key="play.id"
-          :imgSrc="play.picUrl"
+          :imgSrc="`${play.picUrl}?param=400y400`"
           :title="play.name"
           :playCount="play.playCount"
           @click="clickCard(play)"

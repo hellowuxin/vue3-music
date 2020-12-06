@@ -4,8 +4,11 @@
       <progress-linear :value="globalCurrent" :max="track.dt" @progress-click="onProgressClick"></progress-linear>
       <div :class="style['content']">
         <div :class="style['left']">
-          <img :src="`${track.al.picUrl}?param=60y60`" alt="">
-          <div>
+          <div :class="style['left-img']">
+            <img :src="`${track.al.picUrl}?param=60y60`" alt="">
+            <div :class="style['iconshouqi']"><icon iconId="iconshouqi"></icon></div>
+          </div>
+          <div :class="style['left-content']">
             <div :class="style['track-title']">
               <span>{{ track.name }}</span>
               <span>&nbsp;-&nbsp;</span>
@@ -153,13 +156,39 @@ export default defineComponent({
   gap: 10px;
   overflow: hidden;
 
-  > div {
+  &-content {
     width: calc(100% - 50px - 10px);
   }
 
-  img {
+  &-img {
+    position: relative;
     height: inherit;
+    cursor: pointer;
     border-radius: 4px;
+
+    img {
+      height: inherit;
+      border-radius: inherit;
+    }
+
+    &:hover .iconshouqi {
+      display: flex;
+    }
+  }
+
+  .iconshouqi {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border-radius: inherit;
+    backdrop-filter: blur(3px);
+    font-size: 30px;
   }
 }
 
