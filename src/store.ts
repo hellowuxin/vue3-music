@@ -11,6 +11,7 @@ export interface GlobalStore {
   muted: boolean
   playMode: 'order' | 'loop' | 'order-loop'
   tracklist: Track[]
+  playView: boolean
 }
 
 export default createStore<GlobalStore>({
@@ -22,7 +23,8 @@ export default createStore<GlobalStore>({
     volume: 1,
     muted: false,
     playMode: 'order',
-    tracklist: []
+    tracklist: [],
+    playView: false
   },
   mutations: {
     changeTrack (state, payload: { track: Track, songUrl: string }) {
@@ -55,6 +57,9 @@ export default createStore<GlobalStore>({
     },
     changeMuted (state) {
       state.muted = !state.muted
+    },
+    changePlayView (state) {
+      state.playView = !state.playView
     }
   },
   actions: {

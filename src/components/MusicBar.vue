@@ -1,10 +1,15 @@
 <template>
-  <transition :enter-active-class="style['enter-active']" :enter-from-class="style['enter-from']">
+  <transition name="slideInUp">
     <div :class="style['container']" v-if="track">
-      <progress-linear :value="globalCurrent" :max="track.dt" @progress-click="onProgressClick"></progress-linear>
+      <progress-linear
+        :class="style['progress']"
+        :value="globalCurrent"
+        :max="track.dt"
+        @progress-click="onProgressClick"
+      ></progress-linear>
       <div :class="style['content']">
         <div :class="style['left']">
-          <div :class="style['left-img']">
+          <div :class="style['changePlayView']" @click="changePlayView">
             <img :src="`${track.al.picUrl}?param=60y60`" alt="">
             <div :class="style['iconshouqi']"><icon iconId="iconshouqi"></icon></div>
           </div>
@@ -102,6 +107,9 @@ export default defineComponent({
     const onVolumeClick = (percent: number) => {
       store.commit('changeVolume', percent)
     }
+    const changePlayView = () => {
+      store.commit('changePlayView')
+    }
 
     return {
       style,
@@ -114,26 +122,24 @@ export default defineComponent({
       onVolumeClick,
       volume,
       muted,
-      changeMuted
+      changeMuted,
+      changePlayView
     }
   }
 })
 </script>
 
 <style lang="scss" module>
-.enter-active {
-  transition: all 0.3s ease-out;
-}
-
-.enter-from {
-  transform: translateY(var(--bottomspace));
-}
-
 .container {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
+}
+
+.progress {
+  position: relative;
+  top: 5px;
 }
 
 .content {
@@ -160,7 +166,7 @@ export default defineComponent({
     width: calc(100% - 50px - 10px);
   }
 
-  &-img {
+  .changePlayView {
     position: relative;
     height: inherit;
     cursor: pointer;

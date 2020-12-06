@@ -2,6 +2,7 @@
   <global-header></global-header>
   <div class="global-container">
     <router-view></router-view>
+    <play-view></play-view>
   </div>
   <music-bar></music-bar>
   <music-audio></music-audio>
@@ -12,18 +13,29 @@ import { defineComponent } from 'vue'
 import GlobalHeader from './components/GlobalHeader.vue'
 import MusicBar from './components/MusicBar.vue'
 import MusicAudio from './components/MusicAudio.vue'
+import PlayView from './views/PlayView.vue'
 
 export default defineComponent({
   name: 'App',
   components: {
     GlobalHeader,
     MusicBar,
-    MusicAudio
+    MusicAudio,
+    PlayView
   }
 })
 </script>
 
 <style lang="scss">
+.slideInUp{
+  &-enter-active {
+    transition: all 0.3s ease-out;
+  }
+  &-enter-from {
+    transform: translateY(100%);
+  }
+}
+
 :root {
   --main-color: #D33A31;
   --lightgrey: #A6A6A7;
