@@ -132,7 +132,7 @@ export default defineComponent({
   }
 
   a {
-    color: var(--blue);
+    color: var(--bluelink);
   }
 
   p {
@@ -150,19 +150,18 @@ export default defineComponent({
 
 .title {
   display: flex;
+  align-items: center;
+  gap: 10px;
 
   span {
     color: var(--main-color);
     border: 1px solid;
     border-radius: 4px;
     padding: 0 5px;
-    margin: 6px 0;
-    height: min-content;
-    flex-shrink: 0;
   }
 
   h2 {
-    margin: 0 0 0 10px;
+    margin: 0;
     font-weight: normal;
     font-size: x-large;
   }

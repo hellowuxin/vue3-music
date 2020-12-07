@@ -69,7 +69,7 @@ export default defineComponent({
   }
 
   a {
-    color: var(--blue)
+    color: var(--bluelink)
   }
 }
 

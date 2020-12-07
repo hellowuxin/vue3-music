@@ -40,7 +40,7 @@ export default defineComponent({
   --main-color: #D33A31;
   --lightgrey: #A6A6A7;
   --grey: #646464;
-  --blue: #668DB9;
+  --bluelink: #668DB9;
   --monospaced: Courier, monospace, 'Courier New';
   --topspace: 54px;
   --bottomspace: 73px;
