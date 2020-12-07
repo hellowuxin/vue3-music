@@ -20,7 +20,7 @@ export default createStore<GlobalStore>({
     paused: true,
     songUrl: '',
     currentTime: 0,
-    volume: 1,
+    volume: 0.3,
     muted: false,
     playMode: 'order',
     tracklist: [],

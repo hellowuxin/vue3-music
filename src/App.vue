@@ -2,8 +2,8 @@
   <global-header></global-header>
   <div class="global-container">
     <router-view></router-view>
-    <play-view></play-view>
   </div>
+  <play-view></play-view>
   <music-bar></music-bar>
   <music-audio></music-audio>
 </template>

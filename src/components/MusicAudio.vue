@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, ref, watch } from 'vue'
+import { defineComponent, onMounted, Ref, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import { GlobalStore } from '@/store'
 import mitt from '@/mitt'
@@ -16,6 +16,12 @@ export default defineComponent({
   setup () {
     const audioEle: Ref<HTMLAudioElement | undefined> = ref()
     const store = useStore<GlobalStore>()
+
+    const changeVolume = (volume: number) => {
+      if (audioEle.value) {
+        audioEle.value.volume = volume
+      }
+    }
 
     watch(() => store.state.songUrl, (newVal) => {
       if (audioEle.value) {
@@ -34,11 +40,7 @@ export default defineComponent({
         }
       }
     })
-    watch(() => store.state.volume, (volume) => {
-      if (audioEle.value) {
-        audioEle.value.volume = volume
-      }
-    })
+    watch(() => store.state.volume, changeVolume)
     watch(() => store.state.muted, (muted) => {
       if (audioEle.value) {
         audioEle.value.muted = muted
@@ -58,6 +60,10 @@ export default defineComponent({
     const onEnded = () => {
       store.dispatch('end')
     }
+
+    onMounted(() => {
+      changeVolume(store.state.volume)
+    })
 
     return {
       audioEle,

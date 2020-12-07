@@ -11,7 +11,7 @@
         <div :class="style['left']">
           <div :class="style['changePlayView']" @click="changePlayView">
             <img :src="`${track.al.picUrl}?param=60y60`" alt="">
-            <div :class="style['iconshouqi']"><icon iconId="iconshouqi"></icon></div>
+            <div :class="style['iconshouqi']"><icon :iconId="playView ? 'iconzhankai' : 'iconshouqi'"></icon></div>
           </div>
           <div :class="style['left-content']">
             <div :class="style['track-title']">
@@ -94,6 +94,9 @@ export default defineComponent({
     const globalCurrent = computed(() => {
       return store.state.currentTime
     })
+    const playView = computed(() => {
+      return store.state.playView
+    })
 
     const play = () => {
       store.commit(globalPaused.value ? 'play' : 'pause')
@@ -123,7 +126,8 @@ export default defineComponent({
       volume,
       muted,
       changeMuted,
-      changePlayView
+      changePlayView,
+      playView
     }
   }
 })
@@ -131,6 +135,7 @@ export default defineComponent({
 
 <style lang="scss" module>
 .container {
+  z-index: 6;
   position: fixed;
   bottom: 0;
   left: 0;
