@@ -79,24 +79,12 @@ export default defineComponent({
   setup () {
     const style = useCssModule()
     const store = useStore<GlobalStore>()
-    const volume = computed(() => {
-      return store.state.volume
-    })
-    const muted = computed(() => {
-      return store.state.muted
-    })
-    const track = computed(() => {
-      return store.state.track
-    })
-    const globalPaused = computed(() => {
-      return store.state.paused
-    })
-    const globalCurrent = computed(() => {
-      return store.state.currentTime
-    })
-    const playView = computed(() => {
-      return store.state.playView
-    })
+    const volume = computed(() => store.state.volume)
+    const muted = computed(() => store.state.muted)
+    const track = computed(() => store.state.track)
+    const globalPaused = computed(() => store.state.paused)
+    const globalCurrent = computed(() => store.state.currentTime)
+    const playView = computed(() => store.state.playView)
 
     const play = () => {
       store.commit(globalPaused.value ? 'play' : 'pause')

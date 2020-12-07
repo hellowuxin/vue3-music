@@ -39,17 +39,13 @@ export default defineComponent({
       thumbPosMax: ComputedRef<number>,
       thumbStyle: ComputedRef<{ transform: string }>
 
-    const proportion = computed(() => {
-      return props.value / props.max
-    })
+    const proportion = computed(() => props.value / props.max)
 
     if (props.vertical) {
       barScale = 'scaleY'
       containerClass = style['vertical-container']
 
-      thumbPosMax = computed(() => {
-        return parseInt(props.height, 10)
-      })
+      thumbPosMax = computed(() => parseInt(props.height, 10))
       thumbStyle = computed(() => {
         return { transform: `translateY(${thumbPosMax.value * (1 - proportion.value) - 5}px)` }
       })
@@ -57,9 +53,7 @@ export default defineComponent({
       barScale = 'scaleX'
       containerClass = style.container
 
-      thumbPosMax = computed(() => {
-        return (containerRect.value ? containerRect.value.width : 0)
-      })
+      thumbPosMax = computed(() => (containerRect.value ? containerRect.value.width : 0))
       thumbStyle = computed(() => {
         return { transform: `translateX(${thumbPosMax.value * proportion.value - 5}px)` }
       })

@@ -83,12 +83,8 @@ export default defineComponent({
   setup (props) {
     const style = useCssModule()
     const store = useStore<GlobalStore>()
-    const globalTrack = computed(() => {
-      return store.state.track
-    })
-    const globalPaused = computed(() => {
-      return store.state.paused
-    })
+    const globalTrack = computed(() => store.state.track)
+    const globalPaused = computed(() => store.state.paused)
 
     const playSong = (track: Track) => {
       store.dispatch({
