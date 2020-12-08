@@ -116,7 +116,7 @@ export default defineComponent({
 
       if (lyricsEle.value && flag) {
         const children = lyricsEle.value.children
-        const offsetTop = (children[focuslyrics.value - 1] as HTMLParagraphElement).offsetTop
+        const offsetTop = (children[focuslyrics.value] as HTMLParagraphElement).offsetTop
         lyricsEle.value.scroll({
           top: offsetTop - lyricsEle.value.clientHeight / 2,
           behavior: 'smooth'
@@ -161,6 +161,7 @@ export default defineComponent({
   display: flex;
   gap: 20px;
   height: 700px;
+  padding: 20px 0;
 
   .disc,
   .main {

@@ -1,60 +1,59 @@
 <template>
-  <transition name="slideInUp">
-    <div :class="style['container']" v-if="track">
-      <progress-linear
-        :class="style['progress']"
-        :value="globalCurrent"
-        :max="track.dt"
-        @progress-click="onProgressClick"
-      ></progress-linear>
-      <div :class="style['content']">
-        <div :class="style['left']">
-          <div :class="style['changePlayView']" @click="changePlayView">
-            <img :src="`${track.al.picUrl}?param=60y60`" alt="">
-            <div :class="style['iconshouqi']"><icon :iconId="playView ? 'iconzhankai' : 'iconshouqi'"></icon></div>
-          </div>
-          <div :class="style['left-content']">
-            <div :class="style['track-title']">
-              <span>{{ track.name }}</span>
-              <span>&nbsp;-&nbsp;</span>
-              <ul class="breadcrumb">
-                <li v-for="ar in track.ar" :key="ar.id">
-                  <router-link to="#">{{ ar.name }}</router-link>
-                </li>
-              </ul>
-            </div>
-            <div :class="style['time']">{{ getTrackTime(globalCurrent) }}/{{ getTrackTime(track.dt) }}</div>
-          </div>
+  <div :class="style['container']">
+    <progress-linear
+      :class="style['progress']"
+      :value="globalCurrent"
+      :max="track && track.dt"
+      @progress-click="onProgressClick"
+    ></progress-linear>
+    <div :class="style['content']">
+      <div :class="style['left']" v-if="track">
+        <div :class="style['changePlayView']" @click="changePlayView">
+          <img :src="`${track.al.picUrl}?param=60y60`" alt="">
+          <div :class="style['iconshouqi']"><icon :iconId="playView ? 'iconzhankai' : 'iconshouqi'"></icon></div>
         </div>
-        <div :class="style['center']">
-          <icon iconId="iconaixin"/>
-          <icon iconId="iconshangyishou" :class="style['iconshangyishou']"/>
-          <icon :iconId="globalPaused ? 'iconplay_go' : 'iconplay_pause'" :class="style['iconplay']" @click="play"/>
-          <icon iconId="iconxiayishou" :class="style['iconxiayishou']"/>
-          <icon iconId="iconfenxiang"/>
-        </div>
-        <div :class="style['right']">
-          <btn :icon="true"><icon iconId="iconliebiaoshunxu"/></btn>
-          <btn :icon="true"><icon iconId="iconbofangliebiao"/></btn>
-          <dropdown>
-            <template #activator="{ on }">
-              <btn :icon="true" v-on="on" @click="changeMuted">
-                <icon :iconId="muted ? 'iconjingyin1' : 'iconyinliang'"/>
-              </btn>
-            </template>
-            <span :class="style['volume-number']">{{ muted ? 0 : Math.floor(volume * 100) }}</span>
-            <progress-linear
-              :vertical="true"
-              :value="muted ? 0 : volume"
-              :max="1"
-              height="60px"
-              @progress-click="onVolumeClick"
-            ></progress-linear>
-          </dropdown>
+        <div :class="style['left-content']">
+          <div :class="style['track-title']">
+            <span>{{ track.name }}</span>
+            <span>&nbsp;-&nbsp;</span>
+            <ul class="breadcrumb">
+              <li v-for="ar in track.ar" :key="ar.id">
+                <router-link to="#">{{ ar.name }}</router-link>
+              </li>
+            </ul>
+          </div>
+          <div :class="style['time']">{{ getTrackTime(globalCurrent) }}/{{ getTrackTime(track.dt) }}</div>
         </div>
       </div>
+      <div :class="style['left']" v-else></div>
+      <div :class="style['center']">
+        <icon iconId="iconaixin"/>
+        <icon iconId="iconshangyishou" :class="style['iconshangyishou']"/>
+        <icon :iconId="globalPaused ? 'iconplay_go' : 'iconplay_pause'" :class="style['iconplay']" @click="play"/>
+        <icon iconId="iconxiayishou" :class="style['iconxiayishou']"/>
+        <icon iconId="iconfenxiang"/>
+      </div>
+      <div :class="style['right']">
+        <btn :icon="true"><icon iconId="iconliebiaoshunxu"/></btn>
+        <btn :icon="true"><icon iconId="iconbofangliebiao"/></btn>
+        <dropdown>
+          <template #activator="{ on }">
+            <btn :icon="true" v-on="on" @click="changeMuted">
+              <icon :iconId="muted ? 'iconjingyin1' : 'iconyinliang'"/>
+            </btn>
+          </template>
+          <span :class="style['volume-number']">{{ muted ? 0 : Math.floor(volume * 100) }}</span>
+          <progress-linear
+            :vertical="true"
+            :value="muted ? 0 : volume"
+            :max="1"
+            height="60px"
+            @progress-click="onVolumeClick"
+          ></progress-linear>
+        </dropdown>
+      </div>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script lang="ts">
