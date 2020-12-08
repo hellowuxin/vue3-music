@@ -77,7 +77,6 @@ export default createStore<GlobalStore>({
         commit('changePaused')
       }
       if (payload.tracklist && state.tracklist !== payload.tracklist) {
-        console.log(1)
         commit('changeTrackList', payload.tracklist)
       }
     },

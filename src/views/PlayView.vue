@@ -30,7 +30,13 @@
             </div>
           </div>
           <div :class="style['lyrics']">
-            <div :class="style['lyrics-content']"><p v-for="row in lrcArr" :key="row[0]">{{ row[2] }}</p></div>
+            <div :class="style['lyrics-content']" ref="lyricsEle" v-if="lrcArr">
+              <p
+                v-for="(row, index) in lrcArr"
+                :key="index"
+                :class="index === focuslyrics ? style['lyrics-focus'] : ''"
+              >{{ row[1] }}</p>
+            </div>
             <hr :class="style['divider']">
           </div>
         </div>
@@ -48,6 +54,8 @@ import axios from 'axios'
 import Commentlist from '@/components/Commentlist.vue'
 import { CommentResp } from '@/interface'
 
+type lyric = (number | undefined | string)[]
+
 export default defineComponent({
   name: 'PlayView',
   components: {
@@ -57,28 +65,61 @@ export default defineComponent({
     const style = useCssModule()
     const store = useStore<GlobalStore>()
     const commentResp: Ref<CommentResp | undefined> = ref()
-    const lrcArr = ref()
+    const lrcArr: Ref<lyric[] | undefined> = ref()
+    const focuslyrics = ref(0)
+    const lyricsEle: Ref<HTMLDivElement | undefined> = ref()
 
     const playView = computed(() => store.state.playView)
     const track = computed(() => store.state.track)
+    const currentTime = computed(() => store.state.currentTime)
 
+    const toTime = (str: string) => {
+      const arr = str.split(':')
+      return (parseInt(arr[0], 10) * 60 + parseInt(arr[1], 10)) * 1000
+    }
     const reg = /(?:\[(.*)])?(.*)/
     const lrcToObj = (lrc: string) => {
-      const res = lrc.split('\n').slice(0, -1).map((s: string) => {
-        return reg.exec(s)
+      const arr = lrc.split('\n').slice(0, -1).map((s: string) => {
+        return reg.exec(s) || [s, undefined, s]
       })
+      const res = arr.map((a) => {
+        return [a[1] ? toTime(a[1]) : undefined, a[2]]
+      })
+
       return res
     }
 
     watch(() => store.state.track, (track) => {
       if (track) {
         axios.get(`/lyric?id=${track.id}`).then(({ data }) => {
-          console.log(data.lrc.lyric)
           lrcArr.value = lrcToObj(data.lrc.lyric)
-          console.log(lrcArr.value)
         })
         axios.get(`/comment/music?id=${track.id}`).then(({ data }) => {
           commentResp.value = data
+        })
+      }
+    })
+    watch(() => store.state.currentTime, (current) => {
+      let flag = false
+      if (lrcArr.value) {
+        while (focuslyrics.value > 0 &&
+        (lrcArr.value[focuslyrics.value][0] || 0) > current) {
+          focuslyrics.value = focuslyrics.value - 1
+        }
+        while (focuslyrics.value < lrcArr.value.length &&
+        (lrcArr.value[focuslyrics.value][0] || 0) <= current) {
+          focuslyrics.value = focuslyrics.value + 1
+          flag = true
+        }
+        focuslyrics.value = focuslyrics.value - 1
+      }
+
+      if (lyricsEle.value && flag) {
+        const children = lyricsEle.value.children
+        const offsetTop = (children[focuslyrics.value - 1] as HTMLParagraphElement).offsetTop
+        lyricsEle.value.scroll({
+          top: offsetTop - lyricsEle.value.clientHeight / 2,
+          behavior: 'smooth'
         })
       }
     })
@@ -88,7 +129,10 @@ export default defineComponent({
       playView,
       track,
       commentResp,
-      lrcArr
+      lrcArr,
+      currentTime,
+      focuslyrics,
+      lyricsEle
     }
   }
 })
@@ -179,10 +223,15 @@ export default defineComponent({
   color: var(--grey);
   display: flex;
   overflow: hidden;
+  position: relative;
 
   &-content {
     width: 100%;
     overflow: scroll;
+  }
+
+  &-focus {
+    color: black;
   }
 }
 
