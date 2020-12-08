@@ -154,7 +154,7 @@ export default defineComponent({
   left: 0;
   right: 0;
   padding: var(--topspace) 20px var(--bottomspace) 20px;
-  z-index: 6;
+  z-index: 3;
 }
 
 .content {

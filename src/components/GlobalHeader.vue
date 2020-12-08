@@ -30,7 +30,7 @@ export default defineComponent({
 $black: #000;
 
 .container {
-  z-index: 5;
+  z-index: 2;
   background-color: rgba(#F6F6F6, .9);
   backdrop-filter: blur(10px);
   position: fixed;

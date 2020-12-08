@@ -66,6 +66,7 @@ import { emitter } from '@/components/MusicAudio.vue'
 import ProgressLinear from '@/components/ProgressLinear.vue'
 import Btn from '@/components/Btn.vue'
 import Dropdown from '@/components/Dropdown.vue'
+import createMessage from './Message'
 
 export default defineComponent({
   name: 'MusicBar',
@@ -86,7 +87,11 @@ export default defineComponent({
     const playView = computed(() => store.state.playView)
 
     const play = () => {
-      store.commit(globalPaused.value ? 'play' : 'pause')
+      if (track.value) {
+        store.commit(globalPaused.value ? 'play' : 'pause')
+      } else {
+        createMessage('没有可播放的音频', 'error')
+      }
     }
     const changeMuted = () => {
       store.commit('changeMuted')
@@ -122,7 +127,7 @@ export default defineComponent({
 
 <style lang="scss" module>
 .container {
-  z-index: 6;
+  z-index: 3;
   position: fixed;
   bottom: 0;
   left: 0;
