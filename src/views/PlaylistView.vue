@@ -48,7 +48,7 @@ export default defineComponent({
     const commentResp: Ref<CommentResp | undefined> = ref()
     const activeTab = ref(0)
 
-    axios.get(`/playlist/detail?id=${route.query.id}`).then(async ({ data }) => {
+    axios.get(`/playlist/detail?id=${route.query.id}`).then(({ data }) => {
       playlist.value = data.playlist
       console.log(data.playlist)
     })

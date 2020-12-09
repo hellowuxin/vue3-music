@@ -5,7 +5,7 @@
         <icon iconId="iconplay1"/>
         <span>{{ Math.floor(playCount / 10000) }}万</span>
       </span>
-      <icon iconId="iconplay" :class="style['iconplay']"/>
+      <icon iconId="iconplay" :class="style['iconplay']" @click.stop="clickPlay"/>
       <img :src="imgSrc"/>
     </div>
     <span :class="style['title']">{{ title }}</span>
@@ -26,11 +26,16 @@ export default defineComponent({
     title: String,
     playCount: Number
   },
-  setup () {
+  emits: ['click-play'],
+  setup (props, context) {
     const style = useCssModule()
+    const clickPlay = () => {
+      context.emit('click-play')
+    }
 
     return {
-      style
+      style,
+      clickPlay
     }
   }
 })

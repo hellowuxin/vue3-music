@@ -22,6 +22,7 @@
           :title="play.name"
           :playCount="play.playCount"
           @click="clickCard(play)"
+          @click-play="clickPlay(play)"
         ></card>
       </div>
     </div>
@@ -37,6 +38,7 @@ import Icon from '../components/Icon.vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { GlobalStore } from '@/store'
+import { Track } from '@/interface'
 
 interface Banner {
   imageUrl: string
@@ -90,13 +92,24 @@ export default defineComponent({
     const clickCard = (play: Play) => {
       router.push({ name: 'playlist-view', query: { id: play.id } })
     }
+    const clickPlay = (play: Play) => {
+      axios.get(`/playlist/detail?id=${play.id}`).then(({ data }) => {
+        const tracks: Track[] = data.playlist.tracks
+        store.dispatch({
+          type: 'playSong',
+          track: tracks[0],
+          tracklist: tracks
+        })
+      })
+    }
 
     return {
       style,
       carouselValue,
       recommendedPlaylists,
       clickCard,
-      clickCarousel
+      clickCarousel,
+      clickPlay
     }
   }
 })
