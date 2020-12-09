@@ -6,6 +6,9 @@
     :leave-to-class="style['enter-from']"
   >
     <div v-show="playView" v-if="track" :class="style['container']">
+      <btn :icon="true" :class="style['close']" @click="close">
+        <icon iconId="iconzhankai"></icon>
+      </btn>
       <div :class="style['content']">
         <div :class="style['disc']">
           <img :src="track.al.picUrl" alt="">
@@ -30,12 +33,15 @@
             </div>
           </div>
           <div :class="style['lyrics']">
-            <div :class="style['lyrics-content']" ref="lyricsEle" v-if="lrcArr">
+            <div :class="style['lyrics-content']" ref="lyricsEle" v-if="!nolyric && lrcArr">
               <p
                 v-for="(row, index) in lrcArr"
                 :key="index"
                 :class="index === focuslyrics ? style['lyrics-focus'] : ''"
               >{{ row[1] }}</p>
+            </div>
+            <div v-else-if="nolyric" :class="[style['lyrics-content'], style['nolyric']]">
+              <p>纯音乐</p>
             </div>
             <hr :class="style['divider']">
           </div>
@@ -53,18 +59,23 @@ import { GlobalStore } from '@/store'
 import axios from 'axios'
 import Commentlist from '@/components/Commentlist.vue'
 import { CommentResp } from '@/interface'
+import Btn from '@/components/Btn.vue'
+import Icon from '@/components/Icon.vue'
 
 type lyric = (number | undefined | string)[]
 
 export default defineComponent({
   name: 'PlayView',
   components: {
-    Commentlist
+    Commentlist,
+    Btn,
+    Icon
   },
   setup () {
     const style = useCssModule()
     const store = useStore<GlobalStore>()
     const commentResp: Ref<CommentResp | undefined> = ref()
+    const nolyric = ref(false)
     const lrcArr: Ref<lyric[] | undefined> = ref()
     const focuslyrics = ref(0)
     const lyricsEle: Ref<HTMLDivElement | undefined> = ref()
@@ -88,11 +99,19 @@ export default defineComponent({
 
       return res
     }
+    const close = () => {
+      store.commit('closePlayView')
+    }
 
     watch(() => store.state.track, (track) => {
       if (track) {
         axios.get(`/lyric?id=${track.id}`).then(({ data }) => {
-          lrcArr.value = lrcToObj(data.lrc.lyric)
+          if (data.nolyric || !data.lrc?.lyric) {
+            nolyric.value = true
+          } else {
+            nolyric.value = false
+            lrcArr.value = lrcToObj(data.lrc.lyric)
+          }
         })
         axios.get(`/comment/music?id=${track.id}`).then(({ data }) => {
           commentResp.value = data
@@ -100,6 +119,10 @@ export default defineComponent({
       }
     })
     watch(() => store.state.currentTime, (current) => {
+      if (nolyric.value) {
+        return
+      }
+
       let flag = false
       if (lrcArr.value) {
         while (focuslyrics.value > 0 &&
@@ -132,7 +155,9 @@ export default defineComponent({
       lrcArr,
       currentTime,
       focuslyrics,
-      lyricsEle
+      lyricsEle,
+      nolyric,
+      close
     }
   }
 })
@@ -149,12 +174,21 @@ export default defineComponent({
 
 .container {
   background-color: #FBFAFB;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
+  bottom: 0;
   padding: var(--topspace) 20px var(--bottomspace) 20px;
   z-index: 3;
+  overflow: scroll;
+}
+
+.close {
+  position: fixed;
+  top: 20px;
+  font-size: x-large;
+  color: var(--grey)
 }
 
 .content {
@@ -165,7 +199,7 @@ export default defineComponent({
 
   .disc,
   .main {
-    flex: 1;
+    width: calc(50% - 10px);
     display: flex;
   }
 
@@ -175,8 +209,9 @@ export default defineComponent({
   }
 
   .disc img {
-    width: 300px;
-    height: 300px;
+    max-width: 300px;
+    max-height: 300px;
+    width: 100%;
     border: 8px solid #F2F2F3;
     align-self: center;
   }
@@ -191,11 +226,14 @@ export default defineComponent({
   display: flex;
   align-items: center;
   gap: 10px;
+  white-space: nowrap;
 
   h2 {
     font-size: x-large;
     margin: 0;
     font-weight: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   span {
@@ -210,6 +248,13 @@ export default defineComponent({
   display: flex;
   gap: 20px;
   color: var(--grey);
+  white-space: nowrap;
+
+  > * {
+    max-width: calc(50% - 10px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
   .track-ar {
     display: flex;
@@ -229,6 +274,11 @@ export default defineComponent({
   &-content {
     width: 100%;
     overflow: scroll;
+
+    &.nolyric {
+      display: flex;
+      justify-content: center;
+    }
   }
 
   &-focus {

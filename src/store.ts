@@ -60,6 +60,9 @@ export default createStore<GlobalStore>({
     },
     changePlayView (state) {
       state.playView = !state.playView
+    },
+    closePlayView (state) {
+      state.playView = false
     }
   },
   actions: {
