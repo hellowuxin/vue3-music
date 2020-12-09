@@ -43,10 +43,10 @@
             <div v-else-if="nolyric" :class="[style['lyrics-content'], style['nolyric']]">
               <p>纯音乐</p>
             </div>
-            <hr :class="style['divider']">
           </div>
         </div>
       </div>
+      <hr :class="style['divider']">
       <commentlist v-if="commentResp" :commentResp="commentResp"></commentlist>
     </div>
   </transition>
@@ -129,6 +129,9 @@ export default defineComponent({
         (lrcArr.value[focuslyrics.value][0] || 0) > current) {
           focuslyrics.value = focuslyrics.value - 1
         }
+        if (focuslyrics.value <= -1) {
+          focuslyrics.value = 0
+        }
         while (focuslyrics.value < lrcArr.value.length &&
         (lrcArr.value[focuslyrics.value][0] || 0) <= current) {
           focuslyrics.value = focuslyrics.value + 1
@@ -188,7 +191,8 @@ export default defineComponent({
   position: fixed;
   top: 20px;
   font-size: x-large;
-  color: var(--grey)
+  color: var(--grey);
+  box-shadow: var(--shadow);
 }
 
 .content {
@@ -287,6 +291,13 @@ export default defineComponent({
 }
 
 .divider {
+  border: solid;
+  border-width: thin 0 0;
+  margin: 0;
+  border-color: #EEEDEE;
+}
+
+.vertical-divider {
   border: solid;
   border-width: 0 thin 0 0;
   margin: 0;
