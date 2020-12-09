@@ -5,6 +5,8 @@
         v-for="(item, index) in carouselValue"
         :key="index"
         :src="item.imageUrl"
+        @click="clickCarousel(item)"
+        :label="{ title: item.typeTitle, color: item.titleColor }"
       ></carousel-item>
     </carousel>
     <div :class="style['recommended-playlists']">
@@ -33,15 +35,21 @@ import { Carousel, CarouselItem } from '@/components/Carousel'
 import Card from '../components/Card.vue'
 import Icon from '../components/Icon.vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import { GlobalStore } from '@/store'
 
 interface Banner {
-  imageUrl: string;
+  imageUrl: string
+  targetId: number
+  url: string | null
+  titleColor: string
+  typeTitle: string
 }
 interface Play {
-  id: string;
-  name: string;
-  picUrl: string;
-  playCount: number;
+  id: string
+  name: string
+  picUrl: string
+  playCount: number
 }
 
 export default defineComponent({
@@ -57,6 +65,7 @@ export default defineComponent({
     const recommendedPlaylists: Ref<Play[] | undefined> = ref()
     const router = useRouter()
     const style = useCssModule()
+    const store = useStore<GlobalStore>()
 
     axios.get('/banner').then(({ data }) => {
       carouselValue.value = data.banners
@@ -65,6 +74,19 @@ export default defineComponent({
       recommendedPlaylists.value = data.result
     })
 
+    const clickCarousel = (item: Banner) => {
+      console.log(item)
+      if (item.targetId) {
+        axios.get(`/song/detail?ids=${item.targetId}`).then(({ data }) => {
+          store.dispatch({
+            type: 'playSong',
+            track: data.songs[0]
+          })
+        })
+      } else if (item.url) {
+        window.open(item.url)
+      }
+    }
     const clickCard = (play: Play) => {
       router.push({ name: 'playlist-view', query: { id: play.id } })
     }
@@ -73,7 +95,8 @@ export default defineComponent({
       style,
       carouselValue,
       recommendedPlaylists,
-      clickCard
+      clickCard,
+      clickCarousel
     }
   }
 })

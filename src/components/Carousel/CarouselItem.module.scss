@@ -10,6 +10,7 @@
   height: inherit;
   transform: scale(.9);
   transition: all .5s ease-out;
+  cursor: pointer;
 
   &::after {
     position: absolute;
@@ -57,4 +58,15 @@
 
 .next {
   transform-origin: right;
+}
+
+.label {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #CC4A4A;
+  border-radius: 10px 0;
+  color: white;
+  padding: 4px 12px;
+  font-size: small;
 }

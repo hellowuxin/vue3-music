@@ -144,7 +144,7 @@ export default defineComponent({
         const children = lyricsEle.value.children
         const offsetTop = (children[focuslyrics.value] as HTMLParagraphElement).offsetTop
         lyricsEle.value.scroll({
-          top: offsetTop - lyricsEle.value.clientHeight / 2,
+          top: offsetTop - lyricsEle.value.clientHeight / 2 + 11,
           behavior: 'smooth'
         })
       }

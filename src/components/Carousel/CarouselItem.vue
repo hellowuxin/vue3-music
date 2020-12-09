@@ -1,11 +1,12 @@
 <template>
-  <div :class="style['container']" :style="inlineStyle" ref="itemEle">
+  <div :class="style['container']" :style="inlineStyle" ref="itemEle" @click="click">
     <img v-bind="$attrs">
+    <span :class="style['label']" v-if="label">{{ label.title }}</span>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, Ref, ref } from 'vue'
+import { defineComponent, onMounted, PropType, Ref, ref } from 'vue'
 import style from './CarouselItem.module.scss'
 
 export default defineComponent({
@@ -15,9 +16,11 @@ export default defineComponent({
     width: {
       type: Number,
       default: 642
-    }
+    },
+    label: Object as PropType<{ title: string, color: string }>
   },
-  setup (props) {
+  emits: ['click'],
+  setup (props, context) {
     const itemEle: Ref<Element | undefined> = ref()
     const imgWidth = props.width + 'px'
     const inlineStyle = ref({
@@ -35,6 +38,9 @@ export default defineComponent({
         inlineStyle.value.margin = `0 max(0px, calc(100% - ${imgWidth}) / 2)`
       }
     }
+    const click = () => {
+      context.emit('click')
+    }
 
     onMounted(() => {
       const observer = new MutationObserver(changeStyle)
@@ -44,7 +50,8 @@ export default defineComponent({
     return {
       style,
       itemEle,
-      inlineStyle
+      inlineStyle,
+      click
     }
   }
 })
