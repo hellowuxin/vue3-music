@@ -49,6 +49,7 @@ export default defineComponent({
   padding: 5px;
   border-style: none;
   position: relative;
+  background-color: transparent;
 
   &::before {
     content: '';

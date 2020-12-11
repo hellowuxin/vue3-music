@@ -2,7 +2,7 @@
 type Func = <T>(args?: T) => void
 
 export function debounce (fn: Func, delay = 0): Func {
-  let timer: null | number = null
+  let timer: null | ReturnType<typeof setTimeout> = null
 
   return <T>(...args: T[]) => {
     if (timer) {

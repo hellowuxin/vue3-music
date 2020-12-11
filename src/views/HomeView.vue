@@ -15,7 +15,7 @@
         <icon iconId="iconright"/>
       </a>
       <div :class="style['content']" v-if="recommendedPlaylists">
-        <card
+        <playlist-card
           v-for="play in recommendedPlaylists"
           :key="play.id"
           :imgSrc="`${play.picUrl}?param=400y400`"
@@ -23,7 +23,7 @@
           :playCount="play.playCount"
           @click="clickCard(play)"
           @click-play="clickPlay(play)"
-        ></card>
+        ></playlist-card>
       </div>
     </div>
   </div>
@@ -33,7 +33,7 @@
 import axios from 'axios'
 import { defineComponent, ref, Ref, useCssModule } from 'vue'
 import { Carousel, CarouselItem } from '@/components/Carousel'
-import Card from '../components/Card.vue'
+import PlaylistCard from '../components/PlaylistCard.vue'
 import Icon from '../components/Icon.vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
@@ -59,7 +59,7 @@ export default defineComponent({
   components: {
     Carousel,
     CarouselItem,
-    Card,
+    PlaylistCard,
     Icon
   },
   setup () {

@@ -17,7 +17,7 @@ import { defineComponent, useCssModule } from 'vue'
 import Icon from './Icon.vue'
 
 export default defineComponent({
-  name: 'Card',
+  name: 'PlaylistCard',
   components: {
     Icon
   },

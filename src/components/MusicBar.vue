@@ -27,11 +27,11 @@
       </div>
       <div :class="style['left']" v-else></div>
       <div :class="style['center']">
-        <icon iconId="iconaixin"/>
-        <icon iconId="iconshangyishou" :class="style['iconshangyishou']"/>
+        <btn :icon="true"><icon iconId="iconaixin"/></btn>
+        <btn :icon="true" :class="style['iconshangyishou']"><icon iconId="iconshangyishou"/></btn>
         <icon :iconId="globalPaused ? 'iconplay_go' : 'iconplay_pause'" :class="style['iconplay']" @click="play"/>
-        <icon iconId="iconxiayishou" :class="style['iconxiayishou']"/>
-        <icon iconId="iconfenxiang"/>
+        <btn :icon="true" :class="style['iconxiayishou']"><icon iconId="iconxiayishou"/></btn>
+        <btn :icon="true" @click="sharedDialog = true"><icon iconId="iconfenxiang"/></btn>
       </div>
       <div :class="style['right']">
         <btn :icon="true"><icon iconId="iconliebiaoshunxu"/></btn>
@@ -54,10 +54,17 @@
       </div>
     </div>
   </div>
+  <overlay :visible="sharedDialog">
+    <shared-card :track="track" v-if="track">
+      <btn :class="style['sharedcard-close']" :icon="true" @click="sharedDialog = false">
+        <icon iconId="iconclose"></icon>
+      </btn>
+    </shared-card>
+  </overlay>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, useCssModule } from 'vue'
+import { computed, defineComponent, useCssModule, ref } from 'vue'
 import { useStore } from 'vuex'
 import { GlobalStore } from '@/store'
 import Icon from './Icon.vue'
@@ -67,6 +74,8 @@ import ProgressLinear from '@/components/ProgressLinear.vue'
 import Btn from '@/components/Btn.vue'
 import Dropdown from '@/components/Dropdown.vue'
 import createMessage from './Message'
+import Overlay from '@/components/Overlay.vue'
+import SharedCard from '@/components/SharedCard.vue'
 
 export default defineComponent({
   name: 'MusicBar',
@@ -74,7 +83,9 @@ export default defineComponent({
     Icon,
     ProgressLinear,
     Btn,
-    Dropdown
+    Dropdown,
+    Overlay,
+    SharedCard
   },
   setup () {
     const style = useCssModule()
@@ -85,6 +96,7 @@ export default defineComponent({
     const globalPaused = computed(() => store.state.paused)
     const globalCurrent = computed(() => store.state.currentTime)
     const playView = computed(() => store.state.playView)
+    const sharedDialog = ref(false)
 
     const play = () => {
       if (track.value) {
@@ -119,7 +131,8 @@ export default defineComponent({
       muted,
       changeMuted,
       changePlayView,
-      playView
+      playView,
+      sharedDialog
     }
   }
 })
@@ -248,5 +261,14 @@ export default defineComponent({
   text-align: center;
   font-size: 12px;
   width: 20px;
+}
+
+.sharedcard-close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translate(100%, -100%);
+  color: white;
+  font-size: large;
 }
 </style>

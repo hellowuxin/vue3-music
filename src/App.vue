@@ -1,4 +1,5 @@
 <template>
+  <div id="overlay"></div>
   <global-header></global-header>
   <div class="global-container">
     <router-view></router-view>
