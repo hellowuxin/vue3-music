@@ -1,10 +1,11 @@
 <template>
-  <div :class="style['container']">
+  <div :class="style['container']" ref="containerEle">
     <progress-linear
       :class="style['progress']"
       :value="globalCurrent"
       :max="track && track.dt"
       @progress-click="onProgressClick"
+      :width="containerEle ? `${containerEle.offsetWidth}px` : ''"
     ></progress-linear>
     <div :class="style['content']">
       <div :class="style['left']" v-if="track">
@@ -64,7 +65,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, useCssModule, ref } from 'vue'
+import { computed, defineComponent, useCssModule, ref, Ref } from 'vue'
 import { useStore } from 'vuex'
 import { GlobalStore } from '@/store'
 import Icon from './Icon.vue'
@@ -97,6 +98,7 @@ export default defineComponent({
     const globalCurrent = computed(() => store.state.currentTime)
     const playView = computed(() => store.state.playView)
     const sharedDialog = ref(false)
+    const containerEle: Ref<HTMLDivElement | undefined> = ref()
 
     const play = () => {
       if (track.value) {
@@ -132,7 +134,8 @@ export default defineComponent({
       changeMuted,
       changePlayView,
       playView,
-      sharedDialog
+      sharedDialog,
+      containerEle
     }
   }
 })

@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, useCssModule, ref, Ref, computed, onMounted, ComputedRef } from 'vue'
+import { defineComponent, useCssModule, ref, Ref, computed, ComputedRef } from 'vue'
 
 export default defineComponent({
   name: 'ProgressLinear',
@@ -27,13 +27,16 @@ export default defineComponent({
     height: {
       type: String,
       default: ''
+    },
+    width: {
+      type: String,
+      default: ''
     }
   },
   setup (props, context) {
     const containerEle: Ref<HTMLDivElement | undefined> = ref()
     const style = useCssModule()
-    const containerStyle = { height: props.height }
-    const containerRect: Ref<DOMRect | undefined> = ref()
+    const containerStyle = { height: props.height, width: props.width }
     let barScale: string,
       containerClass: string,
       thumbPosMax: ComputedRef<number>,
@@ -53,7 +56,7 @@ export default defineComponent({
       barScale = 'scaleX'
       containerClass = style.container
 
-      thumbPosMax = computed(() => (containerRect.value ? containerRect.value.width : 0))
+      thumbPosMax = computed(() => parseInt(props.width, 10))
       thumbStyle = computed(() => {
         return { transform: `translateX(${thumbPosMax.value * proportion.value - 5}px)` }
       })
@@ -78,12 +81,6 @@ export default defineComponent({
         context.emit('progress-click', percent)
       }
     }
-
-    onMounted(() => {
-      if (containerEle.value) {
-        containerRect.value = containerEle.value.getBoundingClientRect()
-      }
-    })
 
     return {
       style,
