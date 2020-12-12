@@ -29,4 +29,9 @@ export default defineComponent({
 
 <style lang="scss">
 @import '~@/scss';
+
+.global-container {
+  margin: var(--topspace) 20px var(--bottomspace) 20px;
+  padding: 10px 0;
+}
 </style>

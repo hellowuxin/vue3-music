@@ -3,6 +3,7 @@
   &-enter-active {
     transition: all 0.3s ease-out;
   }
+
   &-enter-from {
     transform: translateY(100%);
   }
@@ -46,10 +47,6 @@
   color: var(--grey)
 }
 
-.lightgrey {
-  color: var(--lightgrey)
-}
-
 // 修改初始样式
 body {
   margin: 0;
@@ -78,11 +75,6 @@ ul {
 }
 
 // 自拟样式
-.global-container {
-  margin: var(--topspace) 20px var(--bottomspace) 20px;
-  padding: 10px 0;
-}
-
 .ellipsis {
   white-space: nowrap;
   text-overflow: ellipsis;
