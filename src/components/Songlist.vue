@@ -29,7 +29,7 @@
         </td>
         <td :class="style['songtitle']">
           <div>
-            <div :class="style['songtitle-name']">
+            <div :class="[style['songtitle-name'], 'ellipsis']">
               <span>{{ track.name }}</span>
               <span v-if="track.alia.length > 0">&nbsp;({{ track.alia[0] }})</span>
             </div>
@@ -191,8 +191,6 @@ export default defineComponent({
   }
 
   &-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
     margin-right: 5px;
   }
 

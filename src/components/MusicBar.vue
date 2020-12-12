@@ -8,13 +8,13 @@
     ></progress-linear>
     <div :class="style['content']">
       <div :class="style['left']" v-if="track">
-        <div :class="style['changePlayView']" @click="changePlayView">
+        <div :class="style['change-playview']" @click="changePlayView">
           <img :src="`${track.al.picUrl}?param=60y60`" alt="">
-          <div :class="style['iconshouqi']"><icon :iconId="playView ? 'iconzhankai' : 'iconshouqi'"></icon></div>
+          <div :class="style['change-playview-icon']"><icon :iconId="playView ? 'iconzhankai' : 'iconshouqi'"></icon></div>
         </div>
         <div :class="style['left-content']">
           <div :class="style['track-title']">
-            <span>{{ track.name }}</span>
+            <span class="ellipsis">{{ track.name }}</span>
             <span>&nbsp;-&nbsp;</span>
             <ul class="breadcrumb">
               <li v-for="ar in track.ar" :key="ar.id">
@@ -174,25 +174,28 @@ export default defineComponent({
 
   &-content {
     width: calc(100% - 50px - 10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
   }
+}
 
-  .changePlayView {
-    position: relative;
+.change-playview {
+  position: relative;
+  height: inherit;
+  cursor: pointer;
+  border-radius: 4px;
+
+  img {
     height: inherit;
-    cursor: pointer;
-    border-radius: 4px;
-
-    img {
-      height: inherit;
-      border-radius: inherit;
-    }
-
-    &:hover .iconshouqi {
-      display: flex;
-    }
+    border-radius: inherit;
   }
 
-  .iconshouqi {
+  &:hover &-icon {
+    display: flex;
+  }
+
+  &-icon {
     position: absolute;
     left: 0;
     right: 0;
@@ -212,10 +215,9 @@ export default defineComponent({
   white-space: nowrap;
 
   > * {
+    vertical-align: bottom;
     display: inline-block;
     max-width: calc((100% - 20px) / 2);
-    text-overflow: ellipsis;
-    overflow: hidden;
   }
 
   :global(.breadcrumb) {
@@ -223,11 +225,21 @@ export default defineComponent({
   }
 }
 
+.time {
+  font-family: var(--monospaced);
+  color: var(--lightgrey);
+}
+
 .center {
   justify-content: center;
 
-  .iconplay:global(.icon) {
+  .iconplay {
     font-size: 50px;
+  }
+
+  .iconplay,
+  .iconxiayishou,
+  .iconshangyishou {
     color: var(--main-color);
   }
 }
@@ -241,20 +253,10 @@ export default defineComponent({
   align-items: center;
   gap: 20px;
 
-  :global(.icon) {
+  :global(.icon):not(.iconplay) {
     font-size: 25px;
     cursor: pointer;
   }
-}
-
-.iconxiayishou,
-.iconshangyishou {
-  color: var(--main-color);
-}
-
-.time {
-  font-family: var(--monospaced);
-  color: var(--lightgrey);
 }
 
 .volume-number {
