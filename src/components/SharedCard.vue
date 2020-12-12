@@ -3,12 +3,16 @@
     <span>微信扫码分享</span>
     <div v-if="track" :class="style['preview']">
       <img :src="`${track.al.picUrl}?param=44y44`" alt="">
-      <div :class="style['ellipsis']">
-        <div>{{ track.name }}</div>
+      <div>
+        <div class="ellipsis">{{ track.name }}</div>
         <ul class="breadcrumb">
           <li v-for="ar in track.ar" :key="ar.id">{{ ar.name }}</li>
         </ul>
       </div>
+    </div>
+    <div v-else-if="preview" :class="style['preview']">
+      <img :src="preview.img">
+      <div class="ellipsis">{{ preview.name }}</div>
     </div>
     <canvas ref="qrcodeEle"></canvas>
     <slot></slot>
@@ -27,7 +31,8 @@ export default defineComponent({
     qrcodeUrl: {
       type: String,
       required: true
-    }
+    },
+    preview: Object as PropType<{ name: string, img: string }>
   },
   setup (props) {
     const style = useCssModule()
@@ -90,12 +95,6 @@ export default defineComponent({
 
   :global(.breadcrumb) {
     color: var(--grey);
-  }
-
-  .ellipsis {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
   }
 }
 

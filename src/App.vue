@@ -91,6 +91,7 @@ ul {
 
 .breadcrumb {
   margin: 0;
+  white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 
@@ -121,5 +122,11 @@ ul {
   border-radius: 50%;
   animation: rippleA 0.6s linear forwards;
   background-color: currentColor;
+}
+
+.ellipsis {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 </style>

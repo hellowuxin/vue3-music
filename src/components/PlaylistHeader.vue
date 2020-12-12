@@ -65,7 +65,10 @@
     </div>
   </div>
   <overlay :visible="showSharedCard">
-    <shared-card :qrcodeUrl="`https://music.163.com/#/playlist?id=${playlist.id}`">
+    <shared-card
+      :qrcodeUrl="`https://music.163.com/#/playlist?id=${playlist.id}`"
+      :preview="{ name: playlist.name, img: playlist.coverImgUrl }"
+    >
       <btn class="sharedcard-close" :icon="true" @click="showSharedCard = false">
         <icon iconId="iconclose"></icon>
       </btn>
