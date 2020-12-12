@@ -55,8 +55,8 @@
     </div>
   </div>
   <overlay :visible="sharedDialog">
-    <shared-card :track="track" v-if="track">
-      <btn :class="style['sharedcard-close']" :icon="true" @click="sharedDialog = false">
+    <shared-card :track="track" v-if="track" :qrcodeUrl="`https://music.163.com/#/song?id=${track.id}`">
+      <btn class="sharedcard-close" :icon="true" @click="sharedDialog = false">
         <icon iconId="iconclose"></icon>
       </btn>
     </shared-card>
@@ -261,14 +261,5 @@ export default defineComponent({
   text-align: center;
   font-size: 12px;
   width: 20px;
-}
-
-.sharedcard-close {
-  position: absolute;
-  right: 0;
-  top: 0;
-  transform: translate(100%, -100%);
-  color: white;
-  font-size: large;
 }
 </style>

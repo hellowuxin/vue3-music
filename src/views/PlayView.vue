@@ -111,6 +111,7 @@ export default defineComponent({
           } else {
             nolyric.value = false
             lrcArr.value = lrcToObj(data.lrc.lyric)
+            // console.log(data.tlyric.lyric)
           }
         })
         axios.get(`/comment/music?id=${track.id}`).then(({ data }) => {
@@ -193,6 +194,7 @@ export default defineComponent({
   font-size: x-large;
   color: var(--grey);
   box-shadow: var(--shadow);
+  background-color: white;
 }
 
 .content {

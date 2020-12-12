@@ -13,7 +13,7 @@
       </p>
       <div :class="style['actions']">
         <div :class="style['compose']">
-          <btn :class="style['play']">
+          <btn :class="style['play']" @click="playAll">
             <icon iconId="iconplay3"></icon>
             <span>播放全部</span>
           </btn>
@@ -26,7 +26,7 @@
           <icon iconId="iconAddadocument"></icon>
           <span>收藏({{ playlist.subscribedCount }})</span>
         </btn>
-        <btn>
+        <btn @click="showSharedCard = true">
           <icon iconId="iconfenxiang"></icon>
           <span>分享({{ playlist.shareCount }})</span>
         </btn>
@@ -64,6 +64,13 @@
       </p>
     </div>
   </div>
+  <overlay :visible="showSharedCard">
+    <shared-card :qrcodeUrl="`https://music.163.com/#/playlist?id=${playlist.id}`">
+      <btn class="sharedcard-close" :icon="true" @click="showSharedCard = false">
+        <icon iconId="iconclose"></icon>
+      </btn>
+    </shared-card>
+  </overlay>
 </template>
 
 <script lang="ts">
@@ -71,12 +78,18 @@ import { defineComponent, useCssModule, Ref, ref, PropType, onMounted } from 'vu
 import { Playlist } from '../interface'
 import Icon from './Icon.vue'
 import Btn from './Btn.vue'
+import { useStore } from 'vuex'
+import { GlobalStore } from '@/store'
+import Overlay from '@/components/Overlay.vue'
+import SharedCard from '@/components/SharedCard.vue'
 
 export default defineComponent({
   name: 'PlaylistHeader',
   components: {
     Icon,
-    Btn
+    Btn,
+    Overlay,
+    SharedCard
   },
   props: {
     playlist: {
@@ -84,12 +97,24 @@ export default defineComponent({
       required: true
     }
   },
-  setup () {
+  setup (props) {
     const style = useCssModule()
     const introEle: Ref<HTMLParagraphElement | undefined> = ref()
     const descEle: Ref<HTMLSpanElement | undefined> = ref()
     const isVisible = ref(true)
+    const store = useStore<GlobalStore>()
+    const showSharedCard = ref(false)
 
+    const playAll = () => {
+      store.dispatch({
+        type: 'playSong',
+        track: props.playlist.tracks[0],
+        tracklist: props.playlist.tracks
+      })
+    }
+    const sharePlaylist = () => {
+      console.log('share-playlist')
+    }
     const dropdown = () => {
       if (introEle.value) {
         if (introEle.value.classList.contains(style.unfold)) {
@@ -113,7 +138,10 @@ export default defineComponent({
       introEle,
       descEle,
       isVisible,
-      dropdown
+      dropdown,
+      playAll,
+      sharePlaylist,
+      showSharedCard
     }
   }
 })

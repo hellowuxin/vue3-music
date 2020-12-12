@@ -77,7 +77,6 @@ export default defineComponent({
     })
 
     const clickCarousel = (item: Banner) => {
-      console.log(item)
       if (item.targetId) {
         axios.get(`/song/detail?ids=${item.targetId}`).then(({ data }) => {
           store.dispatch({

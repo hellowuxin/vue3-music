@@ -23,8 +23,9 @@ import { Track } from '@/interface'
 export default defineComponent({
   name: 'SharedCard',
   props: {
-    track: {
-      type: Object as PropType<Track>,
+    track: Object as PropType<Track>,
+    qrcodeUrl: {
+      type: String,
       required: true
     }
   },
@@ -32,18 +33,16 @@ export default defineComponent({
     const style = useCssModule()
     const qrcodeEle: Ref<HTMLCanvasElement | undefined> = ref()
 
-    const makeQrcode = (track: Track) => {
-      const url = `https://music.163.com/#/song?id=${track.id}`
-
+    const makeQrcode = () => {
       if (qrcodeEle.value) {
-        qrcode.toCanvas(qrcodeEle.value, url)
+        qrcode.toCanvas(qrcodeEle.value, props.qrcodeUrl)
       }
     }
 
     watch(() => props.track, makeQrcode)
 
     onMounted(() => {
-      makeQrcode(props.track)
+      makeQrcode()
     })
 
     return {
@@ -67,6 +66,7 @@ export default defineComponent({
   width: 275px;
   height: 275px;
 }
+
 .preview {
   display: flex;
   gap: 10px;
@@ -74,14 +74,18 @@ export default defineComponent({
   padding: 10px;
   border-radius: 4px;
   background-color: #F2F2F2;
-  white-space: nowrap;
   box-sizing: inherit;
   width: 100%;
+
+  > * {
+    overflow: hidden;
+  }
 
   img {
     width: 44px;
     height: 44px;
     border-radius: inherit;
+    flex-shrink: 0;
   }
 
   :global(.breadcrumb) {
@@ -89,13 +93,18 @@ export default defineComponent({
   }
 
   .ellipsis {
-    overflow: hidden;
+    white-space: nowrap;
     text-overflow: ellipsis;
-
-    > * {
-      text-overflow: inherit;
-      overflow: inherit;
-    }
+    overflow: hidden;
   }
+}
+
+:global(.sharedcard-close) {
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translate(100%, -100%);
+  color: white;
+  font-size: large;
 }
 </style>

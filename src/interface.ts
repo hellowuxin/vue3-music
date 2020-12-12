@@ -26,6 +26,7 @@ export interface Track {
 }
 
 export interface Playlist {
+  id: number
   name: string
   coverImgUrl: string
   creator: User
