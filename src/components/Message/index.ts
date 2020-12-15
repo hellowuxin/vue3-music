@@ -17,7 +17,7 @@ function close (container: HTMLElement) {
   }
 }
 
-export default function createMessage (message: string, type: MessageType, duration?: number): void {
+export default function createMessage (message: string, type: MessageType = 'default', duration?: number): void {
   let verticalOffset = 20
   messageQueue.forEach(({ vnode }) => {
     verticalOffset += (vnode.el?.offsetHeight || 0) + 16

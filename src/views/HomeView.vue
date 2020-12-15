@@ -39,6 +39,7 @@ import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { GlobalStore } from '@/store'
 import { Track } from '@/interface'
+import createMessage from '@/components/Message'
 
 interface Banner {
   imageUrl: string
@@ -79,10 +80,14 @@ export default defineComponent({
     const clickCarousel = (item: Banner) => {
       if (item.targetId) {
         axios.get(`/song/detail?ids=${item.targetId}`).then(({ data }) => {
-          store.dispatch({
-            type: 'playSong',
-            track: data.songs[0]
-          })
+          if (data.songs[0]) {
+            store.dispatch({
+              type: 'playSong',
+              track: data.songs[0]
+            })
+          } else {
+            createMessage('暂不可播放', 'error')
+          }
         })
       } else if (item.url) {
         window.open(item.url)
