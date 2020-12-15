@@ -47,6 +47,7 @@ interface Banner {
   url: string | null
   titleColor: string
   typeTitle: string
+  targetType: number
 }
 interface Play {
   id: string
@@ -79,16 +80,16 @@ export default defineComponent({
 
     const clickCarousel = (item: Banner) => {
       if (item.targetId) {
-        axios.get(`/song/detail?ids=${item.targetId}`).then(({ data }) => {
-          if (data.songs[0]) {
+        if (item.targetType === 1) {
+          axios.get(`/song/detail?ids=${item.targetId}`).then(({ data }) => {
             store.dispatch({
               type: 'playSong',
               track: data.songs[0]
             })
-          } else {
-            createMessage('暂不可播放', 'error')
-          }
-        })
+          })
+        } else if (item.targetType === 1004) {
+          createMessage('MV暂不可播放', 'error')
+        }
       } else if (item.url) {
         window.open(item.url)
       }
