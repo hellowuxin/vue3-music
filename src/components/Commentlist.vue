@@ -9,7 +9,7 @@
       ></comment>
       <btn :class="style['footer']" v-if="commentResp.hotComments.length > 10">
         <span>更多精彩评论</span>
-        <icon :class="style['iconright']"  iconId="iconright"></icon>
+        <icon :class="style['iconright']"  icon-id="iconright"></icon>
       </btn>
     </div>
     <div v-if="commentResp.comments.length > 0">

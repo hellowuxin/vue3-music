@@ -11,7 +11,7 @@
       <div :class="style['left']" v-if="track">
         <div :class="style['change-playview']" @click="changePlayView">
           <img :src="`${track.al.picUrl}?param=60y60`" alt="">
-          <div :class="style['change-playview-icon']"><icon :iconId="playView ? 'iconzhankai' : 'iconshouqi'"></icon></div>
+          <div :class="style['change-playview-icon']"><icon :icon-id="playView ? 'iconzhankai' : 'iconshouqi'"></icon></div>
         </div>
         <div :class="style['left-content']">
           <div :class="style['track-title']">
@@ -28,19 +28,19 @@
       </div>
       <div :class="style['left']" v-else></div>
       <div :class="style['center']">
-        <btn :icon="true"><icon iconId="iconaixin"/></btn>
-        <btn :icon="true" :class="style['iconshangyishou']"><icon iconId="iconshangyishou"/></btn>
-        <icon :iconId="globalPaused ? 'iconplay_go' : 'iconplay_pause'" :class="style['iconplay']" @click="play"/>
-        <btn :icon="true" :class="style['iconxiayishou']"><icon iconId="iconxiayishou"/></btn>
-        <btn :icon="true" @click="shareMusic"><icon iconId="iconfenxiang"/></btn>
+        <btn :icon="true"><icon icon-id="iconaixin"/></btn>
+        <btn :icon="true" :class="style['iconshangyishou']"><icon icon-id="iconshangyishou"/></btn>
+        <icon :icon-id="globalPaused ? 'iconplay_go' : 'iconplay_pause'" :class="style['iconplay']" @click="play"/>
+        <btn :icon="true" :class="style['iconxiayishou']"><icon icon-id="iconxiayishou"/></btn>
+        <btn :icon="true" @click="shareMusic"><icon icon-id="iconfenxiang"/></btn>
       </div>
       <div :class="style['right']">
-        <btn :icon="true"><icon iconId="iconliebiaoshunxu"/></btn>
-        <btn :icon="true"><icon iconId="iconbofangliebiao"/></btn>
+        <btn :icon="true"><icon icon-id="iconliebiaoshunxu"/></btn>
+        <btn :icon="true"><icon icon-id="iconbofangliebiao"/></btn>
         <dropdown>
           <template #activator="{ on }">
             <btn :icon="true" v-on="on" @click="changeMuted">
-              <icon :iconId="muted ? 'iconjingyin1' : 'iconyinliang'"/>
+              <icon :icon-id="muted ? 'iconjingyin1' : 'iconyinliang'"/>
             </btn>
           </template>
           <span :class="style['volume-number']">{{ muted ? 0 : Math.floor(volume * 100) }}</span>
@@ -58,7 +58,7 @@
   <overlay :visible="sharedDialog">
     <shared-card :track="track" v-if="track" :qrcodeUrl="`https://music.163.com/#/song?id=${track.id}`">
       <btn class="sharedcard-close" :icon="true" @click="sharedDialog = false">
-        <icon iconId="iconclose"></icon>
+        <icon icon-id="iconclose"></icon>
       </btn>
     </shared-card>
   </overlay>

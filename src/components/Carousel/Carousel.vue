@@ -9,10 +9,10 @@
         <slot/>
       </div>
       <a :class="style['control-prev']" @click="controlClick(false)">
-        <icon iconId="iconleft"/>
+        <icon icon-id="iconleft"/>
       </a>
       <a :class="style['control-next']" @click="controlClick()">
-        <icon iconId="iconright"/>
+        <icon icon-id="iconright"/>
       </a>
     </div>
     <ol :class="style['indicators']" ref="indicatorsEle" v-if="indicators">

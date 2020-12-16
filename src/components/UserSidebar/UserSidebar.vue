@@ -1,18 +1,25 @@
 <template>
   <div :class="style['container']">
-    <div :class="style['user-status']" @click="loginDialog = true">
+    <list-item @click="loginDialog = true">
       <!-- <img src="" alt=""> -->
-      <icon iconId="iconaccount-circle"></icon>
-      <span>未登陆</span>
-    </div>
-    <div>发现音乐</div>
+      <icon :xx-large="true" icon-id="iconaccount-circle"></icon>
+      <span>未获取用户信息</span>
+    </list-item>
+    <list-item>
+      <icon icon-id="iconnetease"></icon>
+      <span>发现音乐</span>
+    </list-item>
+    <list-item>
+      <icon icon-id="iconwuxiandianbo"></icon>
+      <span>私人电台</span>
+    </list-item>
   </div>
   <overlay :visible="loginDialog">
     <div :class="style['login-dialog']">
       <div :class="style['login-dialog-header']">
         <span>获取用户详情</span>
         <btn :icon="true" @click="loginDialog = false">
-          <icon iconId="iconclose"></icon>
+          <icon icon-id="iconclose"></icon>
         </btn>
       </div>
       <div :class="style['login-dialog-body']">
@@ -35,13 +42,15 @@ import { defineComponent, useCssModule, ref } from 'vue'
 import Icon from '@/components/Icon.vue'
 import Overlay from '@/components/Overlay.vue'
 import Btn from '@/components/Btn.vue'
+import ListItem from './ListItem.vue'
 
 export default defineComponent({
   name: 'UserSidebar',
   components: {
     Icon,
     Overlay,
-    Btn
+    Btn,
+    ListItem
   },
   setup () {
     const style = useCssModule()
@@ -66,16 +75,6 @@ export default defineComponent({
   background-color: #EDEDED;
   padding: 8px;
   color: #2F2F2F;
-}
-
-.user-status {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  :global(.icon) {
-    font-size: xx-large;
-  }
 }
 
 .login-dialog {

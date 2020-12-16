@@ -24,8 +24,8 @@
       >
         <td :class="style['serial']">
           <span>{{ (index + 1).toString().padStart(2, '0') }}</span>
-          <icon iconId="iconaixin"></icon>
-          <icon iconId="icondownload"></icon>
+          <icon icon-id="iconaixin"></icon>
+          <icon icon-id="icondownload"></icon>
         </td>
         <td :class="style['songtitle']">
           <div>
@@ -33,17 +33,17 @@
               <span>{{ track.name }}</span>
               <span v-if="track.alia.length > 0">&nbsp;({{ track.alia[0] }})</span>
             </div>
-            <icon v-if="track.mv" iconId="iconvideo" :class="style['iconvideo']"></icon>
+            <icon v-if="track.mv" icon-id="iconvideo" :class="style['iconvideo']"></icon>
             <div :class="style['songtitle-action']">
               <icon
-                :iconId="
+                :icon-id="
                   (globalTrack &&
                   globalTrack.id === track.id &&
                   !globalPaused) ? 'iconpause' : 'iconplay1'
                 "
                 @click="playSong(track)"
               ></icon>
-              <icon iconId="iconxiazai1"></icon>
+              <icon icon-id="iconxiazai1"></icon>
             </div>
           </div>
         </td>

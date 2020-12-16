@@ -2,10 +2,10 @@
   <div :class="style['container']">
     <div :class="style['content']">
       <span :class="style['play-count']" v-if="playCount">
-        <icon iconId="iconplay1"/>
+        <icon icon-id="iconplay1"/>
         <span>{{ Math.floor(playCount / 10000) }}万</span>
       </span>
-      <icon iconId="iconplay" :class="style['iconplay']" @click.stop="clickPlay"/>
+      <icon icon-id="iconplay" :class="style['iconplay']" @click.stop="clickPlay"/>
       <img :src="imgSrc"/>
     </div>
     <span :class="style['title']">{{ title }}</span>

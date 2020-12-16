@@ -12,7 +12,7 @@
     <div :class="style['recommended-playlists']">
       <a :class="style['title']" href="#">
         <span>推荐歌单</span>
-        <icon iconId="iconright"/>
+        <icon icon-id="iconright"/>
       </a>
       <div :class="style['content']" v-if="recommendedPlaylists">
         <playlist-card

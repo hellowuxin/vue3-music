@@ -7,7 +7,7 @@
   >
     <div v-show="playView" v-if="track" :class="style['container']">
       <btn :icon="true" :class="style['close']" @click="close">
-        <icon iconId="iconzhankai"></icon>
+        <icon icon-id="iconzhankai"></icon>
       </btn>
       <div :class="style['content']">
         <div :class="style['disc']">

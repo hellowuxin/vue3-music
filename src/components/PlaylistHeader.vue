@@ -14,24 +14,24 @@
       <div :class="style['actions']">
         <div :class="style['compose']">
           <btn rounded :class="style['play']" @click="playAll">
-            <icon iconId="iconplay3"></icon>
+            <icon icon-id="iconplay3"></icon>
             <span>播放全部</span>
           </btn>
           <div :class="style['gap']"></div>
           <btn rounded :class="style['add-play']">
-            <icon iconId="iconicon-test"></icon>
+            <icon icon-id="iconicon-test"></icon>
           </btn>
         </div>
         <btn rounded>
-          <icon iconId="iconAddadocument"></icon>
+          <icon icon-id="iconAddadocument"></icon>
           <span>收藏({{ playlist.subscribedCount }})</span>
         </btn>
         <btn rounded @click="showSharedCard = true">
-          <icon iconId="iconfenxiang"></icon>
+          <icon icon-id="iconfenxiang"></icon>
           <span>分享({{ playlist.shareCount }})</span>
         </btn>
         <btn rounded>
-          <icon iconId="icondownload"></icon>
+          <icon icon-id="icondownload"></icon>
           <span>下载全部</span>
         </btn>
       </div>
@@ -70,7 +70,7 @@
       :preview="{ name: playlist.name, img: playlist.coverImgUrl }"
     >
       <btn class="sharedcard-close" :icon="true" @click="showSharedCard = false">
-        <icon iconId="iconclose"></icon>
+        <icon icon-id="iconclose"></icon>
       </btn>
     </shared-card>
   </overlay>

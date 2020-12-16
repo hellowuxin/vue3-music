@@ -17,11 +17,11 @@
         <span :class="style['time']">{{ getChinaDate(new Date(comment.time)) }}</span>
         <div :class="style['action']">
           <div>
-            <icon iconId="iconlike"></icon>
+            <icon icon-id="iconlike"></icon>
             <span>{{ comment.likedCount }}</span>
           </div>
-          <icon iconId="iconfenxiang"></icon>
-          <icon iconId="iconcomment"></icon>
+          <icon icon-id="iconfenxiang"></icon>
+          <icon icon-id="iconcomment"></icon>
         </div>
       </div>
     </div>

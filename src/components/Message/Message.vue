@@ -10,7 +10,7 @@
       :class="[style['container'], style[type]]"
       :style="{ top: `${verticalOffset}px` }"
     >
-      <icon :iconId="iconObj[type]"></icon>
+      <icon :icon-id="iconObj[type]"></icon>
       <span>{{ message }}</span>
     </div>
   </transition>
