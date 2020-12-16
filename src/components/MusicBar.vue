@@ -32,7 +32,7 @@
         <btn :icon="true" :class="style['iconshangyishou']"><icon iconId="iconshangyishou"/></btn>
         <icon :iconId="globalPaused ? 'iconplay_go' : 'iconplay_pause'" :class="style['iconplay']" @click="play"/>
         <btn :icon="true" :class="style['iconxiayishou']"><icon iconId="iconxiayishou"/></btn>
-        <btn :icon="true" @click="sharedDialog = true"><icon iconId="iconfenxiang"/></btn>
+        <btn :icon="true" @click="shareMusic"><icon iconId="iconfenxiang"/></btn>
       </div>
       <div :class="style['right']">
         <btn :icon="true"><icon iconId="iconliebiaoshunxu"/></btn>
@@ -119,6 +119,13 @@ export default defineComponent({
     const changePlayView = () => {
       store.commit('changePlayView')
     }
+    const shareMusic = () => {
+      if (track.value) {
+        sharedDialog.value = true
+      } else {
+        createMessage('没有可分享的音乐', 'error')
+      }
+    }
 
     return {
       style,
@@ -135,7 +142,8 @@ export default defineComponent({
       changePlayView,
       playView,
       sharedDialog,
-      containerEle
+      containerEle,
+      shareMusic
     }
   }
 })
@@ -151,8 +159,10 @@ export default defineComponent({
 }
 
 .progress {
-  position: relative;
-  top: 5px;
+  position: absolute;
+  top: -5px;
+  left: 0;
+  right: 0;
 }
 
 .content {

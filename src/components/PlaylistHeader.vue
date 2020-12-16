@@ -13,24 +13,24 @@
       </p>
       <div :class="style['actions']">
         <div :class="style['compose']">
-          <btn :class="style['play']" @click="playAll">
+          <btn rounded :class="style['play']" @click="playAll">
             <icon iconId="iconplay3"></icon>
             <span>播放全部</span>
           </btn>
           <div :class="style['gap']"></div>
-          <btn :class="style['add-play']">
+          <btn rounded :class="style['add-play']">
             <icon iconId="iconicon-test"></icon>
           </btn>
         </div>
-        <btn>
+        <btn rounded>
           <icon iconId="iconAddadocument"></icon>
           <span>收藏({{ playlist.subscribedCount }})</span>
         </btn>
-        <btn @click="showSharedCard = true">
+        <btn rounded @click="showSharedCard = true">
           <icon iconId="iconfenxiang"></icon>
           <span>分享({{ playlist.shareCount }})</span>
         </btn>
-        <btn>
+        <btn rounded>
           <icon iconId="icondownload"></icon>
           <span>下载全部</span>
         </btn>

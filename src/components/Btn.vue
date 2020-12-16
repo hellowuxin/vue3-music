@@ -1,5 +1,5 @@
 <template>
-  <button :class="icon ? style['container-icon'] : style['container']" @click="createRipple" ref="btnEle">
+  <button :class="containerClass" @click="createRipple" ref="btnEle">
     <slot></slot>
   </button>
 </template>
@@ -14,14 +14,26 @@ export default defineComponent({
     icon: {
       type: Boolean,
       default: false
+    },
+    rounded: {
+      type: Boolean,
+      default: false
     }
   },
-  setup () {
+  setup (props) {
     const style = useCssModule()
+    let containerClass = style.container
+
+    if (props.rounded) {
+      containerClass = style['container-rounded']
+    } else if (props.icon) {
+      containerClass = style['container-icon']
+    }
 
     return {
       style,
-      createRipple
+      createRipple,
+      containerClass
     }
   }
 })
@@ -29,11 +41,12 @@ export default defineComponent({
 
 <style lang="scss" module>
 .container,
-.container-icon {
+.container-icon,
+.container-rounded {
   display: flex;
   align-items: center;
   gap: 3px;
-  border-radius: 28px;
+  border-radius: 4px;
   border-style: solid;
   border-width: 1px;
   border-color: #D9D9D9;
@@ -43,6 +56,10 @@ export default defineComponent({
   color: inherit;
   overflow: hidden;
   position: relative;
+}
+
+.container-rounded {
+  border-radius: 28px;
 }
 
 .container-icon {

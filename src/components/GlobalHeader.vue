@@ -37,12 +37,14 @@ $black: #000;
   top: 0;
   left: 0;
   right: 0;
+  padding-left: var(--leftspace);
 }
 
 .nav {
   display: flex;
   justify-content: space-between;
   list-style: none;
+  margin: 16px 20px;
   padding: 0;
 }
 
