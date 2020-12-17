@@ -1,5 +1,6 @@
 <template>
   <div :class="style['container']" @click="createRipple">
+    <icon v-if="prependIcon" :class="style['icon']" :icon-id="prependIcon"></icon>
     <slot></slot>
   </div>
 </template>
@@ -7,9 +8,16 @@
 <script lang="ts">
 import { defineComponent, useCssModule } from 'vue'
 import { createRipple } from '@/tools'
+import Icon from '@/components/Icon.vue'
 
 export default defineComponent({
-  name: 'TabsItems',
+  name: 'ListItem',
+  components: {
+    Icon
+  },
+  props: {
+    prependIcon: String
+  },
   setup () {
     const style = useCssModule()
 
@@ -47,5 +55,9 @@ export default defineComponent({
   &:hover::before {
     opacity: 0.04;
   }
+}
+
+.icon {
+  flex-shrink: 0;
 }
 </style>

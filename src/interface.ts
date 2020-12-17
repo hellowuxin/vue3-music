@@ -40,6 +40,7 @@ export interface Playlist {
   subscribers: User[]
   tracks: Track[]
   commentCount: number
+  userId: number
 }
 
 export interface beReplied {

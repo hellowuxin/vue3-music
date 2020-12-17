@@ -1,18 +1,28 @@
 <template>
   <div :class="style['container']">
-    <list-item @click="loginDialog = true">
-      <!-- <img src="" alt=""> -->
-      <icon :xx-large="true" icon-id="iconaccount-circle"></icon>
-      <span>未获取用户信息</span>
+    <list-item @click="loginDialog = true" :class="style['profile']">
+      <img v-if="profile" :src="profile.avatarUrl" alt="">
+      <icon v-else icon-id="iconaccount-circle"></icon>
+      <span>{{ profile ? profile.nickname : '未获取用户信息' }}</span>
     </list-item>
-    <list-item>
-      <icon icon-id="iconnetease"></icon>
+    <list-item prepend-icon="iconnetease">
       <span>发现音乐</span>
     </list-item>
-    <list-item>
-      <icon icon-id="iconwuxiandianbo"></icon>
+    <list-item prepend-icon="iconwuxiandianbo">
       <span>私人电台</span>
     </list-item>
+    <list-group>
+      <template #header>
+        <list-item>创建的歌单</list-item>
+      </template>
+      <list-item
+        v-for="pl in createdPlaylist"
+        :key="pl.id"
+        prepend-icon="icongedan"
+      >
+        <span class="ellipsis">{{ pl.name }}</span>
+      </list-item>
+    </list-group>
   </div>
   <overlay :visible="loginDialog">
     <div :class="style['login-dialog']">
@@ -23,7 +33,7 @@
         </btn>
       </div>
       <div :class="style['login-dialog-body']">
-        <input type="text" placeholder="请输入您的网易云音乐uid">
+        <input type="text" placeholder="请输入您的网易云音乐uid" v-model="uid">
         <div :class="style['login-dialog-tips']">
           <p>1、请<a href="https://music.163.com" target="_blank">点我(https://music.163.com)</a>打开网易云音乐官网</p>
           <p>2、点击页面右上角的“登录”</p>
@@ -31,18 +41,25 @@
           <p>4、复制浏览器地址栏 /user/home?id= 后面的数字（网易云音乐uid）</p>
         </div>
       </div>
-      <btn :class="style['login-dialog-footer']">确定</btn>
+      <btn :class="style['login-dialog-footer']" @click="getUserDetail">确定</btn>
     </div>
   </overlay>
 </template>
 
 <script lang="ts">
-// import axios from 'axios'
-import { defineComponent, useCssModule, ref } from 'vue'
+import axios from 'axios'
+import { defineComponent, useCssModule, ref, Ref } from 'vue'
 import Icon from '@/components/Icon.vue'
 import Overlay from '@/components/Overlay.vue'
 import Btn from '@/components/Btn.vue'
-import ListItem from './ListItem.vue'
+import { ListGroup, ListItem } from './List'
+import { Playlist } from '@/interface'
+
+interface Profile {
+  avatarUrl: string
+  nickname: string
+  userId: number
+}
 
 export default defineComponent({
   name: 'UserSidebar',
@@ -50,15 +67,44 @@ export default defineComponent({
     Icon,
     Overlay,
     Btn,
-    ListItem
+    ListItem,
+    ListGroup
   },
   setup () {
     const style = useCssModule()
     const loginDialog = ref(false)
+    const uid = ref('')
+    const profile: Ref<Profile | undefined> = ref()
+    const createdPlaylist: Ref<Playlist[]> = ref([])
+    const favorPlaylist: Ref<Playlist[]> = ref([])
+
+    const getUserDetail = () => {
+      const intUid = parseInt(uid.value, 10)
+      if (intUid) {
+        axios.get(`/user/detail?uid=${intUid}`).then(({ data }) => {
+          profile.value = data.profile
+          loginDialog.value = false
+        })
+        axios.get(`/user/playlist?uid=${intUid}`).then(({ data }) => {
+          data.playlist.forEach((pl: Playlist) => {
+            if (pl.userId === intUid) {
+              createdPlaylist.value.push(pl)
+            } else {
+              favorPlaylist.value.push(pl)
+            }
+          })
+        })
+      }
+    }
 
     return {
       style,
-      loginDialog
+      loginDialog,
+      getUserDetail,
+      uid,
+      profile,
+      createdPlaylist,
+      favorPlaylist
     }
   }
 })
@@ -75,6 +121,18 @@ export default defineComponent({
   background-color: #EDEDED;
   padding: 8px;
   color: #2F2F2F;
+}
+
+.profile {
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  :global(.icon) {
+    font-size: 40px;
+  }
 }
 
 .login-dialog {

@@ -16,7 +16,7 @@ import GlobalHeader from './components/GlobalHeader.vue'
 import MusicBar from './components/MusicBar.vue'
 import MusicAudio from './components/MusicAudio.vue'
 import PlayView from './views/PlayView.vue'
-import { UserSidebar } from './components/UserSidebar'
+import UserSidebar from './components/UserSidebar.vue'
 
 export default defineComponent({
   name: 'App',
