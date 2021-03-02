@@ -35,7 +35,8 @@
     "eslint-plugin-standard": "^4.1.0",
     "eslint-plugin-vue": "^7.6.0",
     "sass": "^1.32.8",
-    "sass-loader": "^11.0.1",
+    "sass-loader": "^10.1.1",
+    "tslib": "^2.1.0",
     "typed-scss-modules": "^4.1.0",
     "typescript": "~4.2.2"
   }
