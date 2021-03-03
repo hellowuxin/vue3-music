@@ -34,7 +34,7 @@ export interface Playlist {
   tags: string[]
   trackCount: number
   playCount: number
-  description: string
+  description: string | null
   shareCount: number
   subscribedCount: number
   subscribers: User[]

@@ -19,6 +19,7 @@
         v-for="pl in createdPlaylist"
         :key="pl.id"
         prepend-icon="icongedan"
+        :to="`/playlist?id=${pl.id}`"
       >
         <span class="ellipsis">{{ pl.name }}</span>
       </list-item>
@@ -73,7 +74,7 @@ export default defineComponent({
   setup () {
     const style = useCssModule()
     const loginDialog = ref(false)
-    const uid = ref('')
+    const uid = ref('344201762')
     const profile: Ref<Profile | undefined> = ref()
     const createdPlaylist: Ref<Playlist[]> = ref([])
     const favorPlaylist: Ref<Playlist[]> = ref([])
@@ -96,6 +97,8 @@ export default defineComponent({
         })
       }
     }
+
+    getUserDetail()
 
     return {
       style,

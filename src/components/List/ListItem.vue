@@ -1,5 +1,5 @@
 <template>
-  <div :class="style['container']" @click="createRipple">
+  <div :class="style['container']" @click="click">
     <icon v-if="prependIcon" :class="style['icon']" :icon-id="prependIcon"></icon>
     <slot></slot>
   </div>
@@ -9,6 +9,7 @@
 import { defineComponent, useCssModule } from 'vue'
 import { createRipple } from '@/tools'
 import Icon from '@/components/Icon.vue'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'ListItem',
@@ -16,14 +17,22 @@ export default defineComponent({
     Icon
   },
   props: {
-    prependIcon: String
+    prependIcon: String,
+    to: String
   },
-  setup () {
+  setup (props) {
     const style = useCssModule()
+    const router = useRouter()
 
+    const click = (event: MouseEvent) => {
+      createRipple(event)
+      if (props.to) {
+        router.push(props.to)
+      }
+    }
     return {
       style,
-      createRipple
+      click
     }
   }
 })

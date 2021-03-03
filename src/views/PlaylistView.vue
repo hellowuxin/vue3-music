@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, ref, useCssModule } from 'vue'
+import { defineComponent, Ref, ref, useCssModule, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 import { Playlist, CommentResp } from '../interface'
@@ -48,12 +48,18 @@ export default defineComponent({
     const commentResp: Ref<CommentResp | undefined> = ref()
     const activeTab = ref(0)
 
-    axios.get(`/playlist/detail?id=${route.query.id}`).then(({ data }) => {
-      playlist.value = data.playlist
-      console.log(data.playlist)
-    })
-    axios.get(`/comment/playlist?id=${route.query.id}`).then(({ data }) => {
-      commentResp.value = data
+    watch(() => route.query.id, (val) => {
+      if (val) {
+        axios.get(`/playlist/detail?id=${val}`).then(({ data }) => {
+          playlist.value = data.playlist
+          console.log(data.playlist)
+        })
+        axios.get(`/comment/playlist?id=${val}`).then(({ data }) => {
+          commentResp.value = data
+        })
+      }
+    }, {
+      immediate: true
     })
 
     return {

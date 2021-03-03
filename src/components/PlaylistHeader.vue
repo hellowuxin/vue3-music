@@ -56,7 +56,7 @@
       <p :class="style['introduction']" ref="introEle">
         <span>简&emsp;介：</span>
         <span
-          v-html="playlist.description.replaceAll('\n', '<br>')"
+          v-html="(playlist.description || '').replaceAll('\n', '<br>')"
           :class="style['description']"
           ref="descEle"
         ></span>
