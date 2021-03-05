@@ -1,26 +1,26 @@
 <template>
   <div :class="style['container']">
     <div :class="style['content']" v-if="artistList">
-      <playlist-card
+      <card
         v-for="artist in artistList"
         :key="artist.id"
         :imgSrc="`${artist.img1v1Url}?param=400y400`"
         :title="artist.name"
-      ></playlist-card>
+      ></card>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, Ref, ref, useCssModule } from 'vue'
-import PlaylistCard from '../components/PlaylistCard.vue'
+import Card from '../components/Card.vue'
 import axios from 'axios'
 import { Artist } from '@/interface'
 
 export default defineComponent({
   name: 'ArtistView',
   components: {
-    PlaylistCard
+    Card
   },
   setup () {
     const style = useCssModule()
