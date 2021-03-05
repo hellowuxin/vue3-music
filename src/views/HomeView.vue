@@ -16,6 +16,7 @@
       </a>
       <div :class="style['content']" v-if="recommendedPlaylists">
         <playlist-card
+          play
           v-for="play in recommendedPlaylists"
           :key="play.id"
           :imgSrc="`${play.picUrl}?param=400y400`"

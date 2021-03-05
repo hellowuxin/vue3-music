@@ -5,7 +5,7 @@
       <router-link :class="style['nav-item']" to="/">歌单</router-link>
       <router-link :class="style['nav-item']" to="/">主播电台</router-link>
       <router-link :class="style['nav-item']" to="/">排行榜</router-link>
-      <router-link :class="style['nav-item']" to="/">歌手</router-link>
+      <router-link :class="style['nav-item']" to="/artist">歌手</router-link>
       <router-link :class="style['nav-item']" to="/">最新音乐</router-link>
     </ul>
   </nav>

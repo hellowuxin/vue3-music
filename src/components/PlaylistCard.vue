@@ -5,7 +5,7 @@
         <icon icon-id="iconplay1"/>
         <span>{{ Math.floor(playCount / 10000) }}万</span>
       </span>
-      <icon icon-id="iconplay" :class="style['iconplay']" @click.stop="clickPlay"/>
+      <icon v-if="play" icon-id="iconplay" :class="style['iconplay']" @click.stop="clickPlay"/>
       <img :src="imgSrc"/>
     </div>
     <span :class="style['title']">{{ title }}</span>
@@ -24,7 +24,8 @@ export default defineComponent({
   props: {
     imgSrc: String,
     title: String,
-    playCount: Number
+    playCount: Number,
+    play: Boolean
   },
   emits: ['click-play'],
   setup (props, context) {

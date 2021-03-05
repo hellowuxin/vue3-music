@@ -7,6 +7,7 @@ export interface User {
 export interface Artist {
   id: number
   name: string
+  img1v1Url: string
 }
 
 export interface Album {
