@@ -1,26 +1,43 @@
 <template>
   <nav :class="style['container']">
     <ul :class="style['nav']">
-      <router-link :class="[style['nav-item'], style['active']]" to="/">个性推荐</router-link>
-      <router-link :class="style['nav-item']" to="/">歌单</router-link>
-      <router-link :class="style['nav-item']" to="/">主播电台</router-link>
-      <router-link :class="style['nav-item']" to="/">排行榜</router-link>
-      <router-link :class="style['nav-item']" to="/artist">歌手</router-link>
-      <router-link :class="style['nav-item']" to="/">最新音乐</router-link>
+      <router-link
+        v-for="[path, text] in navItems"
+        :key="path"
+        :class="[style['nav-item'], activeItem === path ? style['active'] : '']"
+        :to="path"
+      >{{ text }}</router-link>
     </ul>
   </nav>
 </template>
 
 <script lang="ts">
-import { defineComponent, useCssModule } from 'vue'
+import { defineComponent, ref, useCssModule, watch } from 'vue'
+import { useRoute } from 'vue-router'
+
+const navItems = new Map<string, string>()
+navItems.set('/', '个性推荐')
+navItems.set('/playlist', '歌单')
+navItems.set('/djradio', '主播电台')
+navItems.set('/toplist', '排行榜')
+navItems.set('/artist', '歌手')
+navItems.set('/album', '最新音乐')
 
 export default defineComponent({
   name: 'GlobalHeader',
   setup () {
     const style = useCssModule()
+    const route = useRoute()
+    const activeItem = ref('/')
+
+    watch(() => route.path, (val) => {
+      activeItem.value = val
+    })
 
     return {
-      style
+      style,
+      activeItem,
+      navItems
     }
   }
 })
