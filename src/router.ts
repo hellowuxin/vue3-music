@@ -1,11 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import DisHomeView from './views/discover/HomeView.vue'
+import { DiscoverHomeView, DiscoverDjradioView, DiscoverToplistView, DiscoverAlbumView, DiscoverArtistView, DiscoverPlaylistView } from './views/discover'
 import PlaylistView from './views/PlaylistView.vue'
-import DisPlaylistView from './views/discover/PlaylistView.vue'
-import DisArtistView from './views/discover/ArtistView.vue'
-import DisDjradioView from './views/discover/DjradioView.vue'
-import DisToplistView from './views/discover/ToplistView.vue'
-import DisAlbumView from './views/discover/AlbumView.vue'
 
 function prefixRoutes (prefix: string, routes: RouteRecordRaw[]) {
   return routes.map((route) => {
@@ -19,12 +14,12 @@ export default createRouter({
   routes: [
     { path: '/', redirect: '/discover' },
     ...prefixRoutes('/discover', [
-      { path: '', component: DisHomeView },
-      { path: 'djradio', component: DisDjradioView },
-      { path: 'toplist', component: DisToplistView },
-      { path: 'album', component: DisAlbumView },
-      { path: 'artist', component: DisArtistView },
-      { path: 'playlist', component: DisPlaylistView }
+      { path: '', component: DiscoverHomeView },
+      { path: 'djradio', component: DiscoverDjradioView },
+      { path: 'toplist', component: DiscoverToplistView },
+      { path: 'album', component: DiscoverAlbumView },
+      { path: 'artist', component: DiscoverArtistView },
+      { path: 'playlist', component: DiscoverPlaylistView }
     ]),
     { path: '/playlist', name: 'playlist-view', component: PlaylistView }
   ]
