@@ -123,7 +123,7 @@ export default defineComponent({
   bottom: var(--bottomspace);
   background-color: #EDEDED;
   padding: 8px;
-  color: #2F2F2F;
+  color: var(--darkgrey);
 }
 
 .profile {
