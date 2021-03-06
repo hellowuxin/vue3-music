@@ -1,6 +1,6 @@
 <template>
   <div :class="style['container']">
-    ToplistView
+    DiscoverToplistView
   </div>
 </template>
 
@@ -8,7 +8,7 @@
 import { defineComponent, Ref, ref, useCssModule } from 'vue'
 
 export default defineComponent({
-  name: 'ToplistView',
+  name: 'DiscoverToplistView',
   setup () {
     const style = useCssModule()
 

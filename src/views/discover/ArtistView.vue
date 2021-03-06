@@ -33,10 +33,10 @@
 
 <script lang="ts">
 import { defineComponent, Ref, ref, useCssModule, watch } from 'vue'
-import Card from '../components/Card.vue'
+import Card from '@/components/Card.vue'
 import axios from 'axios'
 import { Artist } from '@/interface'
-import { ChipGroup, Chip } from '../components/Chip'
+import { ChipGroup, Chip } from '@/components/Chip'
 
 // 语种
 const areaChips = new Map<string, number>()
@@ -62,7 +62,7 @@ for (let i = 97; i < 123; i++) {
 initialChips.set('#', 0)
 
 export default defineComponent({
-  name: 'ArtistView',
+  name: 'DiscoverArtistView',
   components: {
     Card,
     ChipGroup,

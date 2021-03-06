@@ -16,12 +16,12 @@ import { defineComponent, ref, useCssModule, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 const navItems = new Map<string, string>()
-navItems.set('/', '个性推荐')
-navItems.set('/playlist', '歌单')
-navItems.set('/djradio', '主播电台')
-navItems.set('/toplist', '排行榜')
-navItems.set('/artist', '歌手')
-navItems.set('/album', '最新音乐')
+navItems.set('/discover', '个性推荐')
+navItems.set('/discover/playlist', '歌单')
+navItems.set('/discover/djradio', '主播电台')
+navItems.set('/discover/toplist', '排行榜')
+navItems.set('/discover/artist', '歌手')
+navItems.set('/discover/album', '最新音乐')
 
 export default defineComponent({
   name: 'GlobalHeader',

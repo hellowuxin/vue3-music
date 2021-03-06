@@ -1,14 +1,14 @@
 <template>
   <div :class="style['container']">
-    AlbumView
+    DiscoverAlbumView
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, ref, useCssModule } from 'vue'
+import { defineComponent, useCssModule } from 'vue'
 
 export default defineComponent({
-  name: 'AlbumView',
+  name: 'DiscoverAlbumView',
   setup () {
     const style = useCssModule()
 

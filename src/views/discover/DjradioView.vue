@@ -1,14 +1,14 @@
 <template>
   <div :class="style['container']">
-    DjradioView
+    DiscoverDjradioView
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, ref, useCssModule } from 'vue'
+import { defineComponent, useCssModule } from 'vue'
 
 export default defineComponent({
-  name: 'DjradioView',
+  name: 'DiscoverDjradioView',
   setup () {
     const style = useCssModule()
 

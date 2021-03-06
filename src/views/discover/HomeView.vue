@@ -34,8 +34,8 @@
 import axios from 'axios'
 import { defineComponent, ref, Ref, useCssModule } from 'vue'
 import { Carousel, CarouselItem } from '@/components/Carousel'
-import Card from '../components/Card.vue'
-import Icon from '../components/Icon.vue'
+import Card from '../../components/Card.vue'
+import Icon from '../../components/Icon.vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { GlobalStore } from '@/store'
@@ -58,7 +58,7 @@ interface Play {
 }
 
 export default defineComponent({
-  name: 'HomeView',
+  name: 'DiscoverHomeView',
   components: {
     Carousel,
     CarouselItem,
