@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, Ref, ref, useCssModule } from 'vue'
+import { defineComponent, onMounted, Ref, ref, useCssModule, watch } from 'vue'
 
 export default defineComponent({
   name: 'ChipGroup',
@@ -25,26 +25,32 @@ export default defineComponent({
       const path = e.composedPath()
       const li = path[path.indexOf(currentTarget) - 1] as HTMLLIElement
       if (li) {
-        const oldActiveli = currentTarget.querySelector(`.${style.active}`)
-        if (li !== oldActiveli) {
-          context.emit('update:modelValue', li.textContent)
-          li.classList.add(style.active)
-          oldActiveli?.classList.remove(style.active)
-        }
+        context.emit('update:modelValue', li.textContent)
       }
     }
-
     onMounted(() => {
-      if (ulEle.value) {
-        const { children } = ulEle.value
-        for (let index = 0; index < children.length; index += 1) {
-          const li = children[index]
-          if (li.textContent === props.modelValue) {
-            li.classList.add(style.active)
-            break
+      watch(() => props.modelValue, (val) => {
+        if (ulEle.value) {
+          const oldActiveli = ulEle.value.querySelector(`.${style.active}`)
+          const { children } = ulEle.value
+          let activeLi
+          for (let index = 0; index < children.length; index += 1) {
+            const li = children[index]
+            if (li.textContent === val) {
+              activeLi = li
+              break
+            }
+          }
+          if (activeLi) {
+            activeLi.classList.add(style.active)
+          }
+          if (activeLi !== oldActiveli) {
+            oldActiveli?.classList.remove(style.active)
           }
         }
-      }
+      }, {
+        immediate: true
+      })
     })
 
     return {
