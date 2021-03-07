@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, ref, useCssModule } from 'vue'
+import { defineComponent, Ref, ref, useCssModule, watch } from 'vue'
 import axios from 'axios'
 import Card from '@/components/Card.vue'
 import { Playlist } from '@/interface'
@@ -53,7 +53,7 @@ export default defineComponent({
     const playlistArr: Ref<Playlist[] | undefined> = ref()
     const categories: Ref<Record<number, string> | undefined> = ref()
     const arr: Ref<string[][] | undefined> = ref()
-    const activeTag: Ref<string> = ref('')
+    const activeTag: Ref<string> = ref('全部')
 
     axios.get('/playlist/catlist').then(({ data }) => {
       categories.value = data.categories
@@ -69,8 +69,14 @@ export default defineComponent({
     axios.get('/playlist/hot').then(({ data }) => {
       console.log(data)
     })
-    axios.get('/top/playlist').then(({ data }) => {
-      playlistArr.value = data.playlists
+
+    watch(activeTag, (tag) => {
+      axios.get(`/top/playlist?cat=${tag}`).then(({ data }) => {
+        console.log(data)
+        playlistArr.value = data.playlists
+      })
+    }, {
+      immediate: true
     })
 
     return {

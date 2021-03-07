@@ -73,26 +73,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" module>
-@keyframes close {
-  from {
-    -webkit-line-clamp: initial;
-  }
-
-  to {
-    -webkit-line-clamp: 3;
-  }
-}
-
-@keyframes open {
-  from {
-    -webkit-line-clamp: 3;
-  }
-
-  to {
-    -webkit-line-clamp: initial;
-  }
-}
-
 .container {
   display: flow-root;
 }

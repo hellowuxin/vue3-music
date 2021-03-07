@@ -268,7 +268,6 @@ export default defineComponent({
     overflow: hidden;
     text-indent: 4em;
     margin-top: -18px;
-    animation: close 0s 0.3s forwards;
   }
 
   .dropdown {
@@ -281,15 +280,8 @@ export default defineComponent({
     transform-origin: 50% 25%;
   }
 
-  &.unfold {
-
-    .description {
-      animation: open 0s forwards;
-    }
-
-    .dropdown {
-      transform: rotate(180deg);
-    }
+  &.unfold .dropdown {
+    transform: rotate(180deg);
   }
 }
 </style>
