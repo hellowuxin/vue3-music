@@ -14,7 +14,8 @@ export default defineComponent({
   name: 'ChipGroup',
   props: {
     title: String,
-    modelValue: String
+    modelValue: String,
+    mandatory: Boolean
   },
   setup (props, context) {
     const style = useCssModule()
@@ -25,9 +26,14 @@ export default defineComponent({
       const path = e.composedPath()
       const li = path[path.indexOf(currentTarget) - 1] as HTMLLIElement
       if (li) {
-        context.emit('update:modelValue', li.textContent)
+        if (props.modelValue === li.textContent && !props.mandatory) {
+          context.emit('update:modelValue', '')
+        } else {
+          context.emit('update:modelValue', li.textContent)
+        }
       }
     }
+
     onMounted(() => {
       watch(() => props.modelValue, (val) => {
         if (ulEle.value) {

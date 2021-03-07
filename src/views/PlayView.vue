@@ -6,7 +6,7 @@
     :leave-to-class="style['enter-from']"
   >
     <div v-show="playView" v-if="track" :class="style['container']">
-      <btn :icon="true" :class="style['close']" @click="close">
+      <btn icon :class="style['close']" @click="close">
         <icon icon-id="iconzhankai"></icon>
       </btn>
       <div :class="style['content']">

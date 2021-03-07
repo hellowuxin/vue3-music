@@ -1,19 +1,19 @@
 <template>
   <div :class="style['container']">
     <div :class="style['header']">
-      <chip-group title="语种：" v-model="area">
+      <chip-group mandatory title="语种：" v-model="area">
         <chip
           v-for="[text, key] in areaChips"
           :key="key"
         >{{ text }}</chip>
       </chip-group>
-      <chip-group title="分类：" v-model="type">
+      <chip-group mandatory title="分类：" v-model="type">
         <chip
           v-for="[text, key] in typeChips"
           :key="key"
         >{{ text }}</chip>
       </chip-group>
-      <chip-group title="筛选：" v-model="initial">
+      <chip-group mandatory title="筛选：" v-model="initial">
         <chip
           v-for="[text, key] in initialChips"
           :key="key"
