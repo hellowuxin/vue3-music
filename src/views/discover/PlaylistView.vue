@@ -1,7 +1,15 @@
 <template>
   <div :class="style['container']">
     <div :class="style['filter']">
-      <btn @click="showCategories = !showCategories">筛选</btn>
+      <div :class="style['filter-header']">
+        <btn @click="showCategories = !showCategories">筛选</btn>
+        <chip-group v-model="activeTag">
+          <chip
+            v-for="t in hotTags || []"
+            :key="t.id"
+          >{{ t.name }}</chip>
+        </chip-group>
+      </div>
       <transition
         :enter-active-class="style['enter-active']"
         :leave-active-class="style['enter-active']"
@@ -49,6 +57,11 @@ interface Category {
   name: string
 }
 
+interface Tag {
+  id: number
+  name: string
+}
+
 export default defineComponent({
   name: 'DiscoverPlaylistView',
   components: {
@@ -61,6 +74,7 @@ export default defineComponent({
     const style = useCssModule()
     const playlistArr: Ref<Playlist[] | undefined> = ref()
     const categories: Ref<Record<number, string> | undefined> = ref()
+    const hotTags: Ref<Tag[] | undefined> = ref()
     const arr: Ref<string[][] | undefined> = ref()
     const activeTag: Ref<string> = ref('全部')
     const showCategories = ref(false)
@@ -76,13 +90,12 @@ export default defineComponent({
       })
     })
 
-    axios.get('/playlist/hot').then(({ data }) => {
-      console.log(data)
+    axios.get<{ tags: Tag[], code: number }>('/playlist/hot').then(({ data }) => {
+      hotTags.value = data.tags
     })
 
     watch(activeTag, (tag) => {
       axios.get(`/top/playlist?cat=${tag}`).then(({ data }) => {
-        console.log(data)
         playlistArr.value = data.playlists
       })
     }, {
@@ -95,7 +108,8 @@ export default defineComponent({
       arr,
       categories,
       activeTag,
-      showCategories
+      showCategories,
+      hotTags
     }
   }
 })
@@ -114,8 +128,13 @@ export default defineComponent({
 .filter {
   margin-bottom: 10px;
 
-  > button {
+  &-header {
+    display: flex;
     margin-bottom: 10px;
+
+    > div {
+      margin-left: auto;
+    }
   }
 }
 
