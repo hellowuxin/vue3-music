@@ -7,6 +7,10 @@
       </span>
       <icon v-if="play" icon-id="iconplay" :class="style['iconplay']" @click.stop="clickPlay"/>
       <img :src="imgSrc"/>
+      <span v-if="creator" :class="style['creator']">
+        <icon icon-id="iconcontent_account"></icon>
+        <span>{{ creator }}</span>
+      </span>
     </div>
     <span :class="style['title']">{{ title }}</span>
   </div>
@@ -25,7 +29,8 @@ export default defineComponent({
     imgSrc: String,
     title: String,
     playCount: Number,
-    play: Boolean
+    play: Boolean,
+    creator: String
   },
   emits: ['click-play'],
   setup (props, context) {
@@ -87,5 +92,17 @@ export default defineComponent({
   display: block;
   margin: 5px 0;
   font-weight: 300;
+}
+
+.creator {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  color: white;
+  padding: 5px 10px;
+  font-size: small;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 </style>

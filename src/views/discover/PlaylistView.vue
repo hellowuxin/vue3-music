@@ -55,6 +55,7 @@
         :title="playlist.name"
         :playCount="playlist.playCount"
         :imgSrc="playlist.coverImgUrl"
+        :creator="playlist.creator.nickname"
       ></card>
     </div>
   </div>
