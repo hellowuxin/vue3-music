@@ -17,7 +17,10 @@
     </div>
     <div :class="style['filter']">
       <div :class="style['filter-header']">
-        <btn @click="showCategories = !showCategories">{{ activeTag || '全部' }}</btn>
+        <btn @click="showCategories = !showCategories">
+          <span class="nowrap">{{ activeTag || '全部' }}</span>
+          <span :class="[style['dropdown'], showCategories ? style['unfold'] : '']"></span>
+        </btn>
         <chip-group v-model="activeTag">
           <chip
             v-for="t in hotTags || []"
@@ -245,6 +248,18 @@ export default defineComponent({
     flex-direction: column;
     gap: 10px;
     overflow: hidden;
+  }
+
+  .dropdown {
+    position: relative;
+    border: 6px solid transparent;
+    border-top-color: var(--grey);
+    top: 3px;
+  }
+
+  .unfold.dropdown {
+    transform: rotate(180deg);
+    top: -3px;
   }
 }
 
