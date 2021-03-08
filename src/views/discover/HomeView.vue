@@ -10,10 +10,10 @@
       ></carousel-item>
     </carousel>
     <div :class="style['recommended-playlists']">
-      <a :class="style['title']" href="#">
+      <router-link :class="style['title']" to="/discover/playlist">
         <span>推荐歌单</span>
         <icon icon-id="iconright"/>
-      </a>
+      </router-link>
       <div :class="style['content']" v-if="recommendedPlaylists">
         <card
           play

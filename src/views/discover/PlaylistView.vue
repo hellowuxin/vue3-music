@@ -56,6 +56,8 @@
         :playCount="playlist.playCount"
         :imgSrc="playlist.coverImgUrl"
         :creator="playlist.creator.nickname"
+        @click="clickCard(playlist)"
+        @click-play="clickPlay(playlist)"
       ></card>
     </div>
   </div>
@@ -65,10 +67,12 @@
 import { defineComponent, Ref, ref, useCssModule, watch } from 'vue'
 import axios from 'axios'
 import Card from '@/components/Card.vue'
-import { Playlist } from '@/interface'
+import { Playlist, Track } from '@/interface'
 import { Chip, ChipGroup } from '@/components/Chip'
 import Btn from '@/components/Btn.vue'
 import Icon from '@/components/Icon.vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 interface Category {
   category: number
@@ -98,6 +102,8 @@ export default defineComponent({
     const tags: Ref<string[][] | undefined> = ref()
     const activeTag: Ref<string> = ref('全部')
     const showCategories = ref(false)
+    const router = useRouter()
+    const store = useStore()
 
     axios.get('/playlist/catlist').then(({ data }) => {
       categories.value = data.categories
@@ -126,6 +132,20 @@ export default defineComponent({
       immediate: true
     })
 
+    const clickCard = (play: Playlist) => {
+      router.push({ name: 'playlist-view', query: { id: play.id } })
+    }
+    const clickPlay = (play: Playlist) => {
+      axios.get(`/playlist/detail?id=${play.id}`).then(({ data }) => {
+        const tracks: Track[] = data.playlist.tracks
+        store.dispatch({
+          type: 'playSong',
+          track: tracks[0],
+          tracklist: tracks
+        })
+      })
+    }
+
     return {
       style,
       playlistArr,
@@ -134,7 +154,9 @@ export default defineComponent({
       activeTag,
       showCategories,
       hotTags,
-      highPlaylist
+      highPlaylist,
+      clickCard,
+      clickPlay
     }
   }
 })
