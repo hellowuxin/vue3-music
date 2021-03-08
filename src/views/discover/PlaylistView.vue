@@ -94,6 +94,10 @@ export default defineComponent({
       hotTags.value = data.tags
     })
 
+    axios.get('/playlist/highquality').then(({ data }) => {
+      console.log(data)
+    })
+
     watch(activeTag, (tag) => {
       axios.get(`/top/playlist?cat=${tag}`).then(({ data }) => {
         playlistArr.value = data.playlists
