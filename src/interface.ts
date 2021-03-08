@@ -42,6 +42,7 @@ export interface Playlist {
   tracks: Track[]
   commentCount: number
   userId: number
+  copywriter: string
 }
 
 export interface beReplied {

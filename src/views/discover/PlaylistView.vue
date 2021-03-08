@@ -1,8 +1,23 @@
 <template>
   <div :class="style['container']">
+    <div
+      v-if="highPlaylist"
+      :class="style['header']"
+      :style="{ backgroundImage: `url(${ highPlaylist.coverImgUrl })` }"
+    >
+      <img :src="highPlaylist.coverImgUrl">
+      <div>
+        <div :class="style['iconcrown']">
+          <icon medium iconId="iconcrown"></icon>
+          <span>精品歌单</span>
+        </div>
+        <div :class="style['header-title']">{{ highPlaylist.name }}</div>
+        <div :class="style['header-copywriter']">{{ highPlaylist.copywriter }}</div>
+      </div>
+    </div>
     <div :class="style['filter']">
       <div :class="style['filter-header']">
-        <btn @click="showCategories = !showCategories">筛选</btn>
+        <btn @click="showCategories = !showCategories">{{ activeTag || '全部' }}</btn>
         <chip-group v-model="activeTag">
           <chip
             v-for="t in hotTags || []"
@@ -17,6 +32,7 @@
         :leave-to-class="style['enter-from']"
       >
         <div v-if="categories" v-show="showCategories" :class="style['categories']">
+          <div></div>
           <chip-group
             v-model="activeTag"
             v-for="(c, key) in categories"
@@ -24,7 +40,7 @@
             :title="c"
           >
             <chip
-              v-for="temp in (arr ? arr[parseInt(key, 10)] : [])"
+              v-for="temp in (tags ? tags[parseInt(key, 10)] : [])"
               :key="temp"
             >{{ temp }}</chip>
           </chip-group>
@@ -51,6 +67,7 @@ import Card from '@/components/Card.vue'
 import { Playlist } from '@/interface'
 import { Chip, ChipGroup } from '@/components/Chip'
 import Btn from '@/components/Btn.vue'
+import Icon from '@/components/Icon.vue'
 
 interface Category {
   category: number
@@ -68,24 +85,26 @@ export default defineComponent({
     Card,
     ChipGroup,
     Chip,
-    Btn
+    Btn,
+    Icon
   },
   setup () {
     const style = useCssModule()
     const playlistArr: Ref<Playlist[] | undefined> = ref()
     const categories: Ref<Record<number, string> | undefined> = ref()
     const hotTags: Ref<Tag[] | undefined> = ref()
-    const arr: Ref<string[][] | undefined> = ref()
+    const highPlaylist: Ref<Playlist | undefined> = ref()
+    const tags: Ref<string[][] | undefined> = ref()
     const activeTag: Ref<string> = ref('全部')
     const showCategories = ref(false)
 
     axios.get('/playlist/catlist').then(({ data }) => {
       categories.value = data.categories
       const sub: Category[] = data.sub
-      arr.value = new Array(Object.keys(categories.value as any).length).fill(0).map<string[]>(() => [])
+      tags.value = new Array(Object.keys(categories.value as any).length).fill(0).map<string[]>(() => [])
       sub.forEach((c) => {
-        if (arr.value) {
-          arr.value[c.category].push(c.name)
+        if (tags.value) {
+          tags.value[c.category].push(c.name)
         }
       })
     })
@@ -94,8 +113,8 @@ export default defineComponent({
       hotTags.value = data.tags
     })
 
-    axios.get('/playlist/highquality').then(({ data }) => {
-      console.log(data)
+    axios.get<{ playlists: Playlist[] }>('/top/playlist/highquality?limit=1').then(({ data }) => {
+      highPlaylist.value = data.playlists[0]
     })
 
     watch(activeTag, (tag) => {
@@ -109,11 +128,12 @@ export default defineComponent({
     return {
       style,
       playlistArr,
-      arr,
+      tags,
       categories,
       activeTag,
       showCategories,
-      hotTags
+      hotTags,
+      highPlaylist
     }
   }
 })
@@ -121,7 +141,7 @@ export default defineComponent({
 
 <style lang="scss" module>
 .enter-active {
-  max-height: 262px;
+  max-height: 272px;
   transition: max-height .3s ease;
 }
 
@@ -129,24 +149,80 @@ export default defineComponent({
   max-height: 0;
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.header {
+  position: relative;
+  padding: 15px;
+  margin-top: 10px;
+  border-radius: 4px;
+  display: flex;
+  gap: 10px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(40px);
+    border-radius: inherit;
+  }
+
+  & > * {
+    z-index: 0;
+  }
+
+  img {
+    border-radius: inherit;
+    width: 150px;
+  }
+
+  .iconcrown {
+    margin: 20px 0;
+    padding: 5px 15px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border: #E7AA5A 1px solid;
+    border-radius: 44px;
+    color: #E7AA5A;
+    font-size: small;
+  }
+
+  &-title {
+    color: white;
+    margin-bottom: 5px;
+  }
+
+  &-copywriter {
+    font-size: small;
+    color: var(--lightgrey)
+  }
+}
+
 .filter {
-  margin-bottom: 10px;
 
   &-header {
     display: flex;
-    margin-bottom: 10px;
 
     > div {
       margin-left: auto;
     }
   }
-}
 
-.categories {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  overflow: hidden;
+  .categories {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: hidden;
+  }
 }
 
 .content {
