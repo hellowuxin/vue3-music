@@ -17,9 +17,9 @@
     </div>
     <div :class="style['filter']">
       <div :class="style['filter-header']">
-        <btn @click="showCategories = !showCategories">
+        <btn @click.stop="showCategories = !showCategories">
           <span class="nowrap">{{ activeTag || '全部' }}</span>
-          <span :class="[style['dropdown'], showCategories ? style['unfold'] : '']"></span>
+          <icon iconId="iconwebicon215"></icon>
         </btn>
         <chip-group v-model="activeTag">
           <chip
@@ -34,8 +34,7 @@
         :enter-from-class="style['enter-from']"
         :leave-to-class="style['enter-from']"
       >
-        <div v-if="categories" v-show="showCategories" :class="style['categories']">
-          <div></div>
+        <div v-if="categories" v-show="showCategories" :class="style['categories']" @click.stop="">
           <chip-group
             v-model="activeTag"
             v-for="(c, key) in categories"
@@ -45,6 +44,7 @@
             <chip
               v-for="temp in (tags ? tags[parseInt(key, 10)] : [])"
               :key="temp"
+              @click="showCategories = false"
             >{{ temp }}</chip>
           </chip-group>
         </div>
@@ -72,10 +72,10 @@ import axios from 'axios'
 import Card from '@/components/Card.vue'
 import { Playlist, Track } from '@/interface'
 import { Chip, ChipGroup } from '@/components/Chip'
-import Btn from '@/components/Btn.vue'
 import Icon from '@/components/Icon.vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import Btn from '@/components/Btn.vue'
 
 interface Category {
   category: number
@@ -93,8 +93,8 @@ export default defineComponent({
     Card,
     ChipGroup,
     Chip,
-    Btn,
-    Icon
+    Icon,
+    Btn
   },
   setup () {
     const style = useCssModule()
@@ -128,7 +128,7 @@ export default defineComponent({
     })
 
     watch(activeTag, (tag) => {
-      axios.get(`/top/playlist?cat=${tag}`).then(({ data }) => {
+      axios.get<{ playlists: Playlist[] }>(`/top/playlist?cat=${tag}`).then(({ data }) => {
         playlistArr.value = data.playlists
       })
     }, {
@@ -148,6 +148,11 @@ export default defineComponent({
         })
       })
     }
+    const onBlur = () => {
+      showCategories.value = false
+    }
+
+    document.body.addEventListener('click', onBlur)
 
     return {
       style,
@@ -167,12 +172,12 @@ export default defineComponent({
 
 <style lang="scss" module>
 .enter-active {
-  max-height: 272px;
-  transition: max-height .3s ease;
+  opacity: 1;
+  transition: opacity .3s ease;
 }
 
 .enter-from {
-  max-height: 0;
+  opacity: 0;
 }
 
 .container {
@@ -234,20 +239,30 @@ export default defineComponent({
 }
 
 .filter {
+  position: relative;
+  border-radius: 4px;
 
   &-header {
     display: flex;
+    cursor: pointer;
+    font-size: small;
 
-    > div {
+    & > *:last-child {
       margin-left: auto;
     }
   }
 
   .categories {
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    background-color: white;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    overflow: hidden;
+    box-shadow: var(--shadow);
+    border-radius: inherit;
+    padding: 16px;
   }
 
   .dropdown {
