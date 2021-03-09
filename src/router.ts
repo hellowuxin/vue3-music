@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import { DiscoverHomeView, DiscoverDjradioView, DiscoverToplistView, DiscoverAlbumView, DiscoverArtistView, DiscoverPlaylistView } from './views/discover'
+import { HighPlaylistView, DiscoverHomeView, DiscoverDjradioView, DiscoverToplistView, DiscoverAlbumView, DiscoverArtistView, DiscoverPlaylistView } from './views/discover'
 import PlaylistView from './views/PlaylistView.vue'
 
 function prefixRoutes (prefix: string, routes: RouteRecordRaw[]) {
@@ -19,7 +19,8 @@ export default createRouter({
       { path: 'toplist', component: DiscoverToplistView },
       { path: 'album', component: DiscoverAlbumView },
       { path: 'artist', component: DiscoverArtistView },
-      { path: 'playlist', component: DiscoverPlaylistView }
+      { path: 'playlist', component: DiscoverPlaylistView },
+      { path: 'playlist/highquality', component: HighPlaylistView }
     ]),
     { path: '/playlist', name: 'playlist-view', component: PlaylistView }
   ]

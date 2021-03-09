@@ -4,6 +4,7 @@ import DiscoverDjradioView from './DjradioView.vue'
 import DiscoverToplistView from './ToplistView.vue'
 import DiscoverAlbumView from './AlbumView.vue'
 import DiscoverHomeView from './HomeView.vue'
+import HighPlaylistView from './HighPlaylistView.vue'
 
 export {
   DiscoverAlbumView,
@@ -11,5 +12,6 @@ export {
   DiscoverDjradioView,
   DiscoverHomeView,
   DiscoverPlaylistView,
-  DiscoverToplistView
+  DiscoverToplistView,
+  HighPlaylistView
 }

@@ -1,9 +1,10 @@
 <template>
   <div :class="style['container']">
-    <div
+    <router-link
       v-if="highPlaylist"
       :class="style['header']"
       :style="{ backgroundImage: `url(${ highPlaylist.coverImgUrl })` }"
+      to="/discover/playlist/highquality"
     >
       <img :src="highPlaylist.coverImgUrl">
       <div>
@@ -14,7 +15,7 @@
         <div :class="style['header-title']">{{ highPlaylist.name }}</div>
         <div :class="style['header-copywriter']">{{ highPlaylist.copywriter }}</div>
       </div>
-    </div>
+    </router-link>
     <div :class="style['filter']">
       <div :class="style['filter-header']">
         <btn @click.stop="showCategories = !showCategories">
