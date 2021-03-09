@@ -151,10 +151,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" module>
-.container {
-  margin: 10px 0;
-}
-
 .content {
   position: relative;
 }

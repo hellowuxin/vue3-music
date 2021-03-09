@@ -35,6 +35,6 @@ export default defineComponent({
 
 .global-container {
   margin: var(--topspace) 0 var(--bottomspace) var(--leftspace);
-  padding: 10px 20px;
+  padding: 20px 20px;
 }
 </style>

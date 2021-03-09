@@ -190,7 +190,6 @@ export default defineComponent({
 .header {
   position: relative;
   padding: 15px;
-  margin-top: 10px;
   border-radius: 4px;
   display: flex;
   gap: 10px;
