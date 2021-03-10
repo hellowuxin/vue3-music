@@ -43,6 +43,7 @@ export interface Playlist {
   commentCount: number
   userId: number
   copywriter: string
+  highQuality: boolean
 }
 
 export interface beReplied {

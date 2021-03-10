@@ -3,7 +3,7 @@
     <img :src="playlist.coverImgUrl" alt="">
     <div :class="style['content']">
       <div :class="style['title']">
-        <span>歌单</span>
+        <span>{{ `${playlist.highQuality ? '精品' : ''}歌单` }}</span>
         <h2>{{ playlist.name }}</h2>
       </div>
       <p :class="style['creator']">
@@ -189,6 +189,7 @@ export default defineComponent({
     border: 1px solid;
     border-radius: 4px;
     padding: 0 5px;
+    white-space: nowrap;
   }
 
   h2 {
