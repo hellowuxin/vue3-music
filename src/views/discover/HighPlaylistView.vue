@@ -27,6 +27,9 @@
           play
           :imgSrc="playlist.coverImgUrl"
           :playCount="playlist.playCount"
+          label="iconcrown"
+          width="150px"
+          @click="clickCard(playlist)"
         ></card>
         <div>
           <div>{{ playlist.name }}</div>
@@ -47,6 +50,7 @@ import Card from '@/components/Card.vue'
 import Icon from '@/components/Icon.vue'
 import Dropdown from '@/components/Dropdown.vue'
 import { ChipGroup, Chip } from '@/components/Chip'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'highPlaylistView',
@@ -62,6 +66,7 @@ export default defineComponent({
     const style = useCssModule()
     const playlistArr: Ref<Playlist[] | undefined> = ref()
     const tags: Ref<Tag[] | undefined> = ref()
+    const router = useRouter()
 
     axios.get<{ playlists: Playlist[] }>('/top/playlist/highquality').then(({ data }) => {
       playlistArr.value = data.playlists
@@ -71,7 +76,12 @@ export default defineComponent({
       tags.value = data.tags
     })
 
+    const clickCard = (play: Playlist) => {
+      router.push({ name: 'playlist-view', query: { id: play.id } })
+    }
+
     return {
+      clickCard,
       style,
       playlistArr,
       tags
@@ -105,9 +115,5 @@ export default defineComponent({
 .playlist {
   display: flex;
   gap: 10px;
-
-  img {
-    width: 150px;
-  }
 }
 </style>

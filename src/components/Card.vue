@@ -1,6 +1,10 @@
 <template>
-  <div :class="style['container']">
+  <div :class="style['container']" :style="{ width }">
     <div :class="style['content']">
+      <div v-if="label" :class="style['label']">
+        <icon :icon-id="label" :class="style['label-content']"></icon>
+        <div :class="style['triangle-topleft']"></div>
+      </div>
       <span :class="style['play-count']" v-if="playCount">
         <icon icon-id="iconplay1"/>
         <span>{{ Math.floor(playCount / 10000) }}万</span>
@@ -12,7 +16,7 @@
         <span>{{ creator }}</span>
       </span>
     </div>
-    <span :class="style['title']">{{ title }}</span>
+    <span v-if="title" :class="style['title']">{{ title }}</span>
   </div>
 </template>
 
@@ -30,7 +34,9 @@ export default defineComponent({
     title: String,
     playCount: Number,
     play: Boolean,
-    creator: String
+    creator: String,
+    label: String,
+    width: String
   },
   emits: ['click-play'],
   setup (props, context) {
@@ -54,6 +60,7 @@ export default defineComponent({
 
 .content {
   position: relative;
+  width: inherit;
 
   img {
     display: block;
@@ -104,5 +111,34 @@ export default defineComponent({
   display: flex;
   align-items: center;
   gap: 5px;
+}
+
+.label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 4px;
+  z-index: 0;
+  font-size: x-large;
+  width: 32px;
+  height: 32px;
+
+  &-content {
+    vertical-align: 0 !important;
+    color: white;
+    transform: rotate(-45deg);
+  }
+
+  .triangle-topleft {
+    border-top-left-radius: inherit;
+    width: 0;
+    height: 0;
+    border: 22px solid transparent;
+    border-top-color: #F3B067;
+    border-left-color: #F3B067;
+    position: absolute;
+    top: 0;
+    z-index: -1;
+  }
 }
 </style>
