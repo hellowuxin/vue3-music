@@ -71,7 +71,7 @@
 import { defineComponent, Ref, ref, useCssModule, watch } from 'vue'
 import axios from 'axios'
 import Card from '@/components/Card.vue'
-import { Playlist, Track } from '@/interface'
+import { Playlist, Track, Tag } from '@/interface'
 import { Chip, ChipGroup } from '@/components/Chip'
 import Icon from '@/components/Icon.vue'
 import { useRouter } from 'vue-router'
@@ -80,11 +80,6 @@ import Btn from '@/components/Btn.vue'
 
 interface Category {
   category: number
-  name: string
-}
-
-interface Tag {
-  id: number
   name: string
 }
 

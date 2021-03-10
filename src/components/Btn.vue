@@ -65,8 +65,8 @@ export default defineComponent({
 .container-icon {
   padding: 5px;
   border-style: none;
-  position: relative;
   background-color: transparent;
+  border-radius: 50%;
 
   &::before {
     content: '';
@@ -75,7 +75,6 @@ export default defineComponent({
     right: 0;
     top: 0;
     bottom: 0;
-    border-radius: 50%;
     background-color: currentColor;
     opacity: 0;
     transition: opacity .2s cubic-bezier(.4,0,.6,1);

@@ -68,3 +68,11 @@ export interface CommentResp {
   hotComments: Comment[]
   topComments: Comment[]
 }
+
+export interface Tag {
+  id: number
+  name: string
+  category: number
+  hot: boolean
+  type: number
+}

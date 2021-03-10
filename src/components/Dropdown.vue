@@ -1,69 +1,81 @@
 <template>
-  <div :class="style['container']">
-    <slot name="activator" :on="{ mouseenter, mouseleave }"></slot>
-    <div
-      :class="style['content']"
-      ref="contentEle"
-      @transitionend="onTransitionEnd"
-      @mouseleave="mouseleave"
-      @mouseenter="mouseenter"
-    >
-      <slot></slot>
-    </div>
+  <div :class="style['container']" ref="containerEle" v-click-outside="temp">
+    <slot name="activator" :on="onEvent"></slot>
+    <transition name="fade">
+      <div
+        v-show="isActive"
+        :class="contentStyle"
+        v-on="onEvent"
+      >
+        <slot></slot>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script lang="ts">
-import { debounce, reflow } from '@/tools'
-import { defineComponent, Ref, useCssModule, ref, watch } from 'vue'
+import { defineComponent, useCssModule, ref, Ref, computed } from 'vue'
+import ClickOutside from '@/directives/ClickOutside'
 
 export default defineComponent({
   name: 'Dropdown',
-  setup () {
+  directives: {
+    ClickOutside
+  },
+  props: {
+    offsetY: Boolean,
+    hover: Boolean,
+    left: Boolean
+  },
+  setup (props) {
     const style = useCssModule()
-    const contentEle: Ref<HTMLDivElement | undefined> = ref()
+    const containerEle: Ref<HTMLDivElement | undefined> = ref()
     const isActive = ref(false)
 
-    watch(isActive, debounce((val) => {
-      const target = contentEle.value
-      if (target) {
-        if (val) {
-          if (!target.classList.contains(style['content-active']) ||
-          target.classList.contains(style.fade)) {
-            target.classList.add(style['content-active'])
-            target.classList.add(style.fade)
-            reflow(target)
-            target.classList.remove(style.fade)
-          }
-        } else {
-          target.classList.add(style.fade)
-        }
+    const contentStyle = computed(() => {
+      const temp = [style.content]
+      if (props.offsetY) {
+        temp.push(style['offset-y'])
       }
-    }))
-
+      if (props.left) {
+        temp.push(style.left)
+      }
+      return temp
+    })
+    const onEvent = computed(() => {
+      if (props.hover) {
+        return { mouseenter, mouseleave }
+      }
+      return { click }
+    })
     const mouseenter = () => {
-      if (!isActive.value) {
-        isActive.value = true
-      }
+      isActive.value = true
     }
-    const mouseleave = () => {
-      if (isActive.value) {
-        isActive.value = false
+    const mouseleave = (e: MouseEvent) => {
+      if (containerEle.value?.contains(e.relatedTarget as Node)) {
+        return
       }
+      isActive.value = false
     }
-    const onTransitionEnd = () => {
-      const target = contentEle.value
-      if (target && !isActive.value) {
-        target.classList.remove(style['content-active'], style.fade)
-      }
+    const click = () => {
+      isActive.value = true
     }
-
+    const temp = props.hover
+      ? false
+      : {
+          handler: () => { isActive.value = false },
+          closeConditional: () => isActive.value && !props.hover,
+          include: () => [containerEle.value]
+        }
     return {
       style,
       mouseenter,
-      contentEle,
       mouseleave,
-      onTransitionEnd
+      isActive,
+      contentStyle,
+      containerEle,
+      onEvent,
+      temp
     }
   }
 })
@@ -75,27 +87,25 @@ export default defineComponent({
 }
 
 .content {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
   padding: 10px;
   background-color: white;
   border-radius: 4px;
-  display: none;
-  align-items: center;
-  flex-direction: column;
-  gap: 10px;
   box-shadow: var(--shadow);
-  opacity: 1;
-  transition: all .3s ease;
-
-  &-active {
-    display: flex;
-  }
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
 }
 
-.fade {
-  opacity: 0;
+.offset-y {
+  bottom: 100%;
+}
+
+.left {
+  right: 0;
+  left: auto;
+  transform: none;
 }
 </style>

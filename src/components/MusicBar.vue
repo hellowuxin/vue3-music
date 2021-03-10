@@ -37,20 +37,22 @@
       <div :class="style['right']">
         <btn :icon="true"><icon icon-id="iconliebiaoshunxu"/></btn>
         <btn :icon="true"><icon icon-id="iconbofangliebiao"/></btn>
-        <dropdown>
+        <dropdown offset-y hover>
           <template #activator="{ on }">
             <btn :icon="true" v-on="on" @click="changeMuted">
               <icon :icon-id="muted ? 'iconjingyin1' : 'iconyinliang'"/>
             </btn>
           </template>
-          <span :class="style['volume-number']">{{ muted ? 0 : Math.floor(volume * 100) }}</span>
-          <progress-linear
-            :vertical="true"
-            :value="muted ? 0 : volume"
-            :max="1"
-            height="60px"
-            @progress-click="onVolumeClick"
-          ></progress-linear>
+          <div :class="style['volume']">
+            <span :class="style['volume-number']">{{ muted ? 0 : Math.floor(volume * 100) }}</span>
+            <progress-linear
+              :vertical="true"
+              :value="muted ? 0 : volume"
+              :max="1"
+              height="60px"
+              @progress-click="onVolumeClick"
+            ></progress-linear>
+          </div>
         </dropdown>
       </div>
     </div>
@@ -270,6 +272,13 @@ export default defineComponent({
     font-size: 25px;
     cursor: pointer;
   }
+}
+
+.volume {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
 .volume-number {
