@@ -25,7 +25,9 @@ export default defineComponent({
   props: {
     offsetY: Boolean,
     hover: Boolean,
-    left: Boolean
+    left: Boolean,
+    right: Boolean,
+    top: Boolean
   },
   setup (props) {
     const style = useCssModule()
@@ -39,6 +41,12 @@ export default defineComponent({
       }
       if (props.left) {
         temp.push(style.left)
+      }
+      if (props.right) {
+        temp.push(style.right)
+      }
+      if (props.top) {
+        temp.push(style.top)
       }
       return temp
     })
@@ -89,7 +97,6 @@ export default defineComponent({
 .content {
   display: flex;
   justify-content: center;
-  padding: 10px;
   background-color: white;
   border-radius: 4px;
   box-shadow: var(--shadow);
@@ -107,5 +114,14 @@ export default defineComponent({
   right: 0;
   left: auto;
   transform: none;
+}
+
+.right {
+  left: 0;
+  transform: none;
+}
+
+.top {
+  top: 0;
 }
 </style>

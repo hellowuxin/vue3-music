@@ -18,10 +18,29 @@
     </router-link>
     <div :class="style['filter']">
       <div :class="style['filter-header']">
-        <btn @click.stop="showCategories = !showCategories">
-          <span class="nowrap">{{ activeTag || '全部' }}</span>
-          <icon iconId="iconwebicon215"></icon>
-        </btn>
+        <dropdown right top>
+          <template #activator="{ on }">
+            <btn v-on="on">
+              <span class="nowrap">{{ activeTag || '全部' }}</span>
+              <icon iconId="iconwebicon215"></icon>
+            </btn>
+          </template>
+          <div v-if="categories" :class="style['categories']">
+            <chip-group
+              v-model="activeTag"
+              v-for="(c, key) in categories"
+              :key="c"
+              :title="c"
+            >
+              <chip
+                v-for="temp in (tags ? tags[parseInt(key, 10)] : [])"
+                :key="temp"
+                @click="showCategories = false"
+              >{{ temp }}</chip>
+            </chip-group>
+          </div>
+        </dropdown>
+
         <chip-group v-model="activeTag">
           <chip
             v-for="t in hotTags || []"
@@ -29,27 +48,6 @@
           >{{ t.name }}</chip>
         </chip-group>
       </div>
-      <transition
-        :enter-active-class="style['enter-active']"
-        :leave-active-class="style['enter-active']"
-        :enter-from-class="style['enter-from']"
-        :leave-to-class="style['enter-from']"
-      >
-        <div v-if="categories" v-show="showCategories" :class="style['categories']" @click.stop="">
-          <chip-group
-            v-model="activeTag"
-            v-for="(c, key) in categories"
-            :key="c"
-            :title="c"
-          >
-            <chip
-              v-for="temp in (tags ? tags[parseInt(key, 10)] : [])"
-              :key="temp"
-              @click="showCategories = false"
-            >{{ temp }}</chip>
-          </chip-group>
-        </div>
-      </transition>
     </div>
     <div v-if="playlistArr" :class="style['content']">
       <card
@@ -77,6 +75,7 @@ import Icon from '@/components/Icon.vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import Btn from '@/components/Btn.vue'
+import Dropdown from '@/components/Dropdown.vue'
 
 interface Category {
   category: number
@@ -90,7 +89,8 @@ export default defineComponent({
     ChipGroup,
     Chip,
     Icon,
-    Btn
+    Btn,
+    Dropdown
   },
   setup () {
     const style = useCssModule()
@@ -167,15 +167,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" module>
-.enter-active {
-  opacity: 1;
-  transition: opacity .3s ease;
-}
-
-.enter-from {
-  opacity: 0;
-}
-
 .container {
   display: flex;
   flex-direction: column;
@@ -248,16 +239,12 @@ export default defineComponent({
   }
 
   .categories {
-    position: absolute;
-    top: 0;
-    z-index: 1;
-    background-color: white;
+    box-sizing: border-box;
+    padding: 16px;
+    width: calc(100vw - var(--leftspace) - 40px);
     display: flex;
     flex-direction: column;
     gap: 10px;
-    box-shadow: var(--shadow);
-    border-radius: inherit;
-    padding: 16px;
   }
 
   .dropdown {

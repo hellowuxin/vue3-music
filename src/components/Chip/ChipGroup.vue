@@ -1,6 +1,6 @@
 <template>
   <div :class="style['container']">
-    <div :class="style['title']">{{ title }}</div>
+    <div v-if="title" :class="style['title']">{{ title }}</div>
     <ul :class="style['content']" @click="catchLiClick" ref="ulEle">
       <slot></slot>
     </ul>

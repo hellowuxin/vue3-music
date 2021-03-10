@@ -92,6 +92,7 @@ export default defineComponent({
 
   .tags {
     width: 300px;
+    padding: 16px;
   }
 }
 
