@@ -40,10 +40,9 @@
             </chip-group>
           </div>
         </dropdown>
-
-        <chip-group v-model="activeTag">
+        <chip-group v-if="hotTags" v-model="activeTag">
           <chip
-            v-for="t in hotTags || []"
+            v-for="t in hotTags"
             :key="t.id"
           >{{ t.name }}</chip>
         </chip-group>
@@ -72,7 +71,7 @@ import Card from '@/components/Card.vue'
 import { Playlist, Track, Tag } from '@/interface'
 import { Chip, ChipGroup } from '@/components/Chip'
 import Icon from '@/components/Icon.vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import Btn from '@/components/Btn.vue'
 import Dropdown from '@/components/Dropdown.vue'
@@ -102,6 +101,7 @@ export default defineComponent({
     const activeTag: Ref<string> = ref('全部')
     const showCategories = ref(false)
     const router = useRouter()
+    const route = useRoute()
     const store = useStore()
 
     axios.get('/playlist/catlist').then(({ data }) => {
@@ -123,14 +123,6 @@ export default defineComponent({
       highPlaylist.value = data.playlists[0]
     })
 
-    watch(activeTag, (tag) => {
-      axios.get<{ playlists: Playlist[] }>(`/top/playlist?cat=${tag}`).then(({ data }) => {
-        playlistArr.value = data.playlists
-      })
-    }, {
-      immediate: true
-    })
-
     const clickCard = (play: Playlist) => {
       router.push({ name: 'playlist-view', query: { id: play.id } })
     }
@@ -147,6 +139,16 @@ export default defineComponent({
     const onBlur = () => {
       showCategories.value = false
     }
+    const selectCategory = (cat: string) => {
+      axios.get<{ playlists: Playlist[] }>(`/top/playlist?cat=${cat}`).then(({ data }) => {
+        playlistArr.value = data.playlists
+      })
+    }
+
+    watch(activeTag, selectCategory, { immediate: true })
+    watch(() => route.query.cat as string, (val) => {
+      activeTag.value = val
+    }, { immediate: true })
 
     document.body.addEventListener('click', onBlur)
 

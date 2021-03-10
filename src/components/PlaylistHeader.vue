@@ -39,7 +39,7 @@
         <span>标&emsp;签：</span>
         <ul class="breadcrumb">
           <li v-for="(tag, index) in playlist.tags" :key="index">
-            <router-link to="#">{{ tag }}</router-link>
+            <router-link :to="`/discover/playlist?cat=${tag}`">{{ tag }}</router-link>
           </li>
         </ul>
       </p>
