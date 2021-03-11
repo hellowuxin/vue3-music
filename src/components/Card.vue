@@ -7,7 +7,7 @@
       </div>
       <span :class="style['play-count']" v-if="playCount">
         <icon icon-id="iconplay1"/>
-        <span>{{ Math.floor(playCount / 10000) }}万</span>
+        <span>{{ playCountUnit }}</span>
       </span>
       <icon v-if="play" icon-id="iconplay" :class="style['iconplay']" @click.stop="clickPlay"/>
       <img :src="imgSrc"/>
@@ -32,7 +32,10 @@ export default defineComponent({
   props: {
     imgSrc: String,
     title: String,
-    playCount: Number,
+    playCount: {
+      type: Number,
+      default: 0
+    },
     play: Boolean,
     creator: String,
     label: String,
@@ -44,10 +47,16 @@ export default defineComponent({
     const clickPlay = () => {
       context.emit('click-play')
     }
+    const tenThousandDigits = Math.floor(props.playCount / 10000)
+    let playCountUnit = props.playCount.toString()
+    if (tenThousandDigits > 0) {
+      playCountUnit = `${tenThousandDigits}万`
+    }
 
     return {
       style,
-      clickPlay
+      clickPlay,
+      playCountUnit
     }
   }
 })
@@ -66,6 +75,8 @@ export default defineComponent({
     display: block;
     border-radius: 4px;
     width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
   }
 
   &:hover .iconplay {
@@ -79,6 +90,9 @@ export default defineComponent({
   color: white;
   padding: 5px 10px;
   font-size: smaller;
+  display: flex;
+  align-items: center;
+  gap: 2px;
 }
 
 .iconplay {

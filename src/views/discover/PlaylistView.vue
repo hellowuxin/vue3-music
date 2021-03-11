@@ -145,10 +145,10 @@ export default defineComponent({
       })
     }
 
-    watch(activeTag, selectCategory, { immediate: true })
     watch(() => route.query.cat as string, (val) => {
       activeTag.value = val
     }, { immediate: true })
+    watch(activeTag, selectCategory, { immediate: true })
 
     document.body.addEventListener('click', onBlur)
 
