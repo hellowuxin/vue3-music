@@ -250,6 +250,7 @@ export default defineComponent({
 
   .iconplay {
     font-size: 50px;
+    cursor: pointer;
   }
 
   .iconplay,

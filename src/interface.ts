@@ -33,6 +33,7 @@ export interface Playlist {
   creator: User
   createTime: number
   tags: string[]
+  tag: string
   trackCount: number
   playCount: number
   description: string | null

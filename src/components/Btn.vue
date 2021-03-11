@@ -57,7 +57,7 @@ export default defineComponent({
   overflow: hidden;
   position: relative;
   font-size: inherit;
-  line-height: 1.5;
+  line-height: 1.2;
 }
 
 .container-rounded {

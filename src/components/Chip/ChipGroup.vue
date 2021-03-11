@@ -9,6 +9,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, Ref, ref, useCssModule, watch } from 'vue'
+import chipStyle from './Chip.module.scss'
 
 export default defineComponent({
   name: 'ChipGroup',
@@ -37,7 +38,7 @@ export default defineComponent({
     onMounted(() => {
       watch(() => props.modelValue, (val) => {
         if (ulEle.value) {
-          const oldActiveli = ulEle.value.querySelector(`.${style.active}`)
+          const oldActiveli = ulEle.value.querySelector(`.${chipStyle.active}`)
           const { children } = ulEle.value
           let activeLi
           for (let index = 0; index < children.length; index += 1) {
@@ -48,10 +49,10 @@ export default defineComponent({
             }
           }
           if (activeLi) {
-            activeLi.classList.add(style.active)
+            activeLi.classList.add(chipStyle.active)
           }
           if (activeLi !== oldActiveli) {
-            oldActiveli?.classList.remove(style.active)
+            oldActiveli?.classList.remove(chipStyle.active)
           }
         }
       }, {
@@ -85,17 +86,5 @@ export default defineComponent({
   margin: 0;
   gap: 10px;
   flex-wrap: wrap;
-
-  li.active {
-    color: var(--main-color);
-
-    &::before {
-      opacity: .12;
-    }
-  }
-
-  li:not(.active) {
-    background-color: #e0e0e0;
-  }
 }
 </style>

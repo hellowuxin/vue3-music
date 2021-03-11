@@ -34,10 +34,13 @@
           width="150px"
           @click="clickCard(playlist)"
         ></card>
-        <div>
-          <div>{{ playlist.name }}</div>
-          <div>{{ playlist.creator.nickname }}</div>
-          <div>{{ playlist.copywriter }}</div>
+        <div :class="style['playlist-content']">
+          <div :class="style['playlist-title']">{{ playlist.name }}</div>
+          <div :class="style['playlist-creator']">by {{ playlist.creator.nickname }}</div>
+          <div :class="style['playlist-copywriter']">
+            <chip :class="style['playlist-copywriter-label']" :ripple="false" outline label small>{{ playlist.tag }}</chip>
+            <span :class="style['playlist-copywriter-text']">{{ playlist.copywriter }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -87,6 +90,10 @@ export default defineComponent({
       }
     }, { immediate: true })
     watch(activeCat, (cat) => {
+      if (!cat) {
+        activeCat.value = '全部'
+        return
+      }
       const timestamp = new Date().getTime()
       axios.post<{ playlists: Playlist[] }>(`/top/playlist/highquality?timestamp=${timestamp}`, {
         cat
@@ -127,12 +134,48 @@ export default defineComponent({
 
 .content {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 30px 20px;
+  grid-template-columns: repeat(2, calc(50% - 10px));
+  gap: 25px 20px;
 }
 
 .playlist {
   display: flex;
   gap: 10px;
+
+  &-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  &-title,
+  &-copywriter-text {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  &-creator {
+    font-size: small;
+    color: var(--lightgrey);
+    margin: 10px 0 20px 0;
+  }
+
+  &-copywriter {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    &-label {
+      color: var(--main-color);
+      flex-shrink: 0;
+    }
+
+    &-text {
+      font-size: small;
+      color: #BFBFBF
+    }
+  }
 }
 </style>
