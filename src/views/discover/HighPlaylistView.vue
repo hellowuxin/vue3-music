@@ -5,16 +5,19 @@
       <dropdown left>
         <template #activator="{ on }">
           <btn v-on="on">
-            <span>筛选</span>
+            <span>{{ activeCat }}</span>
             <icon iconId="iconwebicon215"></icon>
           </btn>
         </template>
-        <chip-group v-if="tags" :class="style['tags']">
-          <chip
-            v-for="tag in tags"
-            :key="tag.id"
-          >{{ tag.name }}</chip>
-        </chip-group>
+        <template #default="{ close }">
+          <chip-group v-if="tags" :class="style['tags']" v-model="activeCat">
+            <chip
+              v-for="tag in tags"
+              :key="tag.id"
+              @click="close"
+            >{{ tag.name }}</chip>
+          </chip-group>
+        </template>
       </dropdown>
     </div>
     <div v-if="playlistArr" :class="style['content']">
@@ -42,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, useCssModule, Ref, ref } from 'vue'
+import { defineComponent, useCssModule, Ref, ref, watch } from 'vue'
 import Btn from '@/components/Btn.vue'
 import axios from 'axios'
 import { Playlist, Tag } from '@/interface'
@@ -50,7 +53,7 @@ import Card from '@/components/Card.vue'
 import Icon from '@/components/Icon.vue'
 import Dropdown from '@/components/Dropdown.vue'
 import { ChipGroup, Chip } from '@/components/Chip'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'highPlaylistView',
@@ -67,10 +70,8 @@ export default defineComponent({
     const playlistArr: Ref<Playlist[] | undefined> = ref()
     const tags: Ref<Tag[] | undefined> = ref()
     const router = useRouter()
-
-    axios.get<{ playlists: Playlist[] }>('/top/playlist/highquality').then(({ data }) => {
-      playlistArr.value = data.playlists
-    })
+    const activeCat = ref('全部')
+    const route = useRoute()
 
     axios.get<{ tags: Tag[] }>('/playlist/highquality/tags').then(({ data }) => {
       tags.value = data.tags
@@ -80,11 +81,29 @@ export default defineComponent({
       router.push({ name: 'playlist-view', query: { id: play.id } })
     }
 
+    watch(() => route.query.cat, (cat) => {
+      if (cat) {
+        activeCat.value = cat as string
+      }
+    }, { immediate: true })
+    watch(activeCat, (cat) => {
+      const timestamp = new Date().getTime()
+      axios.post<{ playlists: Playlist[] }>(`/top/playlist/highquality?timestamp=${timestamp}`, {
+        cat
+      }).then(({ data }) => {
+        playlistArr.value = data.playlists
+      })
+      if (route.query.cat !== cat) {
+        router.push({ path: '/discover/playlist/highquality', query: { cat } })
+      }
+    }, { immediate: true })
+
     return {
       clickCard,
       style,
       playlistArr,
-      tags
+      tags,
+      activeCat
     }
   }
 })

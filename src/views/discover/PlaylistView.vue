@@ -4,7 +4,7 @@
       v-if="highPlaylist"
       :class="style['header']"
       :style="{ backgroundImage: `url(${ highPlaylist.coverImgUrl })` }"
-      to="/discover/playlist/highquality"
+      :to="`/discover/playlist/highquality?cat=${activeTag}`"
     >
       <img :src="highPlaylist.coverImgUrl">
       <div>
@@ -105,10 +105,13 @@ export default defineComponent({
     const route = useRoute()
     const store = useStore()
 
-    axios.get('/playlist/catlist').then(({ data }) => {
+    axios.get<{
+      categories: Record<number, string>
+      sub: Category[]
+    }>('/playlist/catlist').then(({ data }) => {
       categories.value = data.categories
-      const sub: Category[] = data.sub
-      tags.value = new Array(Object.keys(categories.value as any).length).fill(0).map<string[]>(() => [])
+      const sub = data.sub
+      tags.value = new Array(Object.keys(categories.value).length).fill(0).map<string[]>(() => [])
       sub.forEach((c) => {
         if (tags.value) {
           tags.value[c.category].push(c.name)
@@ -118,10 +121,6 @@ export default defineComponent({
 
     axios.get<{ tags: Tag[], code: number }>('/playlist/hot').then(({ data }) => {
       hotTags.value = data.tags
-    })
-
-    axios.get<{ playlists: Playlist[] }>('/top/playlist/highquality?limit=1').then(({ data }) => {
-      highPlaylist.value = data.playlists[0]
     })
 
     const clickCard = (play: Playlist) => {
@@ -138,11 +137,20 @@ export default defineComponent({
       })
     }
     const selectCategory = (cat: string) => {
+      // timestamp防止缓存
+      const timestamp = new Date().getTime()
       // post防止转义
-      axios.post<{ playlists: Playlist[] }>(`/top/playlist?timestamp=${new Date().getTime()}`, {
+      axios.post<{ playlists: Playlist[] }>(`/top/playlist?timestamp=${timestamp}`, {
         cat
       }).then(({ data }) => {
         playlistArr.value = data.playlists
+      })
+
+      axios.post<{ playlists: Playlist[] }>(`/top/playlist/highquality?timestamp=${timestamp}`, {
+        cat,
+        limit: 1
+      }).then(({ data }) => {
+        highPlaylist.value = data.playlists[0]
       })
     }
 
