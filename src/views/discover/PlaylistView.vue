@@ -25,20 +25,22 @@
               <icon iconId="iconwebicon215"></icon>
             </btn>
           </template>
-          <div v-if="categories" :class="style['categories']">
-            <chip-group
-              v-model="activeTag"
-              v-for="(c, key) in categories"
-              :key="c"
-              :title="c"
-            >
-              <chip
-                v-for="temp in (tags ? tags[parseInt(key, 10)] : [])"
-                :key="temp"
-                @click="showCategories = false"
-              >{{ temp }}</chip>
-            </chip-group>
-          </div>
+          <template #default="{ close }">
+            <div v-if="categories" :class="style['categories']">
+              <chip-group
+                v-model="activeTag"
+                v-for="(c, key) in categories"
+                :key="c"
+                :title="c"
+              >
+                <chip
+                  v-for="temp in (tags ? tags[parseInt(key, 10)] : [])"
+                  :key="temp"
+                  @click="close"
+                >{{ temp }}</chip>
+              </chip-group>
+            </div>
+          </template>
         </dropdown>
         <chip-group v-if="hotTags" v-model="activeTag">
           <chip
@@ -99,7 +101,6 @@ export default defineComponent({
     const highPlaylist: Ref<Playlist | undefined> = ref()
     const tags: Ref<string[][] | undefined> = ref()
     const activeTag: Ref<string> = ref('全部')
-    const showCategories = ref(false)
     const router = useRouter()
     const route = useRoute()
     const store = useStore()
@@ -136,21 +137,26 @@ export default defineComponent({
         })
       })
     }
-    const onBlur = () => {
-      showCategories.value = false
-    }
     const selectCategory = (cat: string) => {
-      axios.get<{ playlists: Playlist[] }>(`/top/playlist?cat=${cat}`).then(({ data }) => {
+      // post防止转义
+      axios.post<{ playlists: Playlist[] }>(`/top/playlist?timestamp=${new Date().getTime()}`, {
+        cat
+      }).then(({ data }) => {
         playlistArr.value = data.playlists
       })
     }
 
-    watch(() => route.query.cat as string, (val) => {
-      activeTag.value = val
+    watch(() => route.query.cat, (val) => {
+      if (val) {
+        activeTag.value = val as string
+      }
     }, { immediate: true })
-    watch(activeTag, selectCategory, { immediate: true })
-
-    document.body.addEventListener('click', onBlur)
+    watch(activeTag, (cat) => {
+      selectCategory(cat)
+      if (route.query.cat !== cat) {
+        router.push({ path: '/discover/playlist', query: { cat } })
+      }
+    }, { immediate: true })
 
     return {
       style,
@@ -158,7 +164,6 @@ export default defineComponent({
       tags,
       categories,
       activeTag,
-      showCategories,
       hotTags,
       highPlaylist,
       clickCard,
@@ -232,7 +237,6 @@ export default defineComponent({
 
   &-header {
     display: flex;
-    cursor: pointer;
     font-size: small;
 
     & > *:last-child {
@@ -264,7 +268,7 @@ export default defineComponent({
 
 .content {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, calc(25% - 15px));
   gap: 30px 20px;
 }
 </style>

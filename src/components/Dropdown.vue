@@ -5,9 +5,9 @@
       <div
         v-show="isActive"
         :class="contentStyle"
-        v-on="onEvent"
+        v-on="hover ? onEvent : {}"
       >
-        <slot></slot>
+        <slot :close="close"></slot>
       </div>
     </transition>
   </div>
@@ -50,28 +50,28 @@ export default defineComponent({
       }
       return temp
     })
+
+    const open = () => { isActive.value = true }
+    const close = () => { isActive.value = false }
+    const click = open
+    const mouseenter = open
+    const mouseleave = (e: MouseEvent) => {
+      if (containerEle.value?.contains(e.relatedTarget as Node)) {
+        return
+      }
+      close()
+    }
     const onEvent = computed(() => {
       if (props.hover) {
         return { mouseenter, mouseleave }
       }
       return { click }
     })
-    const mouseenter = () => {
-      isActive.value = true
-    }
-    const mouseleave = (e: MouseEvent) => {
-      if (containerEle.value?.contains(e.relatedTarget as Node)) {
-        return
-      }
-      isActive.value = false
-    }
-    const click = () => {
-      isActive.value = true
-    }
+
     const temp = props.hover
       ? false
       : {
-          handler: () => { isActive.value = false },
+          handler: close,
           closeConditional: () => isActive.value && !props.hover,
           include: () => [containerEle.value]
         }
@@ -83,7 +83,8 @@ export default defineComponent({
       contentStyle,
       containerEle,
       onEvent,
-      temp
+      temp,
+      close
     }
   }
 })
