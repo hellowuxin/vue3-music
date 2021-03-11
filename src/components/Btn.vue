@@ -56,6 +56,8 @@ export default defineComponent({
   color: inherit;
   overflow: hidden;
   position: relative;
+  font-size: inherit;
+  line-height: 1.5;
 }
 
 .container-rounded {

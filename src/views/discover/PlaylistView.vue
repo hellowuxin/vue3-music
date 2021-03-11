@@ -17,38 +17,36 @@
       </div>
     </router-link>
     <div :class="style['filter']">
-      <div :class="style['filter-header']">
-        <dropdown right top>
-          <template #activator="{ on }">
-            <btn v-on="on">
-              <span class="nowrap">{{ activeTag || '全部' }}</span>
-              <icon iconId="iconwebicon215"></icon>
-            </btn>
-          </template>
-          <template #default="{ close }">
-            <div v-if="categories" :class="style['categories']">
-              <chip-group
-                v-model="activeTag"
-                v-for="(c, key) in categories"
-                :key="c"
-                :title="c"
-              >
-                <chip
-                  v-for="temp in (tags ? tags[parseInt(key, 10)] : [])"
-                  :key="temp"
-                  @click="close"
-                >{{ temp }}</chip>
-              </chip-group>
-            </div>
-          </template>
-        </dropdown>
-        <chip-group v-if="hotTags" v-model="activeTag">
-          <chip
-            v-for="t in hotTags"
-            :key="t.id"
-          >{{ t.name }}</chip>
-        </chip-group>
-      </div>
+      <dropdown right top>
+        <template #activator="{ on }">
+          <btn v-on="on">
+            <span class="nowrap">{{ activeTag || '全部' }}</span>
+            <icon iconId="iconwebicon215"></icon>
+          </btn>
+        </template>
+        <template #default="{ close }">
+          <div v-if="categories" :class="style['categories']">
+            <chip-group
+              v-model="activeTag"
+              v-for="(c, key) in categories"
+              :key="c"
+              :title="c"
+            >
+              <chip
+                v-for="temp in (tags ? tags[parseInt(key, 10)] : [])"
+                :key="temp"
+                @click="close"
+              >{{ temp }}</chip>
+            </chip-group>
+          </div>
+        </template>
+      </dropdown>
+      <chip-group v-if="hotTags" v-model="activeTag">
+        <chip
+          v-for="t in hotTags"
+          :key="t.id"
+        >{{ t.name }}</chip>
+      </chip-group>
     </div>
     <div v-if="playlistArr" :class="style['content']">
       <card
@@ -242,14 +240,12 @@ export default defineComponent({
 .filter {
   position: relative;
   border-radius: 4px;
+  display: flex;
+  align-items: center;
+  font-size: small;
 
-  &-header {
-    display: flex;
-    font-size: small;
-
-    & > *:last-child {
-      margin-left: auto;
-    }
+  & > *:last-child {
+    margin-left: auto;
   }
 
   .categories {
