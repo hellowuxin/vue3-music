@@ -20,7 +20,7 @@
       <dropdown right top>
         <template #activator="{ on }">
           <btn v-on="on">
-            <span class="nowrap">{{ activeTag || '全部' }}</span>
+            <span class="nowrap">{{ activeTag }}</span>
             <icon iconId="iconwebicon215"></icon>
           </btn>
         </template>
@@ -158,6 +158,10 @@ export default defineComponent({
       }
     }, { immediate: true })
     watch(activeTag, (cat) => {
+      if (!cat) {
+        activeTag.value = '全部'
+        return
+      }
       selectCategory(cat)
       if (route.query.cat !== cat) {
         router.push({ path: '/discover/playlist', query: { cat } })

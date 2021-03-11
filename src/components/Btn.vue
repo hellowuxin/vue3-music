@@ -56,7 +56,6 @@ export default defineComponent({
   color: inherit;
   overflow: hidden;
   position: relative;
-  font-size: inherit;
   line-height: 1.2;
 }
 
